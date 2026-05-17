@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/tools/stitch_video.schema.json",
+  "title": "stitch_video arguments",
+  "schemaVersion": "2026-04-27.1",
+  "description": "Combine multiple videos into a single continuous video. Sources can be previously generated clips (non-negative indices into the session video-result array, populated by animate_photo, generate_video, sound_to_video, video_to_video, dance_montage — use videoStartIndex from their results to find the indices) and/or uploaded videos (negative indices: -1 = first uploaded video, -2 = second, etc.). Mix and match in any playback order — for example, pass [0, -1] to play the first generated clip followed by the first uploaded video (a generated bumper followed by the user's existing footage). Use when the user wants to join, merge, concatenate, or combine clips, including when they ask to add a generated bumper / intro / outro / tag / sting to an uploaded video. When the user asks to stitch \"these\" or all uploaded videos and does not name a different playback order, use the current upload/UI order exactly: [-1, -2, ...]. If the user explicitly asks for a different order, honor that requested order. Requires at least 2 source videos in total. Never ask the user to re-upload videos that were already generated or that are already attached to the session. When the user generated music with generate_music in this same session and wants it on the stitch (or asked for a music video / soundtrack), pass a non-negative audioIndex to attach that generated track. When the user uploaded an audio file and wants it overlaid on the stitched video (e.g. \"stitch the audio after\", \"overlay the audio\", \"audio on top of the video\"), pass a negative audioIndex (-1 = first uploaded audio, -2 = second, etc.). In both cases the source clips' own audio is replaced by the chosen track. When the user asks for a fade, dissolve, wipe, or slide between clips, pass `transition`; omit `transition` for a hard cut (the default). Do not use this for alternating/interleaved time slices such as \"alternate 1 second from each video\"; this tool only concatenates whole clips end-to-end. Use repeated replace_video_segment calls with replacementVideoIndex and replacementStartSeconds/replacementEndSeconds for existing-video interleaving.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "videoIndices": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Ordered list of source video indices, in the desired playback order. Non-negative values are 0-based indices into the session generated-video array (results from animate_photo, generate_video, sound_to_video, video_to_video, dance_montage in this conversation). Negative values reference uploaded videos: -1 = first uploaded video, -2 = second, etc. Indices may be mixed — for example, [0, -1] plays the first generated clip followed by the first uploaded video. For vague \"these clips\" / \"all uploaded videos\" requests, use current upload/UI order [-1, -2, ...] unless the user explicitly says to reverse or otherwise reorder them."
+    },
+    "audioIndex": {
+      "type": "number",
+      "description": "Optional index of the audio track to mux onto the stitched output. Non-negative values are 0-based indices into the session generated-audio array (results from generate_music). Negative values reference uploaded audio: -1 = first uploaded audio, -2 = second, etc. When set, the chosen track is muxed onto the stitched output and the source clips' own audio is dropped. Use a non-negative value when the user generated music in the same session or asked for a soundtrack / music video stitch; use a negative value when the user wants their uploaded audio overlaid on the stitched video (e.g. \"stitch the audio after\", \"overlay the audio\"). Omit for a silent or source-audio-preserving stitch."
+    },
+    "transition": {
+      "type": "object",
+      "description": "Optional crossfade between adjacent clips. Omit for a hard-cut concat. When set, every adjacent pair of clips is joined with the same transition type and duration.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "fade",
+            "dissolve",
+            "wipeleft",
+            "wiperight",
+            "slideup",
+            "slidedown"
+          ],
+          "description": "\"fade\" / \"dissolve\" = soft mix; \"wipeleft\" / \"wiperight\" = horizontal wipe; \"slideup\" / \"slidedown\" = vertical slide. Maps to ffmpeg xfade transition names."
+        },
+        "durationSeconds": {
+          "type": "number",
+          "minimum": 0.2,
+          "maximum": 2,
+          "description": "Length of the crossfade in seconds. Default 0.5. Capped at 2s."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  },
+  "required": [
+    "videoIndices"
+  ]
+}

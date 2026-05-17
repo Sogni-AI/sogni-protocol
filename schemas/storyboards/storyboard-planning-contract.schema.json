@@ -1,0 +1,108 @@
+{
+  "title": "storyboard planning contract",
+  "schemaVersion": "2026-05-12.1",
+  "description": "Typed planner payload for storyboard layout and text-rendering decisions. Renderable visible text is intentionally separate from non-renderable production metadata labels.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "source", "layout", "scenes", "endCard", "metadataLabels"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "storyboard-planning-contract/v1"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["llm_schema", "assistant_metadata", "user_schema", "fallback_text"]
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "storyboardCanvasAspectRatio", "storyboardCellAspectRatio", "targetVideoAspectRatio", "boardDimensions"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["llm_schema", "assistant_metadata", "user_schema", "fallback_text"]
+        },
+        "storyboardCanvasAspectRatio": {
+          "type": "string",
+          "description": "Aspect ratio for the composite storyboard sheet/page, such as 16:9 or 9:16."
+        },
+        "storyboardCellAspectRatio": {
+          "type": "string",
+          "description": "Aspect ratio for each cinematic video-frame artwork area inside the storyboard."
+        },
+        "targetVideoAspectRatio": {
+          "type": "string",
+          "description": "Final video aspect ratio, such as 9:16 for vertical social video."
+        },
+        "boardDimensions": {
+          "type": "string",
+          "description": "Optional exact storyboard board dimensions, such as 2560x1440 or 1440x2560."
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "index", "visibleText", "metadataLabels", "referenceUsage"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24
+          },
+          "visibleText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only text that should actually appear inside the final video frame, such as brand copy, CTA text, signage, captions, or diegetic text."
+          },
+          "metadataLabels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Production labels, timing notes, scene numbers, overlay markers, placeholders, and other notes that may guide the storyboard but must not be rendered inside a video scene or Seedance output."
+          },
+          "referenceUsage": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "endCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visibleText", "metadataLabels"],
+      "properties": {
+        "visibleText": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadataLabels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadataLabels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

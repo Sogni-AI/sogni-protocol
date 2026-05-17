@@ -1,0 +1,9 @@
+{
+  "contractId": "set_content_filter_v1",
+  "version": "1.0.0",
+  "toolName": "set_content_filter",
+  "baseDescription": "set_content_filter enables or disables the Safe Content Filter. Call only when the user\nexplicitly asks to change this setting. Do not toggle it as part of ordinary generation.\n\nIf disabling requires host-side confirmation, let the handler surface that permission flow;\ndo not claim the setting changed unless the tool result says it did.",
+  "parameterDocs": {
+    "enabled": "true to enable the filter, false to disable it. Only set from explicit user intent."
+  }
+}

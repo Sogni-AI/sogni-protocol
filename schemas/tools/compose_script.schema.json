@@ -1,0 +1,68 @@
+{
+  "title": "compose_script tool schema",
+  "schemaVersion": "2026-05-14.1",
+  "description": "Synchronous creative writing utility for scripts, storyboards, video prompts, ad concepts, trailers, social shorts, campaign beats, and talking-head plans.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["brief"],
+  "properties": {
+    "brief": {
+      "type": "string",
+      "description": "The creative writing brief, story idea, product concept, video idea, or revision request."
+    },
+    "script_type": {
+      "type": "string",
+      "enum": ["video_prompt", "screenplay", "storyboard", "ad_script", "trailer", "social_short", "talking_head", "campaign", "revision"],
+      "description": "The kind of script or creative writing artifact to produce."
+    },
+    "destination_model": {
+      "type": "string",
+      "description": "Optional destination video model selector, such as ltx23, wan22, or seedance2."
+    },
+    "destination_tool": {
+      "type": "string",
+      "description": "Optional downstream tool, such as generate_video, animate_photo, sound_to_video, or video_to_video."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 300,
+      "description": "Requested runtime for a video prompt, social short, ad, or talking-head script."
+    },
+    "scene_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12,
+      "description": "Requested number of scenes, shots, beats, or storyboard panels."
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "description": "Optional target aspect ratio, such as 16:9, 9:16, 1:1, 4:5, or 21:9."
+    },
+    "platform": {
+      "type": "string",
+      "description": "Optional target platform or context, such as TikTok, YouTube Shorts, Instagram Reels, broadcast, landing page, game trailer, or pitch deck."
+    },
+    "style": {
+      "type": "string",
+      "description": "Optional style, genre, tone, visual treatment, or brand voice to preserve."
+    },
+    "first_frame_description": {
+      "type": "string",
+      "description": "Optional description of the starting frame when composing an image-to-video prompt without attached vision content."
+    },
+    "first_frame_data_url": {
+      "type": "string",
+      "description": "Optional inline image data URI for the starting frame when composing an image-to-video or first-frame video prompt."
+    },
+    "last_frame_data_url": {
+      "type": "string",
+      "description": "Optional inline image data URI for the ending frame when composing an image-to-video transition prompt."
+    },
+    "return_format": {
+      "type": "string",
+      "enum": ["script", "markdown", "json"],
+      "description": "Requested output format. Use script unless structured planning output is explicitly needed."
+    }
+  }
+}

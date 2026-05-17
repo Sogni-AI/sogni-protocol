@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/errors/error.schema.json",
+  "title": "Creative agent error",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "code": { "type": "string" },
+    "message": { "type": "string" },
+    "classification": {
+      "type": "string",
+      "enum": ["validation", "auth", "billing", "rate_limit", "transient", "provider", "policy", "cancelled", "unknown"]
+    },
+    "retryable": { "type": "boolean" },
+    "toolName": { "type": "string" },
+    "stepId": { "type": "string" },
+    "details": { "type": "object", "additionalProperties": true }
+  },
+  "required": ["code", "message", "classification", "retryable"]
+}

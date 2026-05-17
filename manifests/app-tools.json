@@ -1,0 +1,297 @@
+{
+  "version": "2026-04-27.1",
+  "source": "sogni-creative-agent/src/backbone/openai-tools/app-tools.json",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_image",
+        "description": "Analyze an uploaded or generated image using a vision model. Use for image questions, descriptions, OCR, object identification, document reading, or comparing two images. Does not generate or modify images.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The user's question or request about the image."
+            },
+            "analysisType": {
+              "type": "string",
+              "enum": ["describe", "ocr", "objects", "document", "compare", "general"],
+              "description": "Type of analysis. Use general when answering the user's specific question."
+            },
+            "sourceImageIndex": {
+              "type": "number",
+              "description": "Image to analyze. Non-negative indexes refer to generated images; negative indexes refer to uploaded images (-1 first upload, -2 second upload). Omit to auto-select latest image."
+            },
+            "compareImageIndex": {
+              "type": "number",
+              "description": "Second image for compare mode, using the same indexing convention as sourceImageIndex."
+            },
+            "detailed": {
+              "type": "boolean",
+              "description": "Whether to provide a more detailed analysis."
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_video",
+        "description": "Analyze an uploaded or generated video using sampled frames and a vision model. Use for video summaries, timelines, visual scene descriptions, action breakdowns, or visible text. Does not generate or modify videos.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The user's question or request about the video."
+            },
+            "analysisType": {
+              "type": "string",
+              "enum": ["summary", "timeline", "scene", "action", "ocr", "general"],
+              "description": "Type of analysis. Use general when answering the user's specific question."
+            },
+            "sourceVideoIndex": {
+              "type": "number",
+              "description": "Video to analyze. Non-negative indexes refer to generated videos; negative indexes refer to uploaded videos (-1 first upload, -2 second upload). Omit to auto-select latest video."
+            },
+            "detailed": {
+              "type": "boolean",
+              "description": "Whether to sample more context and provide a more detailed analysis."
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "extract_metadata",
+        "description": "Extract available technical metadata from an uploaded or generated media asset. Use when the user asks for duration, dimensions, MIME type, file size, model/prompt/settings metadata, or generation metadata embedded in or attached to a media file. For visual content questions, use analyze_image or analyze_video instead.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "mediaType": {
+              "type": "string",
+              "enum": ["image", "video", "audio"],
+              "description": "Media type to inspect. Omit when the available context makes it unambiguous."
+            },
+            "sourceImageIndex": {
+              "type": "number",
+              "description": "Image to inspect, using generated indexes or negative uploaded indexes."
+            },
+            "sourceVideoIndex": {
+              "type": "number",
+              "description": "Video to inspect, using generated indexes or negative uploaded indexes."
+            },
+            "audioSourceIndex": {
+              "type": "number",
+              "description": "Audio asset to inspect, using generated indexes or negative uploaded indexes."
+            },
+            "fileIndex": {
+              "type": "number",
+              "description": "Legacy 0-based uploaded-file index. Prefer mediaType plus sourceImageIndex/sourceVideoIndex/audioSourceIndex when possible."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "ask_clarifying_question",
+        "description": "Pause the workflow and ask the user a clarifying question. The host treats this as the end of the turn; do not call other tools after it.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "The exact short question to surface to the user."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Short telemetry tag explaining why clarification is needed."
+            }
+          },
+          "required": ["question"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "finalize_response",
+        "description": "Mark the turn complete and surface a final assistant message. The host stops the tool loop when this is called. Do not call other tools after finalize_response.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "Short user-visible summary. Leave empty when prior tool output already says enough."
+            },
+            "outcome": {
+              "type": "string",
+              "enum": ["success", "partial", "asked_user", "failed", "no_action"],
+              "description": "How the turn ended."
+            }
+          },
+          "required": ["outcome"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_asset_manifest",
+        "description": "Reset and seed the session asset manifest with stable asset_id values so later tool calls can refer to assets reliably.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assets": {
+              "type": "array",
+              "description": "Ordered list of assets to register.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "user_label": {
+                    "type": "string",
+                    "description": "Human-readable asset name."
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["image", "video", "audio"],
+                    "description": "Asset media type."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Optional short description."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Optional URL for the asset."
+                  },
+                  "must_preserve": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Features to preserve when regenerating from this asset."
+                  },
+                  "avoid": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Features to avoid."
+                  },
+                  "asset_id": {
+                    "type": "string",
+                    "description": "Optional stable id override."
+                  }
+                },
+                "required": ["user_label", "type"]
+              }
+            }
+          },
+          "required": ["assets"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "inspect_asset",
+        "description": "Return one asset record by asset_id or user_label, or the full asset manifest when no selector is provided.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "asset_id": {
+              "type": "string",
+              "description": "Stable asset id."
+            },
+            "user_label": {
+              "type": "string",
+              "description": "Human-readable asset label."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "label_asset",
+        "description": "Update labels or preservation notes on an existing asset manifest entry.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "asset_id": {
+              "type": "string",
+              "description": "Stable asset id to update."
+            },
+            "user_label": {
+              "type": "string",
+              "description": "Replacement human-readable label."
+            },
+            "description": {
+              "type": "string",
+              "description": "Replacement description. Empty string clears it."
+            },
+            "must_preserve": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Replacement preserve list."
+            },
+            "avoid": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Replacement avoid list."
+            },
+            "url": {
+              "type": "string",
+              "description": "Replacement URL. Empty string clears it."
+            }
+          },
+          "required": ["asset_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "map_assets_for_model",
+        "description": "Return model-specific reference tokens for each asset in the manifest, such as @Image1 for Seedance or Image 1 for GPT Image 2.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "model_id": {
+              "type": "string",
+              "description": "Target model identifier."
+            }
+          },
+          "required": ["model_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "validate_asset_references",
+        "description": "Check whether model-specific asset reference tokens in a prompt resolve to registered manifest assets.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "model_id": {
+              "type": "string",
+              "description": "Target model identifier."
+            },
+            "prompt": {
+              "type": "string",
+              "description": "Prompt text to validate."
+            }
+          },
+          "required": ["model_id", "prompt"]
+        }
+      }
+    }
+  ]
+}

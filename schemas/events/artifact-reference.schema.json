@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/events/artifact-reference.schema.json",
+  "title": "Creative agent artifact reference",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": "string", "enum": ["image", "video", "audio", "archive", "json", "text", "other"] },
+    "url": { "type": "string" },
+    "mimeType": { "type": "string" },
+    "width": { "type": "number" },
+    "height": { "type": "number" },
+    "durationSeconds": { "type": "number" },
+    "sizeBytes": { "type": "number" },
+    "toolName": { "type": "string" },
+    "stepId": { "type": "string" },
+    "metadata": { "type": "object", "additionalProperties": true }
+  },
+  "required": ["id", "kind", "url"]
+}

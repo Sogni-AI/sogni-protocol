@@ -1,0 +1,12 @@
+{
+  "contractId": "manage_memory_v1",
+  "version": "1.0.0",
+  "toolName": "manage_memory",
+  "baseDescription": "manage_memory reads, writes, or deletes persistent user preferences and facts. Use write\nonly when the user states a durable preference/fact or explicitly asks you to remember\nsomething. Use read when persistent preferences are relevant before generation.\n\nDo not save transient one-off creative instructions as memory. Delete/clear actions require\nexplicit user intent; never infer memory deletion from vague dissatisfaction.",
+  "parameterDocs": {
+    "action": "read, write, or delete. Use write only for durable preferences/facts; delete only on explicit request.",
+    "key": "Stable concise memory key. Required for write/delete.",
+    "value": "Concise durable value. Required for write.",
+    "category": "preference for style/defaults, fact for user facts, context for project context."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "contractId": "validate_asset_references_v1",
+  "version": "1.0.0",
+  "toolName": "validate_asset_references",
+  "baseDescription": "validate_asset_references checks a prompt for provider-specific manifest reference tokens\nand reports which resolve or dangle. Call right before dispatching a prompt that names\nmanifest assets with model_ref tokens.\n\nDo not use this for plain uploaded references. If validation finds dangling refs, repair the\nprompt or register/map the asset before running an expensive generation tool.",
+  "parameterDocs": {
+    "model_id": "Target provider/model id whose reference token format should be scanned.",
+    "prompt": "Prompt text about to be sent to the model."
+  }
+}

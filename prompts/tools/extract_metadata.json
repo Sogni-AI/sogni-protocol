@@ -1,0 +1,9 @@
+{
+  "contractId": "extract_metadata_v1",
+  "version": "1.0.0",
+  "toolName": "extract_metadata",
+  "baseDescription": "extract_metadata reads prompt/model/settings metadata from an uploaded media file. Use when\nthe user asks what prompt, model, seed, dimensions, or generation settings are embedded in\nan uploaded file, or when they ask to recreate/remix an uploaded file from its metadata.\n\nThis indexes uploaded files only, not prior generated results already known to chat. Do not\ncall it for ordinary visual analysis; use analyze_image or analyze_video for content.",
+  "parameterDocs": {
+    "file_index": "0-based uploaded-file index. Omit for the first uploaded file."
+  }
+}

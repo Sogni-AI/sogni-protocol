@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/events/workflow-event.schema.json",
+  "title": "Creative agent workflow event",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "workflowId": { "type": "string" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "type": {
+      "type": "string",
+      "enum": ["workflow_started", "workflow_progress", "workflow_completed", "workflow_failed", "workflow_cancelled", "workflow_waiting_for_user", "step_started", "step_completed", "step_failed", "step_waiting_for_user", "artifact_created", "custom"]
+    },
+    "status": { "type": "string", "enum": ["queued", "running", "completed", "partial_failure", "waiting_for_user", "failed", "cancelled"] },
+    "message": { "type": "string" },
+    "data": { "type": "object", "additionalProperties": true }
+  },
+  "required": ["id", "workflowId", "sequence", "timestamp", "type"]
+}

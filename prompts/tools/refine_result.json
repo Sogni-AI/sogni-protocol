@@ -1,0 +1,11 @@
+{
+  "contractId": "refine_result_v1",
+  "version": "1.0.0",
+  "toolName": "refine_result",
+  "baseDescription": "refine_result is the default follow-up image-edit tool after generated results exist. Use it\nfor targeted changes to a prior result: color, brightness, sharpening, background changes,\nobject edits, further restoration, or small creative adjustments.\n\nDescribe only the delta. The source image already contains the subject, composition, and\nmost details. Do not rewrite the whole image unless the user asks for a broad transformation.\nFor people, front-load exact identity preservation and end with preserving all unmentioned\ndetails.\n\nUse restore_photo instead only when the user explicitly asks to start over from the original\nupload. Use sourceImageIndex only when the user names a specific result.",
+  "parameterDocs": {
+    "prompt": "Targeted delta instruction. Preserve identity first for people, then specify the change, then preserve everything else.",
+    "sourceImageIndex": "Omit for the latest relevant result unless the user names a specific image number.",
+    "numberOfVariations": "Use 1 unless the user asks to compare multiple refinement options."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "contractId": "finalize_response_v1",
+  "version": "1.1.0",
+  "toolName": "finalize_response",
+  "baseDescription": "finalize_response marks the turn complete and stops the tool loop. Use after the requested\nworkflow succeeds, partially succeeds, fails with a surfaced error, or needs no tool action.\n\nWhen the user asked for a script, storyboard, ad concept, trailer, creator video, meme/parody,\nor music prompt and no media tool is required, deliver the final creative in a clean Markdown\ncontract: title, concept/objective, audience if relevant, timed beats or script, audio/text\nnotes, generation prompt(s), CTA, and brief assumptions. For revisions, apply the feedback\ndirectly while preserving approved elements and rejected constraints.\n\nDo not call any other tool after finalize_response. Keep the summary short and grounded in\nactual tool results; do not claim exact metadata that no tool returned.",
+  "parameterDocs": {
+    "summary": "Short user-visible closeout. Mention produced media or the concrete blocker; avoid duplicating prior tool output.",
+    "outcome": "success, partial, asked_user, failed, or no_action based on the actual turn outcome."
+  }
+}

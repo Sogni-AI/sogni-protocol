@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/errors/repair-control.schema.json",
+  "title": "Creative agent repair control payload",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "error": { "type": "string" },
+    "message": { "type": "string" },
+    "controlAction": {
+      "type": "string",
+      "enum": ["execute_tool", "wait_for_user", "finish_response", "none"]
+    },
+    "retryPolicy": {
+      "type": "string",
+      "enum": [
+        "auto_tool_call",
+        "auto",
+        "auto_repair",
+        "llm_repair",
+        "manual_ui_only",
+        "manual_user_confirmation",
+        "none",
+        "no_retry",
+        "terminal"
+      ]
+    },
+    "requiredTool": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,40}$"
+    },
+    "suggestedArgs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "nextAction": { "type": "string" }
+  },
+  "required": ["controlAction"]
+}

@@ -1,0 +1,10 @@
+{
+  "contractId": "ask_clarifying_question_v1",
+  "version": "1.1.0",
+  "toolName": "ask_clarifying_question",
+  "baseDescription": "ask_clarifying_question pauses the workflow and asks the user for missing required input.\nUse only when no reasonable safe default exists, when required media/content is missing, or\nwhen confirmation is required for a destructive or credit-sensitive action.\n\nFor creative briefs, do not over-question. Ask at most 3 concise high-leverage questions only\nwhen the answer would materially change audience, product promise, format/duration/platform,\ntone, required assets, dialogue/no-dialogue, safety/legal/factual claims, or credit-sensitive\nexecution. Otherwise make reasonable assumptions and continue.\n\nThis ends the turn. Do not call another tool after it. Ask short concrete question(s) and\navoid preamble.",
+  "parameterDocs": {
+    "question": "One short concrete question surfaced verbatim to the user.",
+    "reason": "Short telemetry tag such as missing_source_asset, ambiguous_subject, or destructive_confirm."
+  }
+}

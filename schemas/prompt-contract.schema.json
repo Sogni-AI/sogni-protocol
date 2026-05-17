@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sogni.ai/schemas/prompt-contract.schema.json",
+  "title": "PromptContract",
+  "description": "A PromptContract owns a tool's LLM-visible description and per-parameter docstrings. One contract per tool. Files in prompts/tools/*.json validate against this shape.",
+  "type": "object",
+  "required": ["contractId", "version", "toolName", "baseDescription", "parameterDocs"],
+  "additionalProperties": false,
+  "properties": {
+    "contractId": {
+      "type": "string",
+      "description": "Stable identifier for telemetry and registry lookup. Convention: <toolName>_v<n>."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semver string. Bumped when the contract's data shape changes."
+    },
+    "toolName": {
+      "type": "string",
+      "description": "Tool the contract describes. Must match a registered tool name from enums/tool-names.json."
+    },
+    "baseDescription": {
+      "type": "string",
+      "description": "Default description shown to the LLM when this tool is visible."
+    },
+    "parameterDocs": {
+      "type": "object",
+      "description": "Per-parameter docstrings keyed by parameter name.",
+      "additionalProperties": { "type": "string" }
+    },
+    "voiceExamples": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tool-specific voice or style examples (e.g. screenplay format for video)."
+    },
+    "conditionalNotes": {
+      "type": "object",
+      "description": "Conditional description fragments keyed by signal name. Appended to the baked description when the corresponding signal is present in the turn policy.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

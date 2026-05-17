@@ -1,0 +1,10 @@
+{
+  "contractId": "inspect_asset_v1",
+  "version": "1.0.0",
+  "toolName": "inspect_asset",
+  "baseDescription": "inspect_asset returns one manifest asset or the whole manifest. Use when the current\nmanifest state is unclear before referring to a generated asset by asset_id/user_label.\n\nDo not call it for ordinary uploaded references that the generation tools can use directly,\nand do not use it as a substitute for analyze_image/analyze_video content inspection.",
+  "parameterDocs": {
+    "asset_id": "Stable internal asset id. Prefer this when known.",
+    "user_label": "Human label to look up case-insensitively when asset_id is not known."
+  }
+}

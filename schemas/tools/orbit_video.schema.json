@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/tools/orbit_video.schema.json",
+  "title": "orbit_video arguments",
+  "schemaVersion": "2026-04-27.1",
+  "description": "Create a 360-degree orbit video around a subject. This is a SELF-CONTAINED pipeline — it automatically generates angle views (via change_angle), creates transition video clips, and stitches them into one seamless looping video. You only need ONE source image as the front view — either an uploaded image or a previously generated result. If the user uploaded an image, call this tool directly without generating anything first. Do NOT pre-generate multiple angles or variations — this tool handles everything internally. Use when the user asks for a \"360 pan\", \"orbit\", \"rotate around\", \"spin around\", or \"turntable\" view.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "elevation": {
+      "type": "string",
+      "enum": [
+        "low-angle shot",
+        "eye-level shot",
+        "elevated shot",
+        "high-angle shot"
+      ],
+      "description": "Camera elevation for all angles. Default: \"eye-level shot\"."
+    },
+    "distance": {
+      "type": "string",
+      "enum": [
+        "close-up",
+        "medium shot",
+        "wide shot"
+      ],
+      "description": "Camera distance for all angles. Default: \"medium shot\"."
+    },
+    "prompt": {
+      "type": "string",
+      "description": "Describe the SUBJECT and ambient environment (for example, a concise description of the visible subject, location, weather, props, and ambience). Do NOT describe camera motion, rotation, panning, orbiting, or 360-degree movement — camera motion is handled automatically. Do NOT put spoken dialogue here — use the dialogue parameter instead. Music is automatically suppressed — use generate_music separately."
+    },
+    "dialogue": {
+      "type": "string",
+      "description": "Spoken dialogue or narration for a SINGLE segment of the orbit video. This is applied ONLY to the segment specified by dialogueSegment (default: first segment). All other segments get foley/ambient audio only. Keep it brief — each segment is 2.5 seconds (~6 words max). If the user asks for dialogue in \"just the first segment\" or \"only at the start\", put the speech here and leave prompt for motion/foley only. If the user asks for dialogue in multiple/every segment, use dialogues instead."
+    },
+    "dialogues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Per-segment spoken dialogue lines for multiple orbit transitions. Use this when the user asks for dialogue in multiple segments, every turn, or before each 90-degree turn. With the default standard 360° orbit there are 4 transitions, so provide exactly 4 short lines in order. Each line should be brief enough for a 2.5 second segment (~6 words max). Preserve real names from the request or prior generated image; never invent placeholder speakers. For \"us\"/\"we\"/couple requests, make the named people speak together. Omit entries or use an empty string for segments that should have foley/ambient audio only. Do NOT also put these dialogue lines in prompt."
+    },
+    "dialogueSegment": {
+      "type": "number",
+      "description": "Which transition segment receives the dialogue (0-based index into the transition sequence). 0 = first transition (default), last index = wrap-back to front. With default angles there are 4 transitions (0-3). With custom angles the count equals angles.length + 1. Only used when dialogue is provided."
+    },
+    "angles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "front-right quarter view",
+          "right side view",
+          "back-right quarter view",
+          "back view",
+          "back-left quarter view",
+          "left side view",
+          "front-left quarter view"
+        ]
+      },
+      "description": "OMIT THIS PARAMETER for standard 360° orbits — the default (3 angles at 90° increments: right, back, left + source as front = 4 transitions) works for nearly all requests. Only provide this when the user explicitly asks for specific angles, a partial orbit, or extra-smooth rotation. Each additional angle costs extra credits and generation time. Values are clockwise azimuths between the source (front) and wrap-back."
+    },
+    "sourceImageIndex": {
+      "type": "number",
+      "description": "Which result image to orbit around (0-based). If the user picked a 1-based image number, subtract 1 and set this explicitly (number 3 -> 2). Omit only when the user did not choose a specific prior result; then the tool uses the latest result or original upload."
+    }
+  },
+  "required": []
+}

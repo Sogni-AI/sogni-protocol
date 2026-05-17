@@ -1,0 +1,11 @@
+{
+  "contractId": "change_angle_v1",
+  "version": "1.0.0",
+  "toolName": "change_angle",
+  "baseDescription": "change_angle creates a new still image from a different camera perspective. Use when the\nuser asks for a left/right/back/three-quarter/front view, elevated/low-angle view, close-up,\nmedium shot, or wide shot of an existing image subject.\n\nThe description must be exactly one azimuth, one elevation, and one distance phrase in the\ntool schema format. Default unspecified elevation to eye-level shot and distance to medium\nshot. Use the latest result unless the user specifies another source or says original.\n\nUse orbit_video for a full video orbit. Do not pre-generate angles for orbit_video; that tool\nowns its own angle pipeline.",
+  "parameterDocs": {
+    "description": "Exact format: \"[azimuth] [elevation] [distance]\". Pick one value from each schema category.",
+    "sourceImageIndex": "Omit for latest result. Use -1 only when the user explicitly says original/source upload.",
+    "loraStrength": "Omit unless the user explicitly asks to control the strength of the angle change."
+  }
+}

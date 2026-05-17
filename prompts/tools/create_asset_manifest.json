@@ -1,0 +1,9 @@
+{
+  "contractId": "create_asset_manifest_v1",
+  "version": "1.0.0",
+  "toolName": "create_asset_manifest",
+  "baseDescription": "create_asset_manifest resets and seeds the session asset manifest with stable asset_id\nrecords. Use at the start of workflows with multiple named uploaded/generated assets that\nwill need durable references across later prompts.\n\nDo not call this just to use ordinary uploaded images in edit_image/generate_image; those\ntools can already reference uploads. Resetting discards prior manifest entries.",
+  "parameterDocs": {
+    "assets": "Ordered assets to register. Each needs user_label and type; include must_preserve/avoid only when they matter later."
+  }
+}

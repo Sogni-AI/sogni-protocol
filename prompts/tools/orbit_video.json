@@ -1,0 +1,13 @@
+{
+  "contractId": "orbit_video_v1",
+  "version": "1.0.0",
+  "toolName": "orbit_video",
+  "baseDescription": "orbit_video is a self-contained pipeline that handles angle generation, video transitions,\nand stitching internally. If the user uploaded an image, call orbit_video directly — it uses\nthe upload as the front view. If no image exists yet, generate ONE front-view image first,\nthen call orbit_video. Never pre-generate multiple angles or variations for orbit_video.\n\nORBIT DIALOGUE: When the user wants spoken dialogue in an orbit video, ALWAYS use the\ndialogue parameter (NOT prompt). Dialogue goes in ONLY the specified segment — put\nmotion/foley in prompt. If the user says \"only in the first segment\" or \"just at the start\",\nset dialogueSegment=0 (default). Never put dialogue text in the prompt parameter — it will\nbe duplicated across all segments.\n\nORBIT ANGLES: Do NOT send the angles parameter for standard 360° orbits — omit it entirely.\nThe default (right side view, back view, left side view at 90° increments) is correct for all\nnormal orbit requests. Only send angles when the user explicitly asks for specific azimuth\npositions (e.g. \"show me from the front-right and back-left only\") or a partial orbit.\n\nORBIT DIALOGUE UPDATE: For dialogue in multiple/every orbit segment, before every 90-degree\nturn, or with per-turn sequence numbers, use the dialogues array instead of the single dialogue\nparameter. Default 360-degree orbit has 4 transitions, so provide 4 short lines in order; leave\nprompt for subject, action, ambient audio, and foley only. Preserve the real names from the\nrequest/prior result; never invent placeholder speaker tags. For a couple/persona request\nphrased as \"us\", \"we\", or \"my wife and I\", each per-turn line should make the named people\nspeak together. When the user picks a generated image by 1-based number (\"number 3\",\n\"use #3\"), pass sourceImageIndex as that number minus one (number 3 -> sourceImageIndex=2)\ninstead of omitting it.",
+  "parameterDocs": {
+    "dialogue": "Spoken dialogue for the first/default orbit segment. Do NOT put dialogue in prompt — it repeats across all segments.",
+    "dialogues": "Per-segment dialogue lines array. Use for multi-segment dialogue (4 lines for full 360° orbit).",
+    "dialogueSegment": "Which orbit segment gets the dialogue (0-based). Default 0 = first segment.",
+    "angles": "Omit for standard 360° orbits. Only set for explicit azimuth positions or partial orbits.",
+    "sourceImageIndex": "Use uploaded image if present. If user picks by 1-based number, subtract 1."
+  }
+}

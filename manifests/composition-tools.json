@@ -1,0 +1,228 @@
+{
+  "schemaRefs": {
+    "enhance_prompt": "../schemas/tools/enhance_prompt.schema.json",
+    "compose_lyrics": "../schemas/tools/compose_lyrics.schema.json",
+    "compose_instrumental": "../schemas/tools/compose_instrumental.schema.json",
+    "compose_script": "../schemas/tools/compose_script.schema.json",
+    "compose_workflow": "../schemas/tools/compose_workflow.schema.json",
+    "compose_workflow_template": "../schemas/tools/compose_workflow_template.schema.json"
+  },
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "enhance_prompt",
+        "description": "Enhance or adapt a source prompt into a model-ready image, video, music, or edit prompt. Use for prompt expansion and model-specific prompt preparation. Do not use for lyrics or full scripts.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prompt"],
+          "properties": {
+            "prompt": { "type": "string", "description": "The source prompt, rough idea, or prompt revision request to enhance." },
+            "target_output": { "type": "string", "enum": ["image_prompt", "video_prompt", "music_prompt", "edit_prompt", "model_prompt", "general_prompt"], "description": "The kind of prompt artifact to produce." },
+            "destination_model": { "type": "string", "description": "Optional destination model selector, such as seedance2, ltx23, wan22, flux2, gpt-image-2, or sdxl." },
+            "destination_tool": { "type": "string", "description": "Optional downstream generation tool, such as generate_image, edit_image, generate_video, animate_photo, sound_to_video, video_to_video, or generate_music." },
+            "prompting_type": { "type": "string", "enum": ["flux", "sdxl", "sd15", "pony", "fast", "sd3", "editing", "video"], "description": "Optional image-prompting family when producing an image prompt." },
+            "model_title": { "type": "string", "description": "Optional human-readable target model name for image prompt guidance." },
+            "style_prompt": { "type": "string", "description": "Optional current style, brand, or prompt context to complement without repeating." },
+            "prompt_mode": { "type": "string", "enum": ["auto", "preserve", "expand", "compress", "validate", "payload"], "description": "Optional model prompt adaptation mode." },
+            "duration_seconds": { "type": "number", "minimum": 1, "maximum": 300, "description": "Requested runtime when enhancing a video or music prompt." },
+            "aspect_ratio": { "type": "string", "description": "Optional target aspect ratio, such as 16:9, 9:16, 1:1, 4:5, or 21:9." },
+            "assets": {
+              "type": "array",
+              "maxItems": 12,
+              "description": "Optional available assets the enhanced prompt may reference.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["media_type"],
+                "properties": {
+                  "id": { "type": "string" },
+                  "label": { "type": "string" },
+                  "media_type": { "type": "string", "enum": ["image", "video", "audio"] },
+                  "role": { "type": "string", "enum": ["first_frame", "last_frame", "reference", "identity", "style", "motion", "audio", "source_video"] },
+                  "url": { "type": "string" }
+                }
+              }
+            },
+            "constraints": { "type": "object", "description": "Optional production, brand, model, or user constraints to preserve." }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "compose_lyrics",
+        "description": "Compose vocal song lyrics and suggested musical parameters. Use for songs with words, choruses, verses, jingles, vocal hooks, or lyric rewrites. Do not use for instrumental-only music.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prompt"],
+          "properties": {
+            "prompt": { "type": "string", "description": "The song topic, mood, genre, scene, campaign, or lyric request." },
+            "language": { "type": "string", "description": "Optional language code or language name for the lyrics." },
+            "music_prompt": { "type": "string", "description": "Optional musical style context, genre, instrumentation, mood, or production direction." },
+            "duration_seconds": { "type": "number", "minimum": 10, "maximum": 600, "description": "Optional desired song duration in seconds." }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "compose_instrumental",
+        "description": "Compose an instrumental music structure and suggested musical parameters. Use for background scores, beds, cues, themes, and music requests without lyrics.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prompt"],
+          "properties": {
+            "prompt": { "type": "string", "description": "The instrumental music topic, mood, genre, scene, campaign, or composition request." },
+            "music_prompt": { "type": "string", "description": "Optional musical style context, instrumentation, mood, or production direction." },
+            "duration_seconds": { "type": "number", "minimum": 10, "maximum": 600, "description": "Optional desired track duration in seconds." }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "compose_script",
+        "description": "Compose scripts, storyboards, video prompts, ad concepts, trailers, social shorts, campaign beats, and talking-head plans. Use for creative writing artifacts. Do not use for lyrics or simple prompt expansion.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["brief"],
+          "properties": {
+            "brief": { "type": "string", "description": "The creative writing brief, story idea, product concept, video idea, or revision request." },
+            "script_type": { "type": "string", "enum": ["video_prompt", "screenplay", "storyboard", "ad_script", "trailer", "social_short", "talking_head", "campaign", "revision"], "description": "The kind of script or creative writing artifact to produce." },
+            "destination_model": { "type": "string", "description": "Optional destination video model selector, such as ltx23, wan22, or seedance2." },
+            "destination_tool": { "type": "string", "description": "Optional downstream tool, such as generate_video, animate_photo, sound_to_video, or video_to_video." },
+            "duration_seconds": { "type": "number", "minimum": 1, "maximum": 300, "description": "Requested runtime for a video prompt, social short, ad, or talking-head script." },
+            "scene_count": { "type": "integer", "minimum": 1, "maximum": 12, "description": "Requested number of scenes, shots, beats, or storyboard panels." },
+            "aspect_ratio": { "type": "string", "description": "Optional target aspect ratio, such as 16:9, 9:16, 1:1, 4:5, or 21:9." },
+            "platform": { "type": "string", "description": "Optional target platform or context, such as TikTok, YouTube Shorts, Instagram Reels, broadcast, landing page, game trailer, or pitch deck." },
+            "style": { "type": "string", "description": "Optional style, genre, tone, visual treatment, or brand voice to preserve." },
+            "first_frame_description": { "type": "string", "description": "Optional description of the starting frame when composing an image-to-video prompt without attached vision content." },
+            "first_frame_data_url": { "type": "string", "description": "Optional inline image data URI for the starting frame when composing an image-to-video or first-frame video prompt." },
+            "last_frame_data_url": { "type": "string", "description": "Optional inline image data URI for the ending frame when composing an image-to-video transition prompt." },
+            "return_format": { "type": "string", "enum": ["script", "markdown", "json"], "description": "Requested output format. Use script unless structured planning output is explicitly needed." }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "compose_workflow",
+        "description": "Compose a runnable durable creative workflow plan from a creative brief. Returns a validated `steps[]` array (the same shape accepted by `POST /v1/creative-agent/workflows`) plus a capacity-units estimate.\n\nCall this tool — do NOT describe the plan in chat text — when the user asks for any of: \"a runnable workflow plan\", \"a plan I can submit\", \"compile a workflow / pipeline\", \"a multi-step plan\", \"a one-shot plan\", or names a structural shape like \"N-shot teaser, [aspect], [duration]\" (e.g. \"5-shot product teaser, 9:16, 15s\"). The plain-text description of stages is never the right output for those requests — the validated `steps[]` array is the contract.\n\nUse `compose_workflow_template` instead when the user wants to SAVE the plan as a reusable template (different surface: typed `inputs[]` plus `template_draft`). Use `compose_script` for creative writing artifacts (scripts, lyrics, scene beats) that are NOT a workflow plan. The returned plan is not idempotent; pair the eventual `POST /v1/creative-agent/workflows` submission with your own `Idempotency-Key`.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["brief"],
+          "properties": {
+            "brief": { "type": "string", "description": "Creative brief describing what the workflow should produce. Free-form natural language. Required." },
+            "scene_count": { "type": "integer", "minimum": 1, "maximum": 12, "description": "Suggested number of distinct shots/scenes. The planner may produce more steps than scenes (e.g., keyframe + clip per scene)." },
+            "duration_seconds": { "type": "number", "minimum": 1, "maximum": 120, "description": "Target total duration in seconds for video-bearing plans." },
+            "aspect_ratio": { "type": "string", "enum": ["1:1", "4:3", "3:4", "16:9", "9:16", "21:9"], "description": "Output aspect ratio." },
+            "style": { "type": "string", "description": "Optional stylistic guidance (e.g., 'cinematic, neon, low-key', 'whiteboard illustration')." },
+            "destination_models": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "image": { "type": "string", "description": "Preferred image model (e.g., 'flux2', 'gpt-image-2')." },
+                "video": { "type": "string", "description": "Preferred video model (e.g., 'ltx23', 'wan22', 'seedance2')." },
+                "music": { "type": "string", "description": "Preferred music model." }
+              }
+            },
+            "max_estimated_capacity_units": { "type": "integer", "minimum": 1, "description": "If set, the planner attempts to keep total estimated cost at or below this value and returns `fits_budget: false` if it cannot." },
+            "include_audio": { "type": "boolean", "description": "If true, include a music generation step. Defaults to false." },
+            "return_format": { "type": "string", "enum": ["json"], "description": "Currently `json` is the only supported value. Reserved for future." }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "compose_workflow_template",
+        "description": "Compose OR EDIT a savable, parameterized workflow template plus a concrete example plan. Returns a `template_draft` (typed `inputs[]`, parameterized `stages[]` referencing `$inputs.<name>`, optional `graph` layout) alongside a Phase-1-compatible `plan` for example inputs.\n\nUse for both: (1) creating a NEW named, reusable workflow in the builder UI, AND (2) EDITING a SAVED workflow the user references by name or id (e.g. \"edit my bobblehead workflow\", \"change my saved storyboard template to 16:9\", \"add a music step to wf_X\", \"swap the model in my saved template\"). For saved-template edits, pass the prior template JSON as `existing_template` so the planner preserves stage ids and bumps only the requested change.\n\nDo NOT use individual creative tools (generate_image, edit_image, animate_photo, generate_video, etc.) when the user is editing a SAVED workflow — those produce one-shot media, not template changes. Do NOT use `compose_workflow` for saved-template edits; that is for one-shot plans only.\n\nThe returned template is a draft; the caller is responsible for saving it via `POST /v1/creative-agent/workflows/templates`.",
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["brief", "name"],
+          "properties": {
+            "brief": { "type": "string", "description": "Creative brief describing what the workflow should produce. Free-form natural language. Required." },
+            "name": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Human-readable template name (e.g. \"My Plastic Dream — TikTok/Reels\"). Required." },
+            "description": { "type": "string", "description": "Optional template description. If omitted, the planner may derive one from the brief." },
+            "category": { "type": "string", "enum": ["portrait", "video-social", "makeover", "cinematic", "music", "analysis", "custom", "other"], "description": "Optional category for surfacing the template in the library. Defaults to 'custom' when omitted." },
+            "visibility": { "type": "string", "enum": ["private", "public"], "description": "Persistence visibility. Defaults to 'private'. The 'team' visibility is reserved for a later milestone." },
+            "inputs": {
+              "type": "array",
+              "maxItems": 16,
+              "description": "Optional typed input declarations. When omitted, the planner LLM proposes inputs based on the brief.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "type"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1, "maxLength": 64, "description": "Input name; used as the placeholder key (e.g. $inputs.motion_source_video)." },
+                  "type": { "type": "string", "enum": ["image", "audio", "video", "text", "number", "select", "boolean"], "description": "Input value type. URL string for image/audio/video; primitive for the rest." },
+                  "required": { "type": "boolean", "description": "Whether the input must be supplied at run time. Defaults to false." },
+                  "description": { "type": "string", "description": "Human-readable description shown in the launcher UI." },
+                  "default": { "description": "Optional default value. Type must match `type`." },
+                  "options": {
+                    "type": "array",
+                    "description": "Allowed enum values for `select` inputs.",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["value", "label"],
+                      "properties": {
+                        "value": { "type": "string" },
+                        "label": { "type": "string" }
+                      }
+                    }
+                  },
+                  "multiple": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["min", "max"],
+                    "description": "Set when the input accepts an array of values.",
+                    "properties": {
+                      "min": { "type": "integer", "minimum": 0 },
+                      "max": { "type": "integer", "minimum": 1 }
+                    }
+                  },
+                  "internal": { "type": "boolean", "description": "Internal inputs are seeded at run-create time and hidden from the launcher UI." }
+                }
+              }
+            },
+            "scene_count": { "type": "integer", "minimum": 1, "maximum": 12, "description": "Suggested number of distinct shots/scenes. The planner may produce more steps than scenes (e.g., keyframe + clip per scene)." },
+            "duration_seconds": { "type": "number", "minimum": 1, "maximum": 120, "description": "Target total duration in seconds for video-bearing plans." },
+            "aspect_ratio": { "type": "string", "enum": ["1:1", "4:3", "3:4", "16:9", "9:16", "21:9"], "description": "Output aspect ratio." },
+            "style": { "type": "string", "description": "Optional stylistic guidance (e.g., 'cinematic, neon, low-key', 'whiteboard illustration')." },
+            "destination_models": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "image": { "type": "string", "description": "Preferred image model (e.g., 'flux2', 'gpt-image-2')." },
+                "video": { "type": "string", "description": "Preferred video model (e.g., 'ltx23', 'wan22', 'seedance2')." },
+                "music": { "type": "string", "description": "Preferred music model." }
+              }
+            },
+            "max_estimated_capacity_units": { "type": "integer", "minimum": 1, "description": "If set, the planner attempts to keep total estimated cost at or below this value and returns `fits_budget: false` if it cannot." },
+            "include_audio": { "type": "boolean", "description": "If true, include a music generation step. Defaults to false." },
+            "return_format": { "type": "string", "enum": ["json"], "description": "Currently `json` is the only supported value. Reserved for future." },
+            "existing_template": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Optional full WorkflowTemplate JSON the caller wants the planner to edit. When supplied, the planner treats the supplied template as the starting point and the brief as the modification request: it preserves unchanged stages and inputs, applies the requested edits, bumps the template version, and keeps stage ids stable unless the brief explicitly renames them. Use for 'add a music step', 'switch the storyboard model to GPT Image 2', 'make this 9:16 instead of 16:9' style edits."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

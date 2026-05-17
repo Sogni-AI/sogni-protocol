@@ -1,0 +1,156 @@
+{
+  "title": "compose_workflow_template tool schema",
+  "schemaVersion": "2026-05-14.1",
+  "description": "Synchronous planner that emits a savable, parameterized workflow template plus a concrete example plan from a brief.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["brief", "name"],
+  "properties": {
+    "brief": {
+      "type": "string",
+      "description": "Creative brief describing what the workflow should produce. Free-form natural language. Required."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable template name (e.g. \"My Plastic Dream — TikTok/Reels\"). Required."
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional template description. If omitted, the planner may derive one from the brief."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["portrait", "video-social", "makeover", "cinematic", "music", "analysis", "custom", "other"],
+      "description": "Optional category for surfacing the template in the library. Defaults to 'custom' when omitted."
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["private", "public"],
+      "description": "Persistence visibility. Defaults to 'private'. The 'team' visibility is reserved for a later milestone."
+    },
+    "inputs": {
+      "type": "array",
+      "maxItems": 16,
+      "description": "Optional typed input declarations. When omitted, the planner LLM proposes inputs based on the brief.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Input name; used as the placeholder key (e.g. $inputs.motion_source_video)."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["image", "audio", "video", "text", "number", "select", "boolean"],
+            "description": "Input value type. URL string for image/audio/video; primitive for the rest."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the input must be supplied at run time. Defaults to false."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description shown in the launcher UI."
+          },
+          "default": {
+            "description": "Optional default value. Type must match `type`."
+          },
+          "options": {
+            "type": "array",
+            "description": "Allowed enum values for `select` inputs.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["value", "label"],
+              "properties": {
+                "value": { "type": "string" },
+                "label": { "type": "string" }
+              }
+            }
+          },
+          "multiple": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["min", "max"],
+            "description": "Set when the input accepts an array of values.",
+            "properties": {
+              "min": { "type": "integer", "minimum": 0 },
+              "max": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "internal": {
+            "type": "boolean",
+            "description": "Internal inputs are seeded at run-create time and hidden from the launcher UI."
+          }
+        }
+      }
+    },
+    "scene_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12,
+      "description": "Suggested number of distinct shots/scenes. The planner may produce more steps than scenes (e.g., keyframe + clip per scene)."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 120,
+      "description": "Target total duration in seconds for video-bearing plans."
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "enum": ["1:1", "4:3", "3:4", "16:9", "9:16", "21:9"],
+      "description": "Output aspect ratio."
+    },
+    "style": {
+      "type": "string",
+      "description": "Optional stylistic guidance (e.g., 'cinematic, neon, low-key', 'whiteboard illustration')."
+    },
+    "destination_models": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "image": { "type": "string", "description": "Preferred image model (e.g., 'flux2', 'gpt-image-2')." },
+        "video": { "type": "string", "description": "Preferred video model (e.g., 'ltx23', 'wan22', 'seedance2')." },
+        "music": { "type": "string", "description": "Preferred music model." }
+      }
+    },
+    "max_estimated_capacity_units": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "If set, the planner attempts to keep total estimated cost at or below this value and returns `fits_budget: false` if it cannot."
+    },
+    "include_audio": {
+      "type": "boolean",
+      "description": "If true, include a music generation step. Defaults to false."
+    },
+    "return_format": {
+      "type": "string",
+      "enum": ["json"],
+      "description": "Currently `json` is the only supported value. Reserved for future."
+    },
+    "existing_template": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional. The full WorkflowTemplate JSON (id, name, description, brief, category, visibility, inputs, stages, etc.) the caller wants the planner to edit. When supplied, the planner treats the existing template as the starting point and the brief as the modification request — preserve unchanged stages and inputs, apply the requested edits, and bump the template version. Stage ids and input names remain stable unless the brief explicitly renames them. Use this for 'add a music step', 'change the dance choreography', 'switch the storyboard model to GPT Image 2', etc.",
+      "properties": {
+        "id": { "type": "string", "description": "Existing template id; preserved on the returned template_draft.id." },
+        "version": { "type": "string", "description": "Existing semver-ish version. The planner returns a bumped value." },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "brief": { "type": "string" },
+        "category": { "type": "string" },
+        "stability": { "type": "string" },
+        "visibility": { "type": "string" },
+        "inputs": { "type": "array" },
+        "stages": { "type": "array" }
+      }
+    }
+  }
+}

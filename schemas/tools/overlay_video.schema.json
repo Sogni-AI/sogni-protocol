@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/tools/overlay_video.schema.json",
+  "title": "overlay_video arguments",
+  "schemaVersion": "2026-04-27.1",
+  "description": "Burn text and/or logo/watermark image overlays onto a previously rendered or uploaded video. Use when the user asks to add a title, caption, label, watermark, brand logo, sponsor mark, lower-third, tagline, sticker, or any persistent text/graphic over the existing video frames. Multiple overlays can be supplied in one call (e.g. a corner logo plus a top-center title). Each overlay can optionally be limited to a [startSeconds, endSeconds] time range. When the user asks for an overlay to appear for a specific window (for example \"2 seconds in the middle\"), set startSeconds/endSeconds on the overlay item in the same call. Negative startSeconds/endSeconds are relative to the end of the base video, so startSeconds=-2 with omitted endSeconds means \"the last 2 seconds\". When replacing a video time window with an uploaded still image or screenshot, use an image overlay with widthPct=100 and fit=\"cover\" for that window. This is a pure ffmpeg post-production op — it does not regenerate the video. Do not use for generative intro/outro/bumper/end-card/start-card requests; those add or regenerate video time and should use extend_video or replace_video_segment. Do not call it again just to refine default size/placement after it succeeds; finalize and wait for user feedback. Do not use for animated typography, kinetic captions, or moving stickers; this lays down static overlays only.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sourceVideoIndex": {
+      "type": "number",
+      "description": "Which video to overlay onto. Omit to use the most recent generated video, or the first uploaded video when no generated video exists. Non-negative values are 0-based indices into prior generated video results. Negative values reference uploaded videos: -1 = first uploaded video, -2 = second, etc., falling back to the most recent generated video when no uploads exist."
+    },
+    "overlays": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered list of overlays to burn in. Each overlay is rendered on top of all previous overlays. Either kind=\"text\" (with `text` and styling) or kind=\"image\" (with `sourceImageIndex`).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "text",
+              "image"
+            ],
+            "description": "Overlay kind. \"text\" renders drawtext; \"image\" composites an existing image asset."
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "top-left",
+              "top-center",
+              "top-right",
+              "center",
+              "bottom-left",
+              "bottom-center",
+              "bottom-right"
+            ],
+            "description": "Anchor position on the frame. Pixel offsets nudge inward; the renderer pads each anchor by a small safe margin so overlays do not touch the frame edge."
+          },
+          "offsetX": {
+            "type": "number",
+            "description": "Optional horizontal offset in pixels. Positive = inward from the anchor edge."
+          },
+          "offsetY": {
+            "type": "number",
+            "description": "Optional vertical offset in pixels. Positive = inward from the anchor edge."
+          },
+          "startSeconds": {
+            "type": "number",
+            "description": "Show the overlay from this time. Default 0 (show from the start). Negative values are relative to the end of the base video; startSeconds=-2 means start 2 seconds before the end."
+          },
+          "endSeconds": {
+            "type": "number",
+            "description": "Hide the overlay at this time. Default = full video duration. Negative values are relative to the end of the base video."
+          },
+          "text": {
+            "type": "string",
+            "description": "Overlay text. Required when kind=\"text\". Use plain text; line breaks are honored."
+          },
+          "fontSizePct": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 30,
+            "description": "Font size as a percentage of the video height. Default: 6 (≈ 43px on a 720p frame). Only valid when kind=\"text\"."
+          },
+          "color": {
+            "type": "string",
+            "description": "Text fill color (CSS hex like \"#FFFFFF\" or named ffmpeg color). Default \"#FFFFFF\". Only valid when kind=\"text\"."
+          },
+          "outlineColor": {
+            "type": "string",
+            "description": "Text outline color. Default \"#000000\" with a thin stroke for legibility. Only valid when kind=\"text\"."
+          },
+          "backgroundColor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional rgba background pill behind the text (e.g. \"rgba(0,0,0,0.5)\"). null = no box. Only valid when kind=\"text\"."
+          },
+          "fontWeight": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "bold"
+            ],
+            "description": "Default \"normal\". Only valid when kind=\"text\"."
+          },
+          "sourceImageIndex": {
+            "type": "number",
+            "description": "Which image to overlay. Required when kind=\"image\". Non-negative values are 0-based indices into prior generated image results. Negative values reference uploaded images in image-only order: -1 = first uploaded image, -2 = second, etc. If the user uploaded one video and one logo image, the logo is sourceImageIndex=-1."
+          },
+          "widthPct": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Logo width as a percentage of the video width. Default: 15. Only valid when kind=\"image\"."
+          },
+          "opacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Image overlay opacity, 0..1. Default 1.0 (fully opaque). Only valid when kind=\"image\"."
+          },
+          "fit": {
+            "type": "string",
+            "enum": [
+              "contain",
+              "cover"
+            ],
+            "description": "Image sizing mode. Default \"contain\" scales by widthPct and preserves the full overlay image. \"cover\" scales/crops the image to cover the full video frame; use with widthPct=100 for screenshot/still-frame replacement windows."
+          }
+        },
+        "required": [
+          "kind",
+          "position"
+        ]
+      }
+    }
+  },
+  "required": [
+    "overlays"
+  ]
+}

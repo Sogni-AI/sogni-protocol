@@ -1,0 +1,21 @@
+{
+  "contractId": "compose_script_v1",
+  "version": "1.0.0",
+  "toolName": "compose_script",
+  "baseDescription": "compose_script composes scripts, storyboards, video prompts, ad concepts, trailers, social\nshorts, campaign beats, and talking-head plans. Use for creative writing artifacts where\nthe user wants prose, scenes, beats, or a script-shaped deliverable.\n\nDo not use compose_script for song lyrics — use compose_lyrics. Do not use it for simple\nprompt expansion — use enhance_prompt. Do not use it to plan a runnable multi-step\nworkflow — use compose_workflow or compose_workflow_template.\n\ncompose_script returns a creative-writing deliverable. When the script is meant to feed a\ndownstream video tool, pair it with destination_tool/destination_model so the output is\ntuned for that pipeline; the caller still has to invoke the generation tool itself.",
+  "parameterDocs": {
+    "brief": "The creative writing brief, story idea, product concept, video idea, or revision request.",
+    "script_type": "The kind of script or creative writing artifact to produce. One of video_prompt, screenplay, storyboard, ad_script, trailer, social_short, talking_head, campaign, or revision.",
+    "destination_model": "Optional destination video model selector, such as ltx23, wan22, or seedance2.",
+    "destination_tool": "Optional downstream tool, such as generate_video, animate_photo, sound_to_video, or video_to_video.",
+    "duration_seconds": "Requested runtime in seconds (1-300) for a video prompt, social short, ad, or talking-head script.",
+    "scene_count": "Requested number of scenes, shots, beats, or storyboard panels (1-12).",
+    "aspect_ratio": "Optional target aspect ratio, such as 16:9, 9:16, 1:1, 4:5, or 21:9.",
+    "platform": "Optional target platform or context, such as TikTok, YouTube Shorts, Instagram Reels, broadcast, landing page, game trailer, or pitch deck.",
+    "style": "Optional style, genre, tone, visual treatment, or brand voice to preserve.",
+    "first_frame_description": "Optional description of the starting frame when composing an image-to-video prompt without attached vision content.",
+    "first_frame_data_url": "Optional inline image data URI for the starting frame when composing an image-to-video or first-frame video prompt.",
+    "last_frame_data_url": "Optional inline image data URI for the ending frame when composing an image-to-video transition prompt.",
+    "return_format": "Requested output format. One of script, markdown, or json. Use script unless structured planning output is explicitly needed."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/events/progress-event.schema.json",
+  "title": "Creative agent progress event",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "workflowId": { "type": "string" },
+    "stepId": { "type": "string" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "type": {
+      "type": "string",
+      "enum": ["started", "progress", "completed", "error", "artifact", "tool_call", "llm_request", "cancelled", "custom"]
+    },
+    "toolName": { "type": "string" },
+    "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+    "message": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "data": { "type": "object", "additionalProperties": true }
+  },
+  "required": ["id", "workflowId", "sequence", "timestamp", "type"]
+}

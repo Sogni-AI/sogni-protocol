@@ -1,0 +1,17 @@
+{
+  "contractId": "compose_workflow_v1",
+  "version": "1.0.0",
+  "toolName": "compose_workflow",
+  "baseDescription": "compose_workflow turns a creative brief into a runnable ONE-SHOT durable creative workflow\nplan (the same shape that POST /v1/creative-agent/workflows accepts). Pick this when the\nuser wants to RUN a multi-step pipeline ONCE — they will review the plan, submit it, get\nthe output, and be done. Trigger phrases: \"give me a runnable workflow plan\", \"compose a\none-shot plan\", \"compile a plan I can submit\", \"I want to run this once\", \"I do NOT need\nto save it as a template\", \"just review the steps and run it\", \"5-shot teaser, 9:16, 15s\"\nstyle concrete one-off briefs.\n\nHard line vs compose_workflow_template: if the user wants to SAVE / REUSE / NAME a\nworkflow recipe to re-run later on different inputs, use compose_workflow_template\ninstead. compose_workflow returns a one-time plan with no template wrapper; the user\nCANNOT re-run this output with different inputs without a fresh planner call.\n\nDo not use compose_workflow for ordinary creative writing artifacts — use compose_script for\nscripts, storyboards, ad concepts, or trailers. Do not use it for prompt expansion — use\nenhance_prompt. Do not use it to actually run a workflow — the response is just the plan;\nthe caller is responsible for submitting it to POST /v1/creative-agent/workflows with their\nown Idempotency-Key.\n\nThe returned plan is not idempotent on its own. Pair the eventual workflow submission with\na caller-owned Idempotency-Key. Phase 1 only supports return_format=\"json\".",
+  "parameterDocs": {
+    "brief": "Required free-form natural-language description of what the workflow should produce.",
+    "scene_count": "Suggested number of distinct shots/scenes (1-12). The planner may emit more steps than scenes (for example, a keyframe + clip pair per scene).",
+    "duration_seconds": "Target total duration in seconds for video-bearing plans (1-120).",
+    "aspect_ratio": "Output aspect ratio. One of 1:1, 4:3, 3:4, 16:9, 9:16, 21:9.",
+    "style": "Optional stylistic guidance such as \"cinematic, neon, low-key\" or \"whiteboard illustration\".",
+    "destination_models": "Optional preferred image/video/music model selectors (e.g. flux2, ltx23). Each subkey is optional.",
+    "max_estimated_capacity_units": "Optional coarse capacity budget. If set, the planner tries to keep total estimated cost at or below this value; the API returns fits_budget=false if it cannot.",
+    "include_audio": "When true, include a generate_music step in the plan. Defaults to false.",
+    "return_format": "Reserved for future use; only \"json\" is supported in Phase 1. Omit if unsure."
+  }
+}

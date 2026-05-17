@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/workflows/durable-workflow-step.schema.json",
+  "title": "Creative agent durable workflow step metadata",
+  "schemaVersion": "2026-04-27.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "workflowId": { "type": "string" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "status": { "type": "string", "enum": ["queued", "running", "completed", "partial_failure", "waiting_for_user", "failed", "cancelled"] },
+    "backbone": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "string" },
+        "modelKnowledgeVersion": { "type": "string" },
+        "routingPolicyVersion": { "type": "string" }
+      },
+      "required": ["schemaVersion", "modelKnowledgeVersion", "routingPolicyVersion"]
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runtime": { "type": "string", "enum": ["sogni-chat", "sogni-api", "sogni-client", "creative-agent", "other"] },
+        "version": { "type": "string" }
+      },
+      "required": ["runtime", "version"]
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "schemaVersion": { "type": "string" }
+      },
+      "required": ["name", "schemaVersion"]
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "arguments": { "type": "object", "additionalProperties": true },
+        "normalizedArguments": { "type": "object", "additionalProperties": true }
+      },
+      "required": ["arguments", "normalizedArguments"]
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectedModel": { "type": "string" },
+        "params": { "type": "object", "additionalProperties": true }
+      },
+      "required": ["selectedModel", "params"]
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectedBy": { "type": "string" },
+        "reasons": { "type": "array", "items": { "type": "string" } },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modelId": { "type": "string" },
+              "available": { "type": "boolean" },
+              "reason": { "type": "string" }
+            },
+            "required": ["modelId"]
+          }
+        }
+      },
+      "required": ["selectedBy", "reasons", "alternatives"]
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "estimate": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "costClass": { "type": "string" },
+            "unit": { "type": "string", "enum": ["image", "second", "operation"] },
+            "quantity": { "type": "number", "minimum": 0 }
+          },
+          "required": ["costClass", "unit", "quantity"]
+        },
+        "actual": { "type": "object", "additionalProperties": true }
+      },
+      "required": ["estimate"]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "idempotencyKey": { "type": "string" },
+    "retry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 },
+        "classification": { "type": "string", "enum": ["none", "transient", "permanent", "unknown"] }
+      },
+      "required": ["count", "classification"]
+    },
+    "timestamps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["createdAt", "updatedAt"]
+    }
+  },
+  "required": [
+    "id",
+    "workflowId",
+    "sequence",
+    "status",
+    "backbone",
+    "implementation",
+    "tool",
+    "input",
+    "generation",
+    "routing",
+    "cost",
+    "artifacts",
+    "idempotencyKey",
+    "retry",
+    "timestamps"
+  ]
+}

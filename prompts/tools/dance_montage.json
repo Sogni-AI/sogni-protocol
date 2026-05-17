@@ -1,0 +1,9 @@
+{
+  "contractId": "dance_montage_v1",
+  "version": "1.0.0",
+  "toolName": "dance_montage",
+  "baseDescription": "dance_montage creates dance videos from an uploaded photo. Dance video requests from an\nuploaded photo go directly to dance_montage; do not call edit_image/generate_image first\nunless the user explicitly asks for a new look, outfit, generated character/image, variations,\nor persona identity prep.\n\nDance preset/vibe words like \"Barbie\", \"Metric\", \"Black Sheep\", \"Rasputin\", or \"TikTok\" are\nnot image-prep requests by themselves.\n\nSELECTION-GATED DANCE FLOW: If the user asks for N image options and says they will pick\none before the dance video, generate the image options first (generate_image or edit_image\nwith numberOfVariations=N), then stop and wait for the user to choose before calling\ndance_montage.",
+  "parameterDocs": {
+    "sourceImageIndex": "Use the uploaded photo directly (-1). Only use a generated image index if the user explicitly requested a new image first."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Chat-run lifecycle states. Mirrors @sogni-ai/sogni-intelligence-client/chatRun ChatRunStatus.",
+  "values": [
+    "queued",
+    "running",
+    "waiting_for_user",
+    "completed",
+    "partial_failure",
+    "failed",
+    "cancelled"
+  ]
+}

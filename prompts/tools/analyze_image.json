@@ -1,0 +1,12 @@
+{
+  "contractId": "analyze_image_v1",
+  "version": "1.0.0",
+  "toolName": "analyze_image",
+  "baseDescription": "analyze_image answers questions about image content, OCR, objects, style, documents, or\ncomparisons. It does not generate or modify media.\n\nUse only when the user asks to inspect, describe, read, compare, or reason about an image.\nDo not insert it as a quality-control step inside generation workflows unless the user\nexplicitly asks for analysis before continuing.\n\nFor uploaded images, negative indices refer to the upload order. For compare mode, provide\nboth sourceImageIndex and compareImageIndex.",
+  "parameterDocs": {
+    "query": "Specific question/request about the image. Preserve the user question directly.",
+    "analysisType": "Pick describe, ocr, objects, document, compare, or general based on the user request.",
+    "sourceImageIndex": "Omit to auto-select latest result or original upload. Use -1 for first uploaded image.",
+    "compareImageIndex": "Second image for compare mode. Use negative uploaded-image indices when comparing uploads."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "compose_lyrics tool schema",
+  "schemaVersion": "2026-05-14.1",
+  "description": "Synchronous song lyric composition utility for vocal music.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["prompt"],
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "description": "The song topic, mood, genre, scene, campaign, or lyric request."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional language code or language name for the lyrics."
+    },
+    "music_prompt": {
+      "type": "string",
+      "description": "Optional musical style context, genre, instrumentation, mood, or production direction."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 10,
+      "maximum": 600,
+      "description": "Optional desired song duration in seconds."
+    }
+  }
+}

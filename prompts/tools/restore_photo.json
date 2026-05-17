@@ -1,0 +1,12 @@
+{
+  "contractId": "restore_photo_v1",
+  "version": "1.0.0",
+  "toolName": "restore_photo",
+  "baseDescription": "restore_photo edits or restores the ORIGINAL uploaded photograph. Use this for the first\nrestoration/edit on an upload, or when the user explicitly asks to start over from the\noriginal/source photo. Use refine_result for follow-up edits to an existing generated result.\n\nFor photos with people, front-load identity preservation before the restoration or edit.\nUse positive constraints such as preserve exact facial likeness, face structure, apparent\nage, pose, and composition. End with preservation of unmentioned details.\n\nUse Dynamic Prompt syntax only when the user explicitly asks to compare multiple restoration\napproaches. Default restoration batches should keep the same prompt and vary only by seed.",
+  "parameterDocs": {
+    "prompt": "Natural-language edit/restoration prompt. Start with identity preservation for people, then requested restoration/edit, then preserve unmentioned details.",
+    "numberOfVariations": "Use 1 unless the user explicitly asks for multiple outputs or comparison options.",
+    "scale": "Set only when the user asks to upscale, enlarge, or increase resolution.",
+    "quality": "Omit unless the user explicitly asks for fast or high quality."
+  }
+}

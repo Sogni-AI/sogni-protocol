@@ -1,0 +1,12 @@
+{
+  "contractId": "compose_lyrics_v1",
+  "version": "1.0.0",
+  "toolName": "compose_lyrics",
+  "baseDescription": "compose_lyrics composes vocal song lyrics and suggested musical parameters. Use for songs\nwith words, choruses, verses, jingles, vocal hooks, or lyric rewrites.\n\nDo not use compose_lyrics for instrumental-only music — use compose_instrumental instead.\nDo not use it for spoken-word scripts, ad copy, or storyboards — use compose_script. Do\nnot use it to plan a multi-step workflow — use compose_workflow.\n\ncompose_lyrics returns lyrics text plus musical guidance. The caller is responsible for\nhanding the lyrics to generate_music to actually synthesize audio.",
+  "parameterDocs": {
+    "prompt": "The song topic, mood, genre, scene, campaign, or lyric request.",
+    "language": "Optional language code or language name for the lyrics.",
+    "music_prompt": "Optional musical style context, genre, instrumentation, mood, or production direction.",
+    "duration_seconds": "Optional desired song duration in seconds (10-600)."
+  }
+}

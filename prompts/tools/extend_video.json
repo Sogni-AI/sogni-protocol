@@ -1,0 +1,11 @@
+{
+  "contractId": "extend_video_v1",
+  "version": "1.0.0",
+  "toolName": "extend_video",
+  "baseDescription": "Use extend_video when a video already exists in the session — whether previously rendered OR\nuploaded — and the user asks to make it longer, add a segment, or append a bumper, outro,\nintro, tag, or sting to the end (or start). Do NOT call generate_video, animate_photo, or build\na new bumper from scratch via edit_image+animate_photo+stitch_video — those render fresh\nclips and either waste the previous render or ignore the uploaded base.\n\nFor uploaded base videos, set videoIndex to a negative number (-1 for first uploaded video).\nSet duration to the ADDITIONAL seconds (not the new total).\n\nTrigger phrases: \"make it longer\", \"extend the video\", \"add another N seconds\", \"continue the\nscene\", \"add a bumper/outro/intro/tag/sting to the end (or start)\".\n\nBoth extend_video and replace_video_segment auto-detect the base video's model (Seedance\nsource → Seedance continuation; LTX source → LTX continuation; Wan source → Wan continuation), so OMIT videoModel unless\nthe user explicitly demands a different model. This applies regardless of whether the prior\nrender came from generate_video, animate_photo, sound_to_video, or video_to_video.",
+  "parameterDocs": {
+    "videoIndex": "Index of the existing video. Use -1 for first uploaded video, non-negative for generated videos.",
+    "duration": "ADDITIONAL seconds to add — not the new total length.",
+    "videoModel": "Omit to auto-detect from source video. Only set if user explicitly requests a different model."
+  }
+}

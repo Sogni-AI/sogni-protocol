@@ -1,0 +1,11 @@
+{
+  "contractId": "apply_style_v1",
+  "version": "1.0.0",
+  "toolName": "apply_style",
+  "baseDescription": "apply_style transfers an artistic style, era, franchise, medium, or photographic look onto\nan uploaded or generated image. It automatically uses the latest result unless the user\nspecifies a result number or asks for the original upload.\n\nTransfer visual style only. Do not let a style reference override identity, pose, or\ncomposition unless the user asked for those changes. For people, state identity preservation\nbefore the style instructions and finish by preserving pose and composition.\n\nUse refine_result instead when the user wants a targeted non-style edit to an existing\nresult. Use restore_photo only when they explicitly want to restart from the original upload.",
+  "parameterDocs": {
+    "prompt": "Style-transfer prompt. Name the style/era/artist/franchise and preserve identity, pose, and composition for people.",
+    "sourceImageIndex": "Omit for the latest result. Use -1 only when the user explicitly says original/source upload.",
+    "scale": "Set only when the user asks to upscale, enlarge, or increase resolution."
+  }
+}

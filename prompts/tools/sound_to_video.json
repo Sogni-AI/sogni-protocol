@@ -1,0 +1,9 @@
+{
+  "contractId": "sound_to_video_v1",
+  "version": "1.0.0",
+  "toolName": "sound_to_video",
+  "baseDescription": "sound_to_video creates audio-synced video from an audio source. Works with uploaded audio\nfiles (mp3, m4a, wav) OR previously generated music from generate_music (auto-detected).\n\nWhen the user asks to \"turn that song/music into a video\" after generate_music, use\nsound_to_video — it will automatically find the generated audio.\n\nFor music visualization (syncing video to a specific song or audio track), use the\ngenerate_music → sound_to_video pipeline. Do NOT use animate_photo or generate_video for\naudio-driven visualization.\n\nanimate_photo and generate_video produce audio natively via LTX 2.3 — never pre-generate\naudio for those tools. sound_to_video is only for when the audio IS the primary creative\ninput driving the video output.",
+  "parameterDocs": {
+    "audioSource": "Uploaded audio file or reference to a prior generate_music result. Auto-detected when omitted after generate_music."
+  }
+}

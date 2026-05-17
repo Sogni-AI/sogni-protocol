@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/tools/video_to_video.schema.json",
+  "title": "video_to_video arguments",
+  "schemaVersion": "2026-04-27.1",
+  "description": "Transform an existing video using AI. Uses WAN 2.2 Animate (move/replace) with a reference image to animate a photo with the video's motion or swap the video's subject, LTX-2.3 V2V ControlNet (canny/pose/depth/detailer) for video-only transforms, or Seedance V2V when the user explicitly asks to transform, upscale, enhance, restyle, or remaster an uploaded video with Seedance. Requires an uploaded video file. Use when the user wants to animate a photo with video motion, replace subjects in a video, restyle an existing video, or enhance video quality.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "description": "Describe the TARGET appearance (not the transformation process). 2-4 present-tense sentences.\n\nLITERAL PROMPT OVERRIDE: If the user explicitly says not to modify the prompt, or to use it exactly/verbatim/as-is, copy the identified prompt text verbatim instead of applying these construction rules unless a hard requirement is missing. For Seedance, set expandPrompt=false.\n\nFor LTX-2.3 canny/depth/pose modes, the source video preserves composition, depth, or motion. Spend prompt detail on style, atmosphere, lighting, surface texture, color palette, scale, and pacing.\n\nExamples by mode:\n- animate-move (DEFAULT — WAN 2.2 Animate Move: applies camera/motion from source video to reference image): \"Smooth cinematic camera movement following the subject through the scene.\"\n- animate-replace (WAN 2.2 Animate Replace: replaces the subject in the source video with the reference image): \"The person from the reference photo performing the actions from the video.\"\n- canny (LTX-2.3 — edge-detection restyle): \"Hand-drawn watercolor anime style with soft ink edges, muted teal and coral palette, rain mist, neon reflections, warm rim light, preserving original silhouettes and composition.\"\n- pose (LTX-2.3 — tracks skeleton, replace person): \"A glossy cartoon robot with exaggerated proportions, brushed metal texture, glowing cyan joints, energetic stage lighting, preserving the original dance timing and pose.\"\n- depth (LTX-2.3 — depth-map restyle): \"A misty alpine valley at golden hour, expansive scale, volumetric haze, cool blue shadows, warm rim light, cinematic depth, lingering continuous shot.\"\n- detailer (LTX-2.3 — enhance quality): DESCRIBE THE SOURCE, do not request changes. Append quality qualifiers only. E.g. \"The same scene, ultra-sharp and clean, crisp high-resolution detail, preserving all original content, composition, and color.\" Avoid words like \"enhanced textures\", \"restyled\", or any new subjects/objects — they cause drift.\n- seedance-v2v (BytePlus Dreamina Seedance 2.0 V2V): \"Restyle the source clip in a watercolor look with soft ink edges, while preserving its motion and composition.\" Use natural prose; Seedance reads the reference video holistically rather than via control-net constraints, so describe target style/mood/dialogue rather than control strength.\n\nPresent tense. Positive phrasing. Concrete visual details.\n\nBATCH VARIATIONS: When numberOfVariations > 1, use Dynamic Prompt syntax to vary the artistic treatment while keeping control mode and structural intent consistent. Example: \"transform to {watercolor with soft edges|oil painting with bold strokes|anime with clean lines} style\"."
+    },
+    "expandPrompt": {
+      "type": "boolean",
+      "description": "Seedance only. Whether to run the shared Seedance prompt shaper before dispatch. Defaults to true; set false only when the user explicitly asks to submit the compact prompt directly or not modify the prompt."
+    },
+    "videoSourceIndex": {
+      "type": "number",
+      "description": "Which uploaded video to transform. OMIT this field when there is only one uploaded video — the tool auto-selects it. Only pass when you need to pick among multiple uploaded videos. Indexing: 0-based (0 = first uploaded video, 1 = second). Note: this differs from analyze_video which uses negative indices; this tool also tolerates the negative form (-1 = first uploaded) for convenience."
+    },
+    "controlMode": {
+      "type": "string",
+      "enum": [
+        "animate-move",
+        "animate-replace",
+        "canny",
+        "pose",
+        "depth",
+        "detailer",
+        "seedance-v2v"
+      ],
+      "description": "How the source video and (optional) reference image interact. Pick by user intent:\n• \"animate-move\" (DEFAULT) — WAN 2.2 Animate Move. Applies camera movement and motion from the source video to the reference image, bringing a still photo to life. Requires sourceImageIndex.\n• \"animate-replace\" — WAN 2.2 Animate Replace. Replaces the subject in the source video with the person/character from the reference image, keeping the video's background and motion. Requires sourceImageIndex.\n• \"canny\" — LTX-2.3 edge-detection control. Best for restyling while preserving exact composition and silhouettes (e.g. \"make this footage look like anime / oil painting / watercolor\"). Use for subjects with crisp edges — people, objects, graphics. Video-only; no reference image needed.\n• \"pose\" — LTX-2.3 skeletal tracking. Best for replacing a person while keeping their motion (e.g. \"turn this dancer into a robot\"). Image optional — if provided, controls appearance; otherwise the prompt drives appearance. Requires person-centric motion.\n• \"depth\" — LTX-2.3 depth-map control. Best for restyling scenes with perspective, camera movement, or volumetric content (landscapes, interiors, camera pans). Preserves 3D spatial layout rather than 2D edges; more forgiving than canny when edges are noisy. Video-only.\n• \"detailer\" — LTX-2.3 quality enhancement. Sharpens detail and texture WITHOUT restyling. The prompt must DESCRIBE THE ORIGINAL scene with quality qualifiers (sharp, clean, high-resolution) — never request content changes, new textures, or a new look. Pick this when the user asks to \"improve quality\", \"enhance\", \"upscale\", or \"sharpen\" without a creative transformation.\n• \"seedance-v2v\" — BytePlus Dreamina Seedance 2.0 video-to-video. Use only when the user explicitly asks for Seedance on the uploaded source video, such as Seedance Fast upscale, enhance, remaster, restyle, or transform. High-fidelity quality, native audio, time-coded scene control. Seedance V2V reads @Video1 holistically. Use it for restyling, motion transfer, extension, subject replacement, or scene transformation, and assign @Video1 a clear role such as source clip, camera movement, action timing, edit rhythm, or continuation anchor. Distinct from canny/depth/pose which use control-net constraints — Seedance treats the reference video holistically.\nCanny vs depth: canny preserves silhouettes and fine outlines — pick it for subject-led scenes and graphic restyles. Depth preserves 3D structure — pick it for scenes where the camera moves or spatial layout matters more than edge fidelity. Default: \"animate-move\"."
+    },
+    "negativePrompt": {
+      "type": "string",
+      "description": "Non-Seedance only. Optional negative prompt for LTX/Wan video-to-video models. Do not set when controlMode is seedance-v2v or videoModel is seedance2/seedance2-fast; rewrite user-provided Seedance avoid/ban/no-X requests as positive prompt instructions."
+    },
+    "videoModel": {
+      "type": "string",
+      "enum": [
+        "ltx23-v2v",
+        "wan22-animate",
+        "seedance2",
+        "seedance2-fast"
+      ],
+      "description": "Model selector for this video-to-video request. Usually omit; controlMode chooses the non-Seedance model. For controlMode=\"seedance-v2v\", use \"seedance2-fast\" by default, especially when the user asks for Seedance Fast/seedance-fast or 480p/720p. Use \"seedance2\" only when the user explicitly asks for the full/non-fast Seedance model or 1080p."
+    },
+    "generateAudio": {
+      "type": "boolean",
+      "description": "Seedance V2V only. Whether Seedance should generate/retain a native audio track. Omit by default; set false only when the user explicitly asks for silent output or no audio. Use only with controlMode=\"seedance-v2v\"."
+    },
+    "targetResolution": {
+      "type": "number",
+      "description": "Seedance V2V only. Short-side output resolution target in pixels. Use when the user asks for a bare named resolution such as \"480p\", \"720p\", or \"1080p\" without exact dimensions. For Seedance V2V fast, 480p and 720p are supported; preserve the source video shape instead of forcing landscape pixels."
+    },
+    "sourceImageIndex": {
+      "type": "number",
+      "description": "Optional index of a reference image (0-based). Required for \"animate-move\" and \"animate-replace\". Optional for \"pose\" (controls appearance if provided). Ignored by \"canny\", \"depth\", and \"detailer\"."
+    },
+    "duration": {
+      "type": "number",
+      "description": "Output video duration in seconds. Range: 2-20 for WAN/LTX modes and 4-15 for controlMode=\"seedance-v2v\". If omitted, the tool matches the uploaded source video duration when available (capped to the selected model range); otherwise it falls back to 10s for WAN Animate Move/Replace and 5s for LTX-2.3/Seedance modes. For long stitched/bulk WAN Animate Move/Replace work with no explicit per-clip length, prefer about 10s clips rather than 5s chunks. Only pass this when the user explicitly requests a different length.",
+      "minimum": 2,
+      "maximum": 20
+    },
+    "numberOfVariations": {
+      "type": "number",
+      "description": "Number of video variations to generate (1-16). Default: 1.",
+      "minimum": 1,
+      "maximum": 16
+    }
+  },
+  "required": [
+    "prompt"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Reason a chat run is in waiting_for_user. Mirrors ChatRunWaitingReason.",
+  "values": [
+    "ask_clarifying_question",
+    "select_media_required",
+    "cost_approval_required",
+    "safety_review_required",
+    "other"
+  ]
+}

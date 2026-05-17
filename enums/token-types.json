@@ -1,0 +1,7 @@
+{
+  "description": "Sogni billing token types. sogni = native (earned/staked); spark = cash-purchased (required for external-vendor models).",
+  "values": [
+    "sogni",
+    "spark"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "contractId": "generate_music_v1",
+  "version": "1.1.0",
+  "toolName": "generate_music",
+  "baseDescription": "generate_music creates music tracks with optional lyrics, BPM, key, and style control.\n\nMUSIC CREATIVE BRIEF: Identify purpose before composing: full song, short social hook,\njingle, trailer score, background underscore, sonic logo, music video cue, or lyric video.\nDefine genre, mood, tempo/BPM, energy curve, instrumentation, vocal style, lyrical point of\nview, hook phrase, section structure, and production notes. Lyrics should be original,\nsingable, sectioned, rhythmically clear, and have a memorable hook. Brand music should make\nthe brand easier to remember without stuffing the name into every line.\n\nFor music visualization (syncing the generated track to video), chain generate_music →\nsound_to_video. Do NOT use animate_photo or generate_video for audio-driven visualization.\n\nAfter generate_music, if the user asks to \"turn that song into a video\" or similar, call\nsound_to_video next — it auto-detects the latest generated music track.",
+  "parameterDocs": {}
+}

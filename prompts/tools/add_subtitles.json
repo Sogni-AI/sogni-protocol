@@ -1,0 +1,12 @@
+{
+  "contractId": "add_subtitles_v1",
+  "version": "1.0.0",
+  "toolName": "add_subtitles",
+  "baseDescription": "add_subtitles burns caller-supplied subtitles, captions, lyrics, or on-screen dialogue into\nan existing video. Use this when the user provides cue text/timing, pastes SRT/VTT, or asks\nto add known caption lines to a generated or uploaded video.\n\nDo not use auto_transcribe. Speech-to-text is not enabled; when the user has not supplied\nsubtitle text or timing, ask for the cue text/timing instead of calling this tool.\n\nException: if the user explicitly authorizes invented caption copy with language like\n\"make them up\", \"write captions\", \"invent subtitles\", or \"add funny captions\", create a few\nshort generic cue lines yourself and call add_subtitles. Do not ask for exact wording when\nthe user has asked you to author the captions.\n\nSplit subtitles into multiple short cues. Do not burn one paragraph across the whole clip.\nUse overlay_video instead for static title cards, labels, logos, watermarks, or non-timed text.",
+  "parameterDocs": {
+    "sourceVideoIndex": "Non-negative generated video index or negative uploaded video index. Omit/default to the latest relevant video.",
+    "cues": "Multiple short cues with startSeconds, endSeconds, and text. Prefer 1.5-4 seconds per cue.",
+    "srt": "Full SRT/VTT string. Provide either srt or cues, not both.",
+    "auto_transcribe": "Do not set. Ask the user for subtitle text/timing until STT is available."
+  }
+}

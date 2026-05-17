@@ -1,0 +1,11 @@
+{
+  "contractId": "analyze_video_v1",
+  "version": "1.0.0",
+  "toolName": "analyze_video",
+  "baseDescription": "analyze_video uses sampled frames to answer questions about an uploaded or generated video:\nsummary, timeline, visual scene description, action breakdown, or visible text.\n\nUse only when the user asks to inspect or understand a video. Do not call it as automatic\nverification after generation, and do not use it before stitch_video when the requested\ngeneration pipeline should continue.\n\nThis is visual sampled-frame analysis only. It does not transcribe audio and does not inspect\nevery frame.",
+  "parameterDocs": {
+    "query": "Specific question/request about the video. State whether summary, timeline, OCR, scene, or action detail is needed.",
+    "analysisType": "Pick summary, timeline, scene, action, ocr, or general based on the user request.",
+    "sourceVideoIndex": "Generated video index or negative uploaded-video index. Omit to auto-select latest generated video or first upload."
+  }
+}

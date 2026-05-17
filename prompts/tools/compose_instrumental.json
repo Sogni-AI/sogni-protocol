@@ -1,0 +1,11 @@
+{
+  "contractId": "compose_instrumental_v1",
+  "version": "1.0.0",
+  "toolName": "compose_instrumental",
+  "baseDescription": "compose_instrumental composes an instrumental music structure and suggested musical\nparameters. Use for background scores, beds, cues, themes, and music requests without\nlyrics.\n\nDo not use compose_instrumental when the user wants sung lyrics, vocal hooks, or a jingle\nwith words — use compose_lyrics instead. Do not use it to actually render audio — the\nresponse is musical guidance; the caller hands it to generate_music for synthesis.",
+  "parameterDocs": {
+    "prompt": "The instrumental music topic, mood, genre, scene, campaign, or composition request.",
+    "music_prompt": "Optional musical style context, instrumentation, mood, or production direction.",
+    "duration_seconds": "Optional desired track duration in seconds (10-600)."
+  }
+}

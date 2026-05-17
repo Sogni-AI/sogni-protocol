@@ -1,0 +1,24 @@
+{
+  "title": "compose_instrumental tool schema",
+  "schemaVersion": "2026-05-14.1",
+  "description": "Synchronous instrumental music structure composition utility.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["prompt"],
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "description": "The instrumental music topic, mood, genre, scene, campaign, or composition request."
+    },
+    "music_prompt": {
+      "type": "string",
+      "description": "Optional musical style context, instrumentation, mood, or production direction."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 10,
+      "maximum": 600,
+      "description": "Optional desired track duration in seconds."
+    }
+  }
+}

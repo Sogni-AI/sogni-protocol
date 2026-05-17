@@ -1,0 +1,13 @@
+{
+  "contractId": "label_asset_v1",
+  "version": "1.0.0",
+  "toolName": "label_asset",
+  "baseDescription": "label_asset updates the label, description, URL, must_preserve, or avoid fields for an\nexisting manifest asset. Use when the user renames an asset, assigns a role, or when a\nprevious tool result adds durable reference constraints.\n\nDo not invent labels or preservation constraints that the user did not provide or that are\nnot present in a tool result.",
+  "parameterDocs": {
+    "asset_id": "Existing asset_id to update.",
+    "user_label": "New human-readable label when the user renames the asset.",
+    "description": "Replacement description. Keep it factual and concise.",
+    "must_preserve": "Replacement preservation list. Use only explicit or tool-result-backed constraints.",
+    "avoid": "Replacement avoid list. Use only explicit or tool-result-backed constraints."
+  }
+}

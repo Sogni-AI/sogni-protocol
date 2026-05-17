@@ -1,0 +1,10 @@
+{
+  "contractId": "overlay_video_v1",
+  "version": "1.0.0",
+  "toolName": "overlay_video",
+  "baseDescription": "Use overlay_video when the user wants to overlay/place/show a logo, text, caption, or\nwatermark ON TOP OF existing video frames.\n\nFor uploaded base videos, set sourceVideoIndex=-1; for generated videos, use their\nnon-negative video index. If the overlay should last only part of the video, set the overlay\nitem's startSeconds/endSeconds (e.g. a 2s middle overlay on a 20s video: ~9s to ~11s).\nNegative startSeconds/endSeconds are relative to the end of the base video, so startSeconds=-2\nwith omitted endSeconds means the last 2 seconds.\n\nWhen the user asks to replace a video time window with an uploaded still image, screenshot,\nphoto, frame, logo, or graphic, use an image overlay for that window with widthPct=100 and\nfit=\"cover\"; do not regenerate the video segment.\n\nDo NOT use overlay_video for intro/outro/bumper/end-card/start-card requests — those add or\nregenerate video time and should use extend_video or replace_video_segment. After a successful\noverlay_video call, finalize the turn; do not call overlay_video again just to tweak default\nsize or placement unless the user asks.",
+  "parameterDocs": {
+    "sourceVideoIndex": "Use -1 for first uploaded video, non-negative index for generated videos.",
+    "overlays": "Use startSeconds/endSeconds for time windows. For still/screenshot replacement windows, use kind=\"image\", widthPct=100, fit=\"cover\"."
+  }
+}
