@@ -1,0 +1,34 @@
+{
+  "description": "Audio / music generation model catalog. ACE-Step 1.5 family. Each entry lists per-parameter ranges so SDKs can validate user input and render sliders without round-tripping to the server. Cross-cutting audio constraints (duration, BPM, time signatures) live in the top-level `constraints` block.",
+  "default": "turbo",
+  "models": {
+    "turbo": {
+      "id": "ace_step_1.5_turbo",
+      "name": "ACE-Step 1.5 Turbo",
+      "steps": { "min": 4, "max": 16, "default": 8 },
+      "shift": { "min": 1, "max": 5, "default": 3 },
+      "guidance": null
+    },
+    "sft": {
+      "id": "ace_step_1.5_sft",
+      "name": "ACE-Step 1.5 SFT",
+      "steps": { "min": 10, "max": 200, "default": 50 },
+      "shift": { "min": 1, "max": 5, "default": 3 },
+      "guidance": { "min": 1, "max": 15, "default": 5 }
+    }
+  },
+  "constraints": {
+    "duration": {
+      "min": 10,
+      "max": 600,
+      "default": 30,
+      "unit": "seconds"
+    },
+    "bpm": {
+      "min": 30,
+      "max": 300,
+      "default": 120
+    },
+    "timeSignatures": [2, 3, 4, 6]
+  }
+}

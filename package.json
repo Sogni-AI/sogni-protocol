@@ -1,6 +1,6 @@
 {
   "name": "@sogni-ai/sogni-protocol",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Language-neutral protocol artifacts for the Sogni ecosystem: tool schemas, prompts, OpenAI tool manifests, and enums. Consumed by every Sogni SDK (TypeScript, Swift, and future Python/Kotlin/Rust SDKs) so contracts stay in lockstep across languages.",
   "keywords": [
     "sogni",
@@ -27,15 +27,18 @@
     "manifests/",
     "prompts/",
     "enums/",
+    "catalogs/",
     "version.json",
     "README.md"
   ],
   "exports": {
+    "./package.json": "./package.json",
     "./version.json": "./version.json",
     "./schemas/*": "./schemas/*",
     "./manifests/*": "./manifests/*",
     "./prompts/*": "./prompts/*",
-    "./enums/*": "./enums/*"
+    "./enums/*": "./enums/*",
+    "./catalogs/*": "./catalogs/*"
   },
   "sideEffects": false
 }

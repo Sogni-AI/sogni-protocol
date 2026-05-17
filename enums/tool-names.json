@@ -1,5 +1,5 @@
 {
-  "description": "Canonical Sogni tool names. hosted = creative tools executed by the server; app = chat-app local tools shipped via app-tools manifest; chatLocal = tools defined inside sogni-chat that have centralized PromptContracts but no shared schema yet; all = union of hosted + app + chatLocal.",
+  "description": "Canonical Sogni tool names. hosted = creative tools executed by the server; app = chat-app tools shipped via app-tools manifest (server-bound discovery); chatLocal = tools defined and executed inside sogni-chat (schemas in schemas/tools/, executed client-side); all = union.",
   "hosted": [
     "add_subtitles",
     "animate_photo",

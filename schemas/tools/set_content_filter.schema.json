@@ -1,0 +1,14 @@
+{
+  "title": "set_content_filter tool schema",
+  "schemaVersion": "2026-05-17.1",
+  "description": "Enable or disable the Safe Content Filter. When enabled, generated images/videos are checked by the safety filter and blocked if flagged. When disabled, no safety filtering is applied. Only call this when the user explicitly asks to change the setting.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["enabled"],
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Set to true to enable the safe content filter (default), or false to disable it."
+    }
+  }
+}

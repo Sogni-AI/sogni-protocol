@@ -19,10 +19,12 @@ This package ships pure data — JSON Schemas, OpenAI tool manifests, prompt con
 | `manifests/composition-tools.json` | Composition subset of the hosted manifest. | TS SDK. |
 | `manifests/app-tools.json` | Chat-app local tools (analyze_image, manage_memory, etc.). | Chat product SDKs. |
 | `prompts/tools/*.json` | Per-tool LLM-visible descriptions + parameter docstrings (`PromptContract`). | All SDKs that surface tools to an LLM. |
-| `enums/tool-names.json` | Canonical tool name catalogs (hosted / app / all). | Validators, codegen. |
+| `enums/tool-names.json` | Canonical tool name catalogs (hosted / app / chatLocal / all). | Validators, codegen. |
 | `enums/chat-run-status.json` | Chat-run lifecycle states. | All SDKs. |
 | `enums/chat-run-waiting-reasons.json` | Why a run is paused for user input. | All SDKs. |
 | `enums/token-types.json` | Sogni billing token types (`sogni`, `spark`). | All SDKs. |
+| `catalogs/quality-presets.json` | Quality tier presets (fast/hq/pro) -> model + sampling parameters. | UI SDKs rendering quality toggles. |
+| `catalogs/audio-models.json` | ACE-Step audio model capability table + duration/BPM/time-signature constraints. | SDKs validating music-gen input. |
 | `version.json` | Protocol version for compatibility checks. | All SDKs. |
 
 ## Why a separate package

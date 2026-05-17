@@ -1,0 +1,15 @@
+{
+  "title": "resolve_personas tool schema",
+  "schemaVersion": "2026-05-17.1",
+  "description": "Load persona reference photos AND voice clips for identity-preserving generation. Call this BEFORE edit_image when the user references a person from My Personas (e.g. \"make a picture of me\", \"draw Sarah and the kids\"). Also call this when the user explicitly asks to use a registered persona VOICE for video generation. Returns reference photos as numbered context images plus appearance descriptions. Voice clips are injected for animate_photo/generate_video, but you MUST set voicePersonaName on the video tool to use referenceAudioIdentity; do this only for explicit registered/reference voice requests, not ordinary dialogue or fictional character voices.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["names"],
+  "properties": {
+    "names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Names of personas to load (case-insensitive). Must match names from the user's people list provided in the system message. Example: [\"Alex\", \"Sam\"]."
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "description": "Quality tier presets for image generation and editing. Maps tier name -> model + sampling parameters. SDKs use this catalog to render quality-toggle UI and resolve a tier into concrete generation parameters.",
+  "default": "fast",
+  "tiers": {
+    "fast": {
+      "model": "qwen_image_edit_2511_fp8_lightning",
+      "steps": 5,
+      "guidance": 1.0,
+      "outputFormat": "jpg",
+      "label": "Fast",
+      "description": "Faster"
+    },
+    "hq": {
+      "model": "qwen_image_edit_2511_fp8",
+      "steps": 25,
+      "guidance": 4.0,
+      "outputFormat": "jpg",
+      "label": "High Quality",
+      "description": "More detail"
+    },
+    "pro": {
+      "model": "flux2_dev_fp8",
+      "steps": 40,
+      "guidance": 4.0,
+      "outputFormat": "jpg",
+      "label": "Pro",
+      "description": "Flux.2 Dev"
+    }
+  }
+}
