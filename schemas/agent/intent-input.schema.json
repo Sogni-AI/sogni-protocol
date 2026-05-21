@@ -11,6 +11,34 @@
       "type": "string",
       "description": "Raw user message text for this turn. Verbatim; sanitization belongs to boundary code, not this contract."
     },
+    "currentMessageDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional structured form of the user's latest message. Producers MAY emit either currentMessage or this; consumers MUST handle BOTH. `text` is required so consumers can always derive a string-level view.",
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "system"] },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "localeHint": { "type": "string" }
+      },
+      "required": ["text"]
+    },
+    "runtimeFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional runtime feature flags the planner reads to decide tool surface and confirmation policy.",
+      "properties": {
+        "surface": {
+          "type": "string",
+          "enum": ["browser", "hosted_chat", "durable_chat", "workflow", "native", "skill"],
+          "description": "Originating producer surface."
+        },
+        "allowPaidTools": { "type": "boolean" },
+        "allowMutatingTools": { "type": "boolean" },
+        "durableRequired": { "type": "boolean" }
+      }
+    },
     "activeState": {
       "type": "object",
       "additionalProperties": false,
@@ -67,7 +95,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "role": { "type": "string", "enum": ["user", "assistant"] },
+          "role": { "type": "string", "enum": ["user", "assistant", "tool", "system"] },
           "content": { "type": "string" },
           "sequence": { "type": "integer", "minimum": 0 }
         },
