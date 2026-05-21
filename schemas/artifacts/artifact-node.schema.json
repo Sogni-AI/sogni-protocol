@@ -86,8 +86,8 @@
   "properties": {
     "artifactId": {
       "type": "string",
-      "pattern": "^art_[A-Z0-9]{26}$",
-      "description": "Stable ULID-style id (art_ prefix + 26-char Crockford base32 ULID body)."
+      "pattern": "^art_(?:[0-9A-Z]{26}|[0-9a-fA-F]{32}|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$",
+      "description": "Stable artifact id. ULID form (`art_` + 26-char Crockford base32 body) is RECOMMENDED for new ids — use `generateUlidArtifactId()` from `@sogni-ai/sogni-intelligence-client/artifacts`. Two legacy forms remain accepted so existing in-wild ids stay valid: `art_` + 32 hex chars (UUID with hyphens stripped, the historical `createArtifactNode` output) and `art_` + canonical UUID with hyphens. Read-side validators must keep accepting all three; write-side code SHOULD enforce ULID via `preferUlid()`."
     },
     "kind": {
       "type": "string",
