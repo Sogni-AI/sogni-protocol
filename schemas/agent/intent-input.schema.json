@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/agent/intent-input.schema.json",
+  "title": "L1 IntentClassifier input packet",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Compact context packet handed to the L1 IntentClassifier at the start of every user turn. Qwen3 256k context window comfortably holds 16-reference-image generations and multi-segment storyboard frames; the runtime never silently drops artifacts. Trim only when measured budget pressure forces it. This contract is built deterministically by the host (browser or cloud runner) from explicit runtime state; it never re-derives semantics from transcript regex.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "currentMessage": {
+      "type": "string",
+      "description": "Raw user message text for this turn. Verbatim; sanitization belongs to boundary code, not this contract."
+    },
+    "activeState": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Currently-resolved focus state owned by the runtime (artifact graph + workflow runner). Populated from explicit runtime references — never from prose extraction.",
+      "properties": {
+        "activeArtifactId": { "type": "string" },
+        "activeArtifactType": {
+          "type": "string",
+          "enum": ["image", "video", "audio", "text", "workflow", "collection"]
+        },
+        "pendingAction": {
+          "type": "object",
+          "description": "Opaque reference to a runtime-tracked pending action (e.g. proposed plan awaiting selection). Shape is owned by the runtime, not this schema.",
+          "additionalProperties": true
+        },
+        "awaitingConfirmation": { "type": "boolean" },
+        "lastToolResult": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "toolName": { "type": "string" },
+            "toolCallId": { "type": "string" },
+            "status": { "type": "string" }
+          },
+          "required": ["toolName", "toolCallId", "status"]
+        },
+        "activeWorkflowRunId": { "type": "string" }
+      }
+    },
+    "artifactState": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Stable artifact identifiers owned by the ArtifactGraph. Qwen3 256k context window comfortably holds 16-reference-image generations and multi-segment storyboard frames; the runtime never silently drops artifacts. Trim only when measured budget pressure forces it.",
+      "properties": {
+        "selectedArtifactIds": {
+          "type": "array",
+          "description": "Artifacts the user or planner has explicitly focused (e.g. multi-select for batch edit).",
+          "items": { "type": "string" }
+        },
+        "artifactIds": {
+          "type": "array",
+          "description": "Full conversation artifact id list. UNBOUNDED by default. Qwen3 256k context window comfortably holds 16-reference-image generations and multi-segment storyboard frames; the runtime never silently drops artifacts. Trim only when measured budget pressure forces it.",
+          "items": { "type": "string" }
+        },
+        "lastGeneratedArtifactId": { "type": "string" },
+        "lastEditedArtifactId": { "type": "string" }
+      },
+      "required": ["selectedArtifactIds", "artifactIds"]
+    },
+    "recentTurns": {
+      "type": "array",
+      "description": "Recent transcript window. UNBOUNDED by default. Qwen3 256k context window comfortably holds 16-reference-image generations and multi-segment storyboard frames; the runtime never silently drops artifacts. Trim only when measured budget pressure forces it. Sliding-window trimming from contextWindow.ts only fires after measured token budget pressure, and writes the trimmed prefix into conversationSummary.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": { "type": "string", "enum": ["user", "assistant"] },
+          "content": { "type": "string" },
+          "sequence": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["role", "content", "sequence"]
+      }
+    },
+    "conversationSummary": {
+      "type": "string",
+      "description": "Rolling summary of trimmed prefix. Empty string until the first measured-budget-pressure trim event."
+    },
+    "userPreferences": {
+      "type": "object",
+      "description": "Free-form preference payload (e.g. preferred model tier, default aspect ratio). Deliberate exception: additionalProperties is true here, mirroring the data/metadata pattern in other contracts, because preferences evolve faster than the schema.",
+      "additionalProperties": true
+    },
+    "availableCapabilitiesSummary": {
+      "type": "array",
+      "description": "Short human-readable capability strings the planner can quote when answering capability questions without invoking any tool.",
+      "items": { "type": "string" }
+    }
+  },
+  "required": [
+    "currentMessage",
+    "activeState",
+    "artifactState",
+    "recentTurns",
+    "conversationSummary",
+    "availableCapabilitiesSummary"
+  ]
+}

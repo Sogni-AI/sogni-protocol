@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/agent/turn-analysis.schema.json",
+  "title": "L1 IntentClassifier output",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Structured output of the L1 IntentClassifier. Produced by an LLM-backed classifier, a typed planner, runtime state inspection, the artifact graph, or an explicit user signal — never by regex. Per the Codex reconciliation in v2 plan §1.A, the legacy SignalSource value 'regex' is intentionally absent from SignalProvenance; regex is demoted to bounded fact extraction (dimensions, durations, file types) which does not produce semantic intent.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "SignalProvenance": {
+      "type": "string",
+      "description": "Which layer authored this TurnAnalysis. The value 'regex' is intentionally absent — regex extracts bounded facts only and never decides intent, tool surface, or routing.",
+      "enum": [
+        "classifier",
+        "planner",
+        "runtime_state",
+        "artifact_graph",
+        "user_explicit"
+      ]
+    }
+  },
+  "properties": {
+    "domain": {
+      "type": "string",
+      "enum": ["chat", "image", "video", "audio", "analysis", "workflow", "memory", "settings", "unknown"]
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["generate", "edit", "analyze", "transform", "question", "capability", "continue", "reference", "configure", "clarify", "unknown"]
+    },
+    "executionMode": {
+      "type": "string",
+      "enum": ["none", "tool", "multi_tool", "workflow"]
+    },
+    "userWantsExecution": { "type": "boolean" },
+    "isCapabilityQuestion": { "type": "boolean" },
+    "isFutureInstruction": { "type": "boolean" },
+    "isReferenceOnly": { "type": "boolean" },
+    "needsPriorContext": { "type": "boolean" },
+    "needsClarification": { "type": "boolean" },
+    "referencedArtifacts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Artifact ids the classifier resolved from the user's message via the artifact graph (positional references like 'the second image' resolve to stable ids before this list is emitted)."
+    },
+    "requiredCapabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form capability tags the planner must satisfy (e.g. 'image_generation', 'video_stitch')."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "provenance": {
+      "$ref": "#/$defs/SignalProvenance"
+    }
+  },
+  "required": [
+    "domain",
+    "intent",
+    "executionMode",
+    "userWantsExecution",
+    "isCapabilityQuestion",
+    "isFutureInstruction",
+    "isReferenceOnly",
+    "needsPriorContext",
+    "referencedArtifacts",
+    "requiredCapabilities",
+    "needsClarification",
+    "confidence",
+    "provenance"
+  ]
+}

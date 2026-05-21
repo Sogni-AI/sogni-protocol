@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/tools/tool-metadata.schema.json",
+  "title": "Tool catalog metadata",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Metadata that accompanies each tool definition in the v2 catalog. Drives tool surfacing decisions (which family/execution mode is visible this turn), spend gating (costClass + requiresConfirmation), retry behavior (retrySafety), and durable-run observability (mutatesData, producesArtifacts). Input/output schema refs point at sogni-protocol argument and result contracts so the validator and the planner share one source of truth.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Canonical tool name (snake_case, matches the OpenAI-format tool definition exposed to the LLM)."
+    },
+    "family": {
+      "type": "string",
+      "enum": ["creative", "composition", "artifact", "memory", "settings", "analysis", "control"],
+      "description": "Coarse grouping used by the planner to pick a minimal visible tool subset."
+    },
+    "executionMode": {
+      "type": "string",
+      "enum": ["hosted", "client", "app", "workflow", "internal"],
+      "description": "Where the tool runs. 'hosted' = sogni-api durable runner. 'client' = browser tool dispatch. 'app' = native shell. 'workflow' = synthetic tool that creates a WorkflowRun. 'internal' = runtime-only (e.g. L1 hidden resolver) — never surfaced to the LLM directly."
+    },
+    "inputSchemaRef": {
+      "type": "string",
+      "description": "URI or repo-relative path. MUST resolve to a sogni-protocol tool argument JSON Schema (e.g. schemas/tools/generate_image.schema.json)."
+    },
+    "outputSchemaRef": {
+      "type": "string",
+      "description": "URI or repo-relative path. MUST resolve to a sogni-protocol tool result envelope schema."
+    },
+    "costClass": {
+      "type": "string",
+      "enum": ["free", "low", "medium", "high", "variable"],
+      "description": "Indicative cost tier. Concrete unit estimates live on the SpendGate request, not here."
+    },
+    "latencyClass": {
+      "type": "string",
+      "enum": ["inline", "interactive", "long_running"],
+      "description": "Indicative wall-clock tier. 'long_running' tools generally belong inside a Workflow Template, not a synchronous chat turn."
+    },
+    "mutatesData": {
+      "type": "boolean",
+      "description": "True when the tool changes persisted user state (e.g. manage_memory write, settings update)."
+    },
+    "producesArtifacts": {
+      "type": "boolean",
+      "description": "True when the tool emits one or more ArtifactNodes that must be registered in the ArtifactGraph."
+    },
+    "requiresConfirmation": {
+      "type": "string",
+      "enum": ["never", "paid", "destructive", "always"],
+      "description": "Confirmation policy. 'paid' defers to SpendGate. 'destructive' requires an explicit user yes regardless of cost. 'always' is reserved for atomic operations with no other gate."
+    },
+    "retrySafety": {
+      "type": "string",
+      "enum": ["idempotent", "dedupe_key_required", "not_safe"],
+      "description": "Whether the runner may retry the tool call on a transient failure. 'dedupe_key_required' tools must be called with a stable dedupe token (e.g. sogni-socket project id)."
+    },
+    "hiddenFromModel": {
+      "type": "boolean",
+      "description": "Optional. L1 hidden context tools (resolve_*, inspect_*) set this true so the runner can call them directly without surfacing them to the LLM."
+    }
+  },
+  "required": [
+    "name",
+    "family",
+    "executionMode",
+    "inputSchemaRef",
+    "outputSchemaRef",
+    "costClass",
+    "latencyClass",
+    "mutatesData",
+    "producesArtifacts",
+    "requiresConfirmation",
+    "retrySafety"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/billing/workflow-authorization.schema.json",
+  "title": "Workflow authorization ticket",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Umbrella authorization ticket recorded once at workflow run start. The executor consults it before dispatching each stage and pauses for re-authorization if cumulative settled + reserved + next-estimate would exceed authorizedCapacityUnits. Per-job settlement continues through the existing sogni-socket 'project + N identical jobs' path; the workflow layer is an authorization umbrella, not a new transaction ledger.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "StageSettlementStatus": {
+      "type": "string",
+      "enum": ["pending", "in_flight", "settled", "failed", "cancelled"]
+    },
+    "StageSettlement": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-stage ledger row. estimatedUnits comes from the WorkflowCostPreview; settledUnits is filled in as the sogni-socket worker(s) for this stage finish.",
+      "properties": {
+        "stageId": { "type": "string" },
+        "projectId": {
+          "type": "string",
+          "description": "sogni-socket project id. Null until dispatched."
+        },
+        "jobIds": {
+          "type": "array",
+          "description": "sogni-socket job ids. Empty until dispatched. May have multiple entries for fan-out stages.",
+          "items": { "type": "string" }
+        },
+        "estimatedUnits": { "type": "number", "minimum": 0 },
+        "settledUnits": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Cumulative settled units for this stage. Null until at least one worker completes."
+        },
+        "status": { "$ref": "#/$defs/StageSettlementStatus" }
+      },
+      "required": ["stageId", "estimatedUnits", "status"]
+    }
+  },
+  "properties": {
+    "workflowRunId": { "type": "string" },
+    "authorizedCapacityUnits": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Umbrella cap. Per-job settlements stay within this; if next dispatch would exceed by more than the documented drift tolerance the run pauses for re-authorization."
+    },
+    "tokenType": {
+      "type": "string",
+      "enum": ["spark", "sogni"]
+    },
+    "authorizedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Past expiry, the run pauses with cost_approval_required for re-authorization. Template declares an expected duration; expiry is duration + retry grace."
+    },
+    "cumulativeSettledUnits": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Sum of stageSettlements[].settledUnits to date."
+    },
+    "cumulativeReservedUnits": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Estimated units for in-flight jobs not yet settled."
+    },
+    "stageSettlements": {
+      "type": "array",
+      "description": "Per-stage ledger. May be empty pre-dispatch; populated as the executor dispatches each stage.",
+      "items": { "$ref": "#/$defs/StageSettlement" }
+    }
+  },
+  "required": [
+    "workflowRunId",
+    "authorizedCapacityUnits",
+    "tokenType",
+    "authorizedAt",
+    "expiresAt",
+    "cumulativeSettledUnits",
+    "cumulativeReservedUnits",
+    "stageSettlements"
+  ]
+}

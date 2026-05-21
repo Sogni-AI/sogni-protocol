@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/artifacts/artifact-graph.schema.json",
+  "title": "Artifact graph serialization",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Durable serialization of the in-memory ArtifactGraph. The same shape mirrors into ChatRunRecord.artifacts[] and WorkflowRunRecord.artifacts[] so cloud and hosted runners can reconstitute the graph on resume. The runtime Map<string, ArtifactNode> serializes as a positional nodes[] array; artifactId uniqueness is a runtime invariant, not expressible cheaply in JSON Schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "description": "All artifact nodes in the graph. Uniqueness on artifactId is enforced by the runtime, not the schema.",
+      "items": {
+        "$ref": "./artifact-node.schema.json"
+      }
+    },
+    "selectedId": {
+      "type": "string",
+      "description": "Optional currently-selected artifact id. When present, MUST match an artifactId in nodes."
+    },
+    "compatibilityProjections": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Read-only legacy projections derived from nodes[]. Populated during the Phase 1-4 transition so existing chat-side code that still reads positional URL arrays keeps working. Deleted after plan Phase 5.",
+      "properties": {
+        "resultUrls": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "videoResultUrls": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "audioResultUrls": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["nodes"]
+}

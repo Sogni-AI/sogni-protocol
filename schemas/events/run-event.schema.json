@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/events/run-event.schema.json",
+  "title": "Unified run event",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Single event vocabulary across chat runs and workflow runs. Both persist into the shared `runs` substrate (plan §13.5) and differ only by the runKind discriminator. SSE replay key is (runId, sequence). idempotencyKey covers reentrant transitions such as cost confirmation. Per-event-type payload shapes are deliberately not enforced at this layer — payload shapes are documented per type and tightened in a Phase 1 follow-up to avoid an enormous union in this round.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "RunEventType": {
+      "type": "string",
+      "description": "All event types. Clusters: lifecycle (run_queued, run_started, run_completed, run_partial_failure, run_failed, run_cancelled), LLM (llm_round_started, llm_token, llm_round_completed), tools (tool_call_proposed, tool_call_dispatched, tool_call_progress, tool_call_resolved), artifacts (artifact_created, artifact_updated, artifact_referenced), waiting (run_waiting_for_user), spend (spend_preview_emitted, spend_confirmed, spend_cancelled, spend_insufficient), audit (audit_evaluated, repair_requested), workflow-stage (stage_started, stage_completed, stage_failed, stage_waiting_for_user).",
+      "enum": [
+        "run_queued",
+        "run_started",
+        "run_completed",
+        "run_partial_failure",
+        "run_failed",
+        "run_cancelled",
+        "llm_round_started",
+        "llm_token",
+        "llm_round_completed",
+        "tool_call_proposed",
+        "tool_call_dispatched",
+        "tool_call_progress",
+        "tool_call_resolved",
+        "artifact_created",
+        "artifact_updated",
+        "artifact_referenced",
+        "run_waiting_for_user",
+        "spend_preview_emitted",
+        "spend_confirmed",
+        "spend_cancelled",
+        "spend_insufficient",
+        "audit_evaluated",
+        "repair_requested",
+        "stage_started",
+        "stage_completed",
+        "stage_failed",
+        "stage_waiting_for_user"
+      ]
+    },
+    "RunStatus": {
+      "type": "string",
+      "description": "Unified status enum across chat and workflow runs.",
+      "enum": [
+        "queued",
+        "running",
+        "completed",
+        "partial_failure",
+        "waiting_for_user",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "WaitingReason": {
+      "type": "string",
+      "description": "Why a run paused. Carried inside the payload of a run_waiting_for_user event (and stage_waiting_for_user where applicable).",
+      "enum": [
+        "ask_clarifying_question",
+        "select_media_required",
+        "cost_approval_required",
+        "safety_review_required",
+        "workflow_user_input_required",
+        "insufficient_credit",
+        "other"
+      ]
+    }
+  },
+  "properties": {
+    "runId": { "type": "string" },
+    "runKind": {
+      "type": "string",
+      "enum": ["chat", "workflow"],
+      "description": "Substrate discriminator (plan §13.5). chat and workflow runs share persistence, lease, heartbeat, event log, waiting semantics, cancellation, cost confirmation, and resume."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Strictly increasing per runId. SSE replay key is (runId, sequence)."
+    },
+    "type": { "$ref": "#/$defs/RunEventType" },
+    "status": { "$ref": "#/$defs/RunStatus" },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-type payload. Documented shapes: run_waiting_for_user -> { reason: WaitingReason, ... }; tool_call_proposed/_dispatched/_progress/_resolved -> { toolCallId, toolName, ... }; artifact_* -> { artifactId, ... }; spend_* -> { gateId, scope, ... }; audit_evaluated -> { toolCallId, passed, ... }; repair_requested -> { toolCallId, reason, retryCount }; stage_* -> { stageId, ... }. Schema-level enforcement of these shapes is intentionally deferred to Phase 1 to avoid an unwieldy union here."
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "resumable": {
+      "type": "boolean",
+      "description": "True when the run is in a state the client can resume from (typically paired with run_waiting_for_user)."
+    },
+    "terminal": {
+      "type": "boolean",
+      "description": "True for the final event of a run (run_completed / run_failed / run_cancelled / run_partial_failure)."
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "description": "Stable key for reentrant transitions (e.g. POST /confirm-cost). Re-submitting the same key MUST be a no-op."
+    }
+  },
+  "required": [
+    "runId",
+    "runKind",
+    "sequence",
+    "type",
+    "payload",
+    "createdAt"
+  ]
+}

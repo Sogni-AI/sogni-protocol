@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/artifacts/artifact-node.schema.json",
+  "title": "Artifact graph node",
+  "schemaVersion": "2026-05-20.1",
+  "description": "One node in the v2 ArtifactGraph. ArtifactNode replaces positional URL arrays (resultUrls / videoResultUrls / audioResultUrls) deleted in plan Phase 5. Every tool result auto-registers one node. Lineage edges resolve continuation ('use the second image', 'make it cinematic') without transcript scraping. Per-model token shape lives in modelRefs (gpt-image-2 'Image 1', seedance-2 '@Image1', ltx-2.3 'context_image_0').",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "ArtifactEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Typed lineage edge from this artifact to one of its parents.",
+      "properties": {
+        "parentId": { "type": "string" },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "derived_from",
+            "edited_from",
+            "styled_from",
+            "animated_from",
+            "stitched_from",
+            "extended_from",
+            "segmented_from",
+            "reference_for"
+          ]
+        }
+      },
+      "required": ["parentId", "relation"]
+    },
+    "ArtifactVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One version of an artifact. Retries, refinements, and user-driven redos all append a version rather than mutating an existing one.",
+      "properties": {
+        "versionId": { "type": "string" },
+        "uri": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "reason": {
+          "type": "string",
+          "enum": ["initial", "retry", "refinement", "audit_repair", "user_redo"]
+        },
+        "jobId": {
+          "type": "string",
+          "description": "Optional sogni-socket job id that produced this version."
+        }
+      },
+      "required": ["versionId", "createdAt", "reason"]
+    },
+    "ArtifactSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "upload" },
+            "uploadId": { "type": "string" }
+          },
+          "required": ["type", "uploadId"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "tool_result" },
+            "runId": { "type": "string" },
+            "toolCallId": { "type": "string" }
+          },
+          "required": ["type", "toolCallId"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "workflow_stage" },
+            "workflowRunId": { "type": "string" },
+            "stageId": { "type": "string" },
+            "itemId": { "type": "string" }
+          },
+          "required": ["type", "workflowRunId", "stageId"]
+        }
+      ]
+    }
+  },
+  "properties": {
+    "artifactId": {
+      "type": "string",
+      "pattern": "^art_[A-Z0-9]{26}$",
+      "description": "Stable ULID-style id (art_ prefix + 26-char Crockford base32 ULID body)."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["image", "video", "audio", "text", "workflow", "collection"]
+    },
+    "uri": {
+      "type": "string",
+      "description": "Canonical resolvable URI for the current version (mirrors versions[last].uri for convenience)."
+    },
+    "mimeType": { "type": "string" },
+    "userLabel": {
+      "type": "string",
+      "description": "Friendly label the user (or the system on the user's behalf) chose. Optional; planner falls back to artifactId + kind."
+    },
+    "modelRefs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Per-model formatter mapping. Keys are model ids; values are the token that model expects in prompts. Examples: gpt-image-2 -> 'Image 1', seedance-2 -> '@Image1', ltx-2.3 -> 'context_image_0'. Use the asset-reference helpers in @sogni/creative-agent rather than hand-formatting."
+    },
+    "source": { "$ref": "#/$defs/ArtifactSource" },
+    "parents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ArtifactEdge" }
+    },
+    "versions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/ArtifactVersion" }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Free-form artifact metadata (width/height, durationSeconds, seed, prompt summary, etc.). Boundary code populates known fields; consumers must not assume any specific field is present."
+    },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "artifactId",
+    "kind",
+    "modelRefs",
+    "source",
+    "parents",
+    "versions",
+    "metadata",
+    "createdAt"
+  ]
+}

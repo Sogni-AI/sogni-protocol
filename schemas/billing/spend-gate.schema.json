@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/billing/spend-gate.schema.json",
+  "title": "Spend gate request and state",
+  "schemaVersion": "2026-05-20.1",
+  "description": "Single shared spend-approval state machine for both atomic tool calls (scope='tool_call') and workflow authorizations (scope='workflow_run'). One envelope, one state enum, one transition log. Per-job settlement remains on the sogni-socket project+N path — this gate authorizes spend, it does not move funds.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "SpendGateState": {
+      "type": "string",
+      "description": "Canonical lifecycle states for a spend gate. 'not_required' = free / no-cost tool. 'preview_required' = estimate must be shown to the user. 'waiting_for_user' = awaiting confirm or cancel. 'confirmed' = user accepted; runner may dispatch. 'cancelled' = user declined. 'insufficient_credit' = wallet balance below estimate. 'safety_review_required' = blocked pending human or automated safety review. 'failed' = unrecoverable error in the gate itself.",
+      "enum": [
+        "not_required",
+        "preview_required",
+        "waiting_for_user",
+        "confirmed",
+        "cancelled",
+        "insufficient_credit",
+        "safety_review_required",
+        "failed"
+      ]
+    },
+    "SpendGateDecision": {
+      "type": "string",
+      "enum": ["confirm", "cancel"]
+    },
+    "SpendEstimateLineItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One row of the spend estimate breakdown. Sum of (units * model price) across line items yields the totalEstimatedCapacityUnits.",
+      "properties": {
+        "model": { "type": "string" },
+        "units": { "type": "number", "minimum": 0 },
+        "tokenType": {
+          "type": "string",
+          "enum": ["spark", "sogni"]
+        }
+      },
+      "required": ["model", "units", "tokenType"]
+    },
+    "PendingToolCall": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Minimal reference to a tool call this gate covers (when scope='tool_call' the array has one entry; when scope='workflow_run' the gate authorizes the umbrella and pendingToolCalls may be empty).",
+      "properties": {
+        "toolCallId": { "type": "string" },
+        "toolName": { "type": "string" }
+      },
+      "required": ["toolCallId", "toolName"]
+    },
+    "PendingWorkflowPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Reference to the workflow run this gate authorizes (only meaningful when scope='workflow_run').",
+      "properties": {
+        "workflowRunId": { "type": "string" },
+        "templateId": { "type": "string" }
+      },
+      "required": ["workflowRunId", "templateId"]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gateId": { "type": "string" },
+        "runId": { "type": "string" },
+        "scope": { "const": "tool_call" },
+        "toolCallId": { "type": "string" },
+        "pendingToolCalls": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PendingToolCall" }
+        },
+        "estimate": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "totalEstimatedCapacityUnits": { "type": "number", "minimum": 0 },
+            "breakdown": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/SpendEstimateLineItem" }
+            },
+            "maxAcceptableUnits": { "type": "number", "minimum": 0 }
+          },
+          "required": ["totalEstimatedCapacityUnits", "breakdown"]
+        },
+        "state": { "$ref": "#/$defs/SpendGateState" },
+        "reason": { "type": "string" },
+        "decision": { "$ref": "#/$defs/SpendGateDecision" },
+        "decidedAt": { "type": "string", "format": "date-time" },
+        "lastTransitionAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["gateId", "scope", "toolCallId", "estimate", "state", "lastTransitionAt"]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gateId": { "type": "string" },
+        "runId": { "type": "string" },
+        "scope": { "const": "workflow_run" },
+        "workflowRunId": { "type": "string" },
+        "pendingWorkflowPlan": { "$ref": "#/$defs/PendingWorkflowPlan" },
+        "estimate": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "totalEstimatedCapacityUnits": { "type": "number", "minimum": 0 },
+            "breakdown": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/SpendEstimateLineItem" }
+            },
+            "maxAcceptableUnits": { "type": "number", "minimum": 0 }
+          },
+          "required": ["totalEstimatedCapacityUnits", "breakdown"]
+        },
+        "state": { "$ref": "#/$defs/SpendGateState" },
+        "reason": { "type": "string" },
+        "decision": { "$ref": "#/$defs/SpendGateDecision" },
+        "decidedAt": { "type": "string", "format": "date-time" },
+        "lastTransitionAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["gateId", "scope", "workflowRunId", "estimate", "state", "lastTransitionAt"]
+    }
+  ]
+}
