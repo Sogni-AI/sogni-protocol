@@ -1,0 +1,9 @@
+{
+  "description": "Maximum loose-reference assets accepted per Seedance 2.0 video generation request. SDKs use this catalog to validate user input client-side and to render UI affordances (e.g. disable an upload button once the per-modality cap or the combined-total cap is reached). The numbers mirror the BytePlus Dreamina Seedance 2.0 platform limits and are the same values previously hard-coded in sogni-chat's orchestration. Per-video request: at most `images` image refs (start frame + end frame + loose `referenceImageUrls`), `videos` video refs, and `audios` audio refs, with at most `assets` total ref files across all three modalities.",
+  "limits": {
+    "images": 9,
+    "videos": 3,
+    "audios": 3,
+    "assets": 12
+  }
+}
