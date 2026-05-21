@@ -78,3 +78,12 @@ Tool prompt prose lives in `prompts/tools/*.json`. Each file is one [`PromptCont
 ## Editing schemas
 
 The JSON Schema files under `schemas/` are the authoritative wire-spec shape. Any change here is a protocol bump (minor or major depending on compatibility). Consumers regenerate their language-specific types via their codegen step.
+
+## v2 contract docs
+
+This branch carries the additive schemas for the Sogni Platform v2 execution architecture. Two markdown documents under [`docs/`](./docs/) describe the new surface for downstream consumers:
+
+- [`docs/v2-changes-summary.md`](./docs/v2-changes-summary.md) — concise map of the 8 new schemas (IntentInput, TurnAnalysis, ToolMetadata, ArtifactNode, ArtifactGraph, SpendGate, WorkflowAuthorization, RunEvent) and per-consumer impact.
+- [`docs/v2-consumer-contract.md`](./docs/v2-consumer-contract.md) — full integration contract for native `sogni` (Mac/iOS via SogniKit codegen) and `sogni-creative-agent-skill`. Covers transport choice, classifier/regex replacement plan, artifact-graph projection, tool-surface budget, preserved public API params, and the workflow charging model.
+
+v2 does not implement migration in the native or skill repos; their teams own implementation timing against this contract.
