@@ -3,9 +3,8 @@
   "$id": "https://schemas.sogni.ai/creative-agent/2026-05-20.1/billing/spend-gate.schema.json",
   "title": "Spend gate request and state",
   "schemaVersion": "2026-05-20.1",
-  "description": "Single shared spend-approval state machine for both atomic tool calls (scope='tool_call') and workflow authorizations (scope='workflow_run'). One envelope, one state enum, one transition log. Per-job settlement remains on the sogni-socket project+N path — this gate authorizes spend, it does not move funds.",
+  "description": "Single shared spend-approval state machine for atomic tool calls (scope='tool_call'), grouped concurrent dispatches (scope='parallel_batch'), and workflow authorizations (scope='workflow_run'). One envelope, one state enum, one transition log. Per-job settlement remains on the sogni-socket project+N path — this gate authorizes spend, it does not move funds. Note: additionalProperties:false is applied per oneOf branch, not at the root — a root-level additionalProperties has no sibling properties to whitelist against and would reject every payload.",
   "type": "object",
-  "additionalProperties": false,
   "$defs": {
     "SpendGateState": {
       "type": "string",
@@ -23,12 +22,13 @@
     },
     "SpendGateDecision": {
       "type": "string",
-      "enum": ["confirm", "cancel"]
+      "description": "Decision recorded when the gate leaves waiting_for_user. Three historical vocabularies are accepted: 'confirm'/'cancel' (canonical), 'approved'/'rejected' (pre-2026-05-20 aliases still emitted by sogni-api and sogni-creative-agent durable runs), and 'cancelled' (alternate past-tense spelling collapsing to 'cancel'). Consumers normalize via normalizeSpendDecision so business logic only sees the canonical pair.",
+      "enum": ["confirm", "cancel", "approved", "rejected", "cancelled"]
     },
     "SpendEstimateLineItem": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One row of the spend estimate breakdown. Sum of (units * model price) across line items yields the totalEstimatedCapacityUnits.",
+      "description": "One row of the spend estimate breakdown. Sum of (units * model price) across line items yields the estimate's capacityUnits.",
       "properties": {
         "model": { "type": "string" },
         "units": { "type": "number", "minimum": 0 },
@@ -39,13 +39,33 @@
       },
       "required": ["model", "units", "tokenType"]
     },
+    "SpendGateEstimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Estimate payload carried on the gate itself. capacityUnits = sum of breakdown units; tokenType = denomination the breakdown is in; maxAcceptableUnits = optional caller-supplied cap.",
+      "properties": {
+        "capacityUnits": { "type": "number", "minimum": 0 },
+        "breakdown": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/SpendEstimateLineItem" }
+        },
+        "tokenType": {
+          "type": "string",
+          "enum": ["spark", "sogni"]
+        },
+        "maxAcceptableUnits": { "type": "number", "minimum": 0 }
+      },
+      "required": ["capacityUnits", "breakdown", "tokenType"]
+    },
     "PendingToolCall": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Minimal reference to a tool call this gate covers (when scope='tool_call' the array has one entry; when scope='workflow_run' the gate authorizes the umbrella and pendingToolCalls may be empty).",
+      "description": "Minimal reference to a tool call this gate covers (when scope='tool_call' the array has one entry; when scope='parallel_batch' it carries the constituent calls of the fan-out; when scope='workflow_run' the gate authorizes the umbrella and pendingToolCalls may be empty).",
       "properties": {
         "toolCallId": { "type": "string" },
-        "toolName": { "type": "string" }
+        "toolName": { "type": "string" },
+        "estimateUnits": { "type": "number", "minimum": 0 }
       },
       "required": ["toolCallId", "toolName"]
     },
@@ -73,27 +93,39 @@
           "type": "array",
           "items": { "$ref": "#/$defs/PendingToolCall" }
         },
-        "estimate": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "totalEstimatedCapacityUnits": { "type": "number", "minimum": 0 },
-            "breakdown": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "$ref": "#/$defs/SpendEstimateLineItem" }
-            },
-            "maxAcceptableUnits": { "type": "number", "minimum": 0 }
-          },
-          "required": ["totalEstimatedCapacityUnits", "breakdown"]
-        },
+        "estimate": { "$ref": "#/$defs/SpendGateEstimate" },
         "state": { "$ref": "#/$defs/SpendGateState" },
         "reason": { "type": "string" },
         "decision": { "$ref": "#/$defs/SpendGateDecision" },
+        "createdAt": { "type": "string", "format": "date-time" },
         "decidedAt": { "type": "string", "format": "date-time" },
-        "lastTransitionAt": { "type": "string", "format": "date-time" }
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "failureReason": { "type": "string" }
       },
-      "required": ["gateId", "scope", "toolCallId", "estimate", "state", "lastTransitionAt"]
+      "required": ["gateId", "scope", "toolCallId", "estimate", "state", "updatedAt"]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gateId": { "type": "string" },
+        "runId": { "type": "string" },
+        "scope": { "const": "parallel_batch" },
+        "pendingToolCalls": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/PendingToolCall" }
+        },
+        "estimate": { "$ref": "#/$defs/SpendGateEstimate" },
+        "state": { "$ref": "#/$defs/SpendGateState" },
+        "reason": { "type": "string" },
+        "decision": { "$ref": "#/$defs/SpendGateDecision" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "decidedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "failureReason": { "type": "string" }
+      },
+      "required": ["gateId", "scope", "pendingToolCalls", "estimate", "state", "updatedAt"]
     },
     {
       "type": "object",
@@ -104,27 +136,16 @@
         "scope": { "const": "workflow_run" },
         "workflowRunId": { "type": "string" },
         "pendingWorkflowPlan": { "$ref": "#/$defs/PendingWorkflowPlan" },
-        "estimate": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "totalEstimatedCapacityUnits": { "type": "number", "minimum": 0 },
-            "breakdown": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "$ref": "#/$defs/SpendEstimateLineItem" }
-            },
-            "maxAcceptableUnits": { "type": "number", "minimum": 0 }
-          },
-          "required": ["totalEstimatedCapacityUnits", "breakdown"]
-        },
+        "estimate": { "$ref": "#/$defs/SpendGateEstimate" },
         "state": { "$ref": "#/$defs/SpendGateState" },
         "reason": { "type": "string" },
         "decision": { "$ref": "#/$defs/SpendGateDecision" },
+        "createdAt": { "type": "string", "format": "date-time" },
         "decidedAt": { "type": "string", "format": "date-time" },
-        "lastTransitionAt": { "type": "string", "format": "date-time" }
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "failureReason": { "type": "string" }
       },
-      "required": ["gateId", "scope", "workflowRunId", "estimate", "state", "lastTransitionAt"]
+      "required": ["gateId", "scope", "workflowRunId", "estimate", "state", "updatedAt"]
     }
   ]
 }

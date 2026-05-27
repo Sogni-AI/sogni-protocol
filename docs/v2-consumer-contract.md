@@ -203,12 +203,13 @@ All schemas are JSON Schema 2020-12 and live in `@sogni-ai/sogni-protocol` under
 
 **Key fields.**
 
-- `gateId`, `runId?`, `scope: tool_call | workflow_run`.
+- `gateId`, `runId?`, `scope: tool_call | parallel_batch | workflow_run`.
 - `tool_call` variant: `toolCallId`, `pendingToolCalls[]`.
+- `parallel_batch` variant: `pendingToolCalls[]` (>=1; the constituent calls of the fan-out).
 - `workflow_run` variant: `workflowRunId`, `pendingWorkflowPlan: { workflowRunId, templateId }`.
-- `estimate: { totalEstimatedCapacityUnits, breakdown: SpendEstimateLineItem[], maxAcceptableUnits? }`.
+- `estimate: { capacityUnits, breakdown: SpendEstimateLineItem[], tokenType, maxAcceptableUnits? }`.
 - `state: not_required | preview_required | waiting_for_user | confirmed | cancelled | insufficient_credit | safety_review_required | failed`.
-- `decision?: confirm | cancel`, `decidedAt?`, `lastTransitionAt`, `reason?`.
+- `decision?: confirm | cancel | approved | rejected | cancelled`, `createdAt?`, `decidedAt?`, `updatedAt`, `reason?`.
 
 ### 2.7 `schemas/billing/workflow-authorization.schema.json` — WorkflowAuthorization
 
@@ -227,8 +228,8 @@ All schemas are JSON Schema 2020-12 and live in `@sogni-ai/sogni-protocol` under
 
 **Key fields.**
 
-- `runId`, `runKind: chat | workflow`, `sequence: integer >= 0`.
-- `type: RunEventType` — clusters: lifecycle (`run_queued`, `run_started`, `run_completed`, `run_partial_failure`, `run_failed`, `run_cancelled`), LLM (`llm_round_started`, `llm_token`, `llm_round_completed`), tools (`tool_call_proposed`, `tool_call_dispatched`, `tool_call_progress`, `tool_call_resolved`), artifacts (`artifact_created`, `artifact_updated`, `artifact_referenced`), waiting (`run_waiting_for_user`), spend (`spend_preview_emitted`, `spend_confirmed`, `spend_cancelled`, `spend_insufficient`), audit (`audit_evaluated`, `repair_requested`), workflow-stage (`stage_started`, `stage_completed`, `stage_failed`, `stage_waiting_for_user`).
+- `runId`, `runKind: chat | workflow | tool_batch`, `sequence: integer >= 0`.
+- `type: RunEventType` — clusters: lifecycle (`run_created`, `run_queued`, `run_started`, `run_resumed`, `run_completed`, `run_partial_failure`, `run_failed`, `run_cancelled`), LLM (`llm_round_started`, `llm_token`, `llm_round_completed`, `assistant_message_delta`, `assistant_message_completed`), tools (`tool_call_proposed`, `tool_call_dispatched`, `tool_call_progress`, `tool_call_resolved`), artifacts (`artifact_created`, `artifact_updated`, `artifact_referenced`), media context (`media_context_updated`, `media_turn_intent_classified`, `asset_manifest_updated`), waiting (`run_waiting_for_user`), spend/billing (`billing_preview_updated`, `spend_gate_opened`, `spend_preview_emitted`, `spend_confirmed`, `spend_cancelled`, `spend_insufficient`, `run_awaiting_cost_confirmation`, `run_cost_confirmation_resolved`), workflow-stage (`stage_started`, `stage_completed`, `stage_failed`, `stage_waiting_for_user`), audit (`audit_evaluated`, `repair_requested`).
 - `status?: queued | running | completed | partial_failure | waiting_for_user | failed | cancelled`.
 - `payload: object` — per-type shapes documented in the schema description; schema-level enforcement deferred to a Phase 1 follow-up to avoid an unwieldy union.
 - `createdAt`, `resumable?`, `terminal?`, `idempotencyKey?`.

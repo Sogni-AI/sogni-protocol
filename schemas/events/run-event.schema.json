@@ -9,10 +9,12 @@
   "$defs": {
     "RunEventType": {
       "type": "string",
-      "description": "All event types. Clusters: lifecycle (run_queued, run_started, run_completed, run_partial_failure, run_failed, run_cancelled), LLM (llm_round_started, llm_token, llm_round_completed), tools (tool_call_proposed, tool_call_dispatched, tool_call_progress, tool_call_resolved), artifacts (artifact_created, artifact_updated, artifact_referenced), waiting (run_waiting_for_user), spend (spend_preview_emitted, spend_confirmed, spend_cancelled, spend_insufficient), audit (audit_evaluated, repair_requested), workflow-stage (stage_started, stage_completed, stage_failed, stage_waiting_for_user).",
+      "description": "All event types — superset of every type emitted by any current consumer (sogni-creative-agent-v2, sogni-chat, sogni-api) plus the schema-mandated set; mirrors RUN_EVENT_TYPES in sogni-intelligence-client src/events/runEvent.ts. Clusters: lifecycle (run_created, run_queued, run_started, run_resumed, run_completed, run_partial_failure, run_failed, run_cancelled), LLM (llm_round_started, llm_token, llm_round_completed, assistant_message_delta, assistant_message_completed), tools (tool_call_proposed, tool_call_dispatched, tool_call_progress, tool_call_resolved), artifacts (artifact_created, artifact_updated, artifact_referenced), media context (media_context_updated, media_turn_intent_classified, asset_manifest_updated), waiting (run_waiting_for_user), spend/billing (billing_preview_updated, spend_gate_opened, spend_preview_emitted, spend_confirmed, spend_cancelled, spend_insufficient, run_awaiting_cost_confirmation, run_cost_confirmation_resolved), workflow-stage (stage_started, stage_completed, stage_failed, stage_waiting_for_user), audit (audit_evaluated, repair_requested).",
       "enum": [
+        "run_created",
         "run_queued",
         "run_started",
+        "run_resumed",
         "run_completed",
         "run_partial_failure",
         "run_failed",
@@ -20,6 +22,8 @@
         "llm_round_started",
         "llm_token",
         "llm_round_completed",
+        "assistant_message_delta",
+        "assistant_message_completed",
         "tool_call_proposed",
         "tool_call_dispatched",
         "tool_call_progress",
@@ -27,17 +31,24 @@
         "artifact_created",
         "artifact_updated",
         "artifact_referenced",
+        "media_context_updated",
+        "media_turn_intent_classified",
+        "asset_manifest_updated",
         "run_waiting_for_user",
+        "billing_preview_updated",
+        "spend_gate_opened",
         "spend_preview_emitted",
         "spend_confirmed",
         "spend_cancelled",
         "spend_insufficient",
-        "audit_evaluated",
-        "repair_requested",
+        "run_awaiting_cost_confirmation",
+        "run_cost_confirmation_resolved",
         "stage_started",
         "stage_completed",
         "stage_failed",
-        "stage_waiting_for_user"
+        "stage_waiting_for_user",
+        "audit_evaluated",
+        "repair_requested"
       ]
     },
     "RunStatus": {
@@ -71,8 +82,8 @@
     "runId": { "type": "string" },
     "runKind": {
       "type": "string",
-      "enum": ["chat", "workflow"],
-      "description": "Substrate discriminator (plan §13.5). chat and workflow runs share persistence, lease, heartbeat, event log, waiting semantics, cancellation, cost confirmation, and resume."
+      "enum": ["chat", "workflow", "tool_batch"],
+      "description": "Substrate discriminator (plan §13.5). chat and workflow runs share persistence, lease, heartbeat, event log, waiting semantics, cancellation, cost confirmation, and resume. tool_batch is used by sogni-creative-agent-v2 for fan-out tool-call runs that share the same event substrate without being a full chat or workflow run."
     },
     "sequence": {
       "type": "integer",
