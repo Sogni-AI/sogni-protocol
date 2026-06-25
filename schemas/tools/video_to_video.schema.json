@@ -34,7 +34,7 @@
     },
     "negativePrompt": {
       "type": "string",
-      "description": "Non-Seedance only. Optional negative prompt for LTX/Wan video-to-video models. Do not set when controlMode is seedance-v2v or videoModel is seedance2/seedance2-fast; rewrite user-provided Seedance avoid/ban/no-X requests as positive prompt instructions."
+      "description": "Non-Seedance only. Optional negative prompt for LTX/Wan video-to-video models. Do not set when controlMode is seedance-v2v or videoModel is seedance2/seedance2-mini/seedance2-fast; rewrite user-provided Seedance avoid/ban/no-X requests as positive prompt instructions."
     },
     "videoModel": {
       "type": "string",
@@ -42,9 +42,10 @@
         "ltx23-v2v",
         "wan22-animate",
         "seedance2",
+        "seedance2-mini",
         "seedance2-fast"
       ],
-      "description": "Model selector for this video-to-video request. Usually omit; controlMode chooses the non-Seedance model. For controlMode=\"seedance-v2v\", use \"seedance2-fast\" by default, especially when the user asks for Seedance Fast/seedance-fast or 480p/720p. Use \"seedance2\" only when the user explicitly asks for the full/non-fast Seedance model or 1080p."
+      "description": "Model selector for this video-to-video request. Usually omit; controlMode chooses the non-Seedance model. For controlMode=\"seedance-v2v\", Seedance quality is selected only by model: use \"seedance2-mini\" for fast, lower-cost 720p Seedance V2V unless the user explicitly asks for legacy Fast, use \"seedance2-fast\" when the user asks for Seedance Fast / seedance-fast, and use \"seedance2\" for full/non-fast Seedance or 1080p/4K. Do not infer the Seedance model from Default Media Quality Fast/HQ/Pro or from 480p/720p resolution requests alone."
     },
     "generateAudio": {
       "type": "boolean",
@@ -52,7 +53,7 @@
     },
     "targetResolution": {
       "type": "number",
-      "description": "Seedance V2V only. Short-side output resolution target in pixels. Use when the user asks for a bare named resolution such as \"480p\", \"720p\", \"1080p\", \"2160p\", or \"4K\" without exact dimensions. Seedance V2V full supports 4K; Seedance V2V fast supports 480p and 720p. Preserve the source video shape instead of forcing landscape pixels."
+      "description": "Seedance V2V only. Short-side output resolution target in pixels. Use when the user asks for a bare named resolution such as \"480p\", \"720p\", \"1080p\", \"2160p\", or \"4K\" without exact dimensions. Seedance V2V full supports 4K; Seedance V2V Mini and Fast support 480p and 720p. Preserve the source video shape instead of forcing landscape pixels."
     },
     "sourceImageIndex": {
       "type": "number",
