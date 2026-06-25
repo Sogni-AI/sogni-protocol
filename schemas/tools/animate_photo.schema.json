@@ -37,7 +37,7 @@
     },
     "targetResolution": {
       "type": "number",
-      "description": "Short-side video resolution target in pixels. Use when the user asks for a bare named resolution such as \"480p\", \"720p\", or \"1080p\" without exact pixels or an output orientation. This preserves the source image aspect ratio. Do NOT set width, height, or exact-pixel aspectRatio for bare named resolution requests. If the user says \"720p portrait\" or \"720p landscape\", use exact-pixel aspectRatio instead."
+      "description": "Short-side video resolution target in pixels. Use when the user asks for a bare named resolution such as \"480p\", \"720p\", \"1080p\", \"2160p\", or \"4K\" without exact pixels or an output orientation. This preserves the source/reference aspect ratio. Do NOT set exact-pixel aspectRatio for bare named resolution requests. If the user says \"720p portrait\", \"720p landscape\", \"4K portrait\", or \"4K landscape\", use exact-pixel aspectRatio instead."
     },
     "sourceImageIndex": {
       "type": "number",
