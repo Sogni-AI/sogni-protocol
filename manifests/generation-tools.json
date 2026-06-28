@@ -40,6 +40,7 @@
                 "gpt-image-2",
                 "z-turbo",
                 "z-image",
+                "krea-2-turbo",
                 "chroma-v46-flash",
                 "chroma-detail",
                 "flux1-krea",
