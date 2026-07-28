@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sogni.ai/creative-agent/2026-04-27.1/tools/generate_image.schema.json",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-07-18.1/tools/generate_image.schema.json",
   "title": "generate_image arguments",
-  "schemaVersion": "2026-04-27.1",
-  "description": "Generate a new image from a text description. Usually this is text-only: do NOT use this tool when the user expects an existing image to be reused or preserved in the result. That includes (a) people from My Personas, and (b) uploaded assets such as logos, brand marks, mascots, product shots, photos, screenshots, sketches, character designs, or other reference images they want carried through. Use edit_image with sourceImageIndex=-1 (or the appropriate generated index) instead. Exception: when the user explicitly requests Z-image, Z Image, or Z-image Turbo for an uploaded-image enhancement/image-to-image request, use this tool with model=\"z-turbo\" or model=\"z-image\", sourceImageIndex=-1, and starting_image_strength because edit_image does not expose Z-image models.",
+  "schemaVersion": "2026-07-18.1",
+  "description": "Generate a new image from a text description. Usually this is text-only: do NOT use this tool when the user expects an existing image to be reused or preserved in the result. That includes (a) people from My Personas, and (b) uploaded assets such as logos, brand marks, mascots, product shots, photos, screenshots, sketches, character designs, or other reference images they want carried through. Use edit_image with sourceImageIndex=-1 (or the appropriate generated index) instead. Exception: when the user explicitly requests Z-image, Z Image, Z-image Turbo, or Krea 2 Turbo for an uploaded-image enhancement/image-to-image request, use this tool with model=\"z-turbo\", model=\"z-image\", or model=\"krea-2-turbo\", sourceImageIndex=-1, and starting_image_strength because edit_image does not expose those base image-to-image models.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -18,7 +18,10 @@
         "z-turbo",
         "z-image",
         "krea-2-turbo",
+        "dark-beast-krea2",
+        "dark-beast-z-turbo",
         "chroma-v46-flash",
+        "chroma1-hd",
         "chroma-detail",
         "flux1-krea",
         "flux2",
@@ -27,6 +30,7 @@
         "qwen-2512-lightning",
         "albedo-xl",
         "animagine-xl",
+        "one-obsession-v22",
         "anima-pencil-xl",
         "art-universe-xl",
         "hyphoria-real",
@@ -38,15 +42,15 @@
         "pony-faetality",
         "dreamshaper-xl"
       ],
-      "description": "DO NOT SET THIS PARAMETER unless the user names a specific model, asks for a very complex image render, asks for a video storyboard/storyboard sheet/contact sheet/panel layout image, or explicitly asks for Z-image/Z-image Turbo image-to-image. The app auto-selects based on quality settings. Set \"gpt-image-2\" when the user asks for a ChatGPT, OpenAI, GPT, GPT-2, GPT Image, or gpt-image-2 image/model, when they explicitly request very strong text rendering, or by default for complex single-image renders that need dense labels, crisp typography, multi-panel composition, timing notes, foley notes, professional storyboard-sheet layout, or a comprehensive character/mascot/model sheet with turnarounds, expressions, accessories, palette swatches, and brand notes. Set \"z-turbo\" when the user asks for Z-image Turbo; set \"z-image\" when they ask for Z-image without Turbo. If the user names another image model, honor that requested model instead. A model preference usually does not change which tool to use; the Z-image image-to-image exception uses sourceImageIndex plus starting_image_strength on this tool. NSFW rule: \"gpt-image-2\"/\"flux2\"/\"flux1-krea\" CANNOT do nudity — use \"pony-v7\", \"chroma-detail\", \"chroma-v46-flash\", or \"z-turbo\" instead."
+      "description": "DO NOT SET THIS PARAMETER unless the user names a specific model, asks for a very complex image render, asks for a video storyboard/storyboard sheet/contact sheet/panel layout image, asks for anime without naming a model, requests permitted NSFW/nudity content, or explicitly asks for Z-image/Z-image Turbo/Krea 2 Turbo image-to-image. The app auto-selects based on quality settings. Set \"gpt-image-2\" when the user asks for a ChatGPT, OpenAI, GPT, GPT-2, GPT Image, or gpt-image-2 image/model, when they explicitly request very strong text rendering, or by default for complex single-image renders that need dense labels, crisp typography, multi-panel composition, timing notes, foley notes, professional storyboard-sheet layout, or a comprehensive character/mascot/model sheet with turnarounds, expressions, accessories, palette swatches, and brand notes. Set \"one-obsession-v22\" when the user asks for an anime or anime-style image and has not named a specific image model. Set \"z-turbo\" when the user asks for Z-image Turbo; set \"z-image\" when they ask for Z-image without Turbo. Set \"krea-2-turbo\" when the user asks for Krea 2 Turbo. If the user names another image model, honor that requested model instead. A model preference usually does not change which tool to use; the Z-image and Krea 2 Turbo image-to-image exception uses sourceImageIndex plus starting_image_strength on this tool. NSFW rule: \"gpt-image-2\"/\"flux2\"/\"flux1-krea\"/Qwen image models CANNOT do nudity. For permitted NSFW/nudity content, prefer \"dark-beast-krea2\", then \"dark-beast-z-turbo\"; \"chroma1-hd\", \"pony-v7\", \"chroma-detail\", \"chroma-v46-flash\", and \"z-turbo\" are compatible fallbacks."
     },
     "width": {
       "type": "number",
-      "description": "Output image width in pixels. Default: 1024. Supported range is 256-2560 for default Z/Qwen/Flux.2 image models and 256-2048 for legacy/specialized image models. For gpt-image-2, dimensions are flexible up to 3840px on either edge with max 3:1 aspect ratio and a total pixel budget from 655,360 to 8,294,400; the renderer snaps to the nearest valid multiple-of-16 size. Set when the user specifies a width, exact pixel dimensions, or a named resolution (e.g., \"1280 wide\", \"1280x720\", \"720p\", \"1080x1920\", \"3840x2160\"). If the user gives only one dimension, set only that dimension and preserve/infer the sensible aspect ratio. User-requested dimensions override the default media quality, including Pro. Non-multiple-of-16 values are accepted when in bounds, so do not ask the user to adjust by a few pixels."
+      "description": "Output image width in pixels. Default: 1024. Supported bounds depend on the selected image model: Z-Image/Z-Image Turbo, Dark Beast Z-Image Turbo, Chroma, and legacy/specialized image models support 256-2048 on either edge; Krea 2 Turbo, Dark Beast KREA 2, and Qwen image models support 256-2560 on either edge; One Obsession v22 supports 256-1920 on either edge; Flux.2 uses a 2048x2048 total pixel budget (4,194,304 pixels) with non-square edges up to 2816, such as 1408x2816; GPT Image 2 supports flexible dimensions up to 3840px on either edge with max 3:1 aspect ratio and a total pixel budget from 655,360 to 8,294,400. Set when the user specifies a width, exact pixel dimensions, or a named resolution (e.g., \"1280 wide\", \"1280x720\", \"720p\", \"1080x1920\", \"3840x2160\"). If the user gives only one dimension, set only that dimension and preserve/infer the sensible aspect ratio. User-requested dimensions override the default media quality, including Pro. Non-multiple-of-16 values are accepted when in bounds; the renderer snaps to the nearest supported size internally, so do not ask the user to adjust by a few pixels."
     },
     "height": {
       "type": "number",
-      "description": "Output image height in pixels. Default: 1024. Supported range is 256-2560 for default Z/Qwen/Flux.2 image models and 256-2048 for legacy/specialized image models. For gpt-image-2, dimensions are flexible up to 3840px on either edge with max 3:1 aspect ratio and a total pixel budget from 655,360 to 8,294,400; the renderer snaps to the nearest valid multiple-of-16 size. Set when the user specifies a height, exact pixel dimensions, or a named resolution (e.g., \"720 high\", \"1280x720\", \"720p\", \"1080x1920\", \"2160x3840\"). If the user gives only one dimension, set only that dimension and preserve/infer the sensible aspect ratio. User-requested dimensions override the default media quality, including Pro. Non-multiple-of-16 values are accepted when in bounds, so do not ask the user to adjust by a few pixels."
+      "description": "Output image height in pixels. Default: 1024. Supported bounds depend on the selected image model: Z-Image/Z-Image Turbo, Dark Beast Z-Image Turbo, Chroma, and legacy/specialized image models support 256-2048 on either edge; Krea 2 Turbo, Dark Beast KREA 2, and Qwen image models support 256-2560 on either edge; One Obsession v22 supports 256-1920 on either edge; Flux.2 uses a 2048x2048 total pixel budget (4,194,304 pixels) with non-square edges up to 2816, such as 1408x2816; GPT Image 2 supports flexible dimensions up to 3840px on either edge with max 3:1 aspect ratio and a total pixel budget from 655,360 to 8,294,400. Set when the user specifies a height, exact pixel dimensions, or a named resolution (e.g., \"720 high\", \"1280x720\", \"720p\", \"1080x1920\", \"2160x3840\"). If the user gives only one dimension, set only that dimension and preserve/infer the sensible aspect ratio. User-requested dimensions override the default media quality, including Pro. Non-multiple-of-16 values are accepted when in bounds; the renderer snaps to the nearest supported size internally, so do not ask the user to adjust by a few pixels."
     },
     "numberOfVariations": {
       "type": "number",
@@ -60,7 +64,7 @@
     },
     "starting_image_strength": {
       "type": "number",
-      "description": "Image-to-image strength (0.0-1.0). Only used when a source image is available and model supports img2img. Higher values = more deviation from the source image. 0.35 = conservative enhancement, 0.5 = balanced, 0.8 = creative. Set this with sourceImageIndex when the user explicitly requests Z-image/Z-image Turbo enhancement or any supported img2img starting-image workflow."
+      "description": "Image-to-image source guidance strength (0.0-1.0). Only set when a source image is available and the model supports img2img. For Z-Image/Z-Image Turbo, Krea 2 Turbo, or source-preserving enhancement requests, use 0.75 with sourceImageIndex so the source image remains a strong guide while allowing higher-resolution reconstruction. Use lower values only when the user explicitly asks for a lighter guide/subtle variation; higher values are more creative and can deviate further from the source."
     },
     "sourceImageIndex": {
       "type": "number",
