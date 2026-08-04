@@ -21,13 +21,13 @@
     },
     "duration": {
       "type": "number",
-      "description": "Video duration in seconds. Default: 5. Range: 2-20. Use when the user explicitly requests a specific length.",
+      "description": "Video duration in seconds. Default: 5. Range: 2-20. Use when the user explicitly requests a specific length. MiniMax H3 is quantized to a 17-frame grid at a fixed 24 fps and renders 124-362 frames, so an H3 clip runs 5.17-15.08 seconds and a requested length outside that window snaps to the nearest valid H3 length.",
       "minimum": 2,
       "maximum": 20
     },
     "negativePrompt": {
       "type": "string",
-      "description": "Non-Seedance only. Optional negative prompt for video models that expose a separate negative-prompt field. Do not set for seedance2, seedance2-mini, or seedance2-fast; rewrite user-provided Seedance avoid/ban/no-X requests as positive visual instructions in prompt."
+      "description": "Advanced LTX/WAN only. Use this field only when the user explicitly asks to set a separate negative prompt. MiniMax H3 has no negative-prompt input; put requested exclusions in prompt. Do not set for MiniMax H3, Seedance, or HappyHorse."
     },
     "videoModel": {
       "type": "string",
@@ -36,13 +36,17 @@
         "wan22",
         "seedance2",
         "seedance2-mini",
-        "seedance2-fast"
+        "seedance2-fast",
+        "minimax-h3-t2v",
+        "happyhorse-1.1-t2v",
+        "happyhorse-1.1-i2v",
+        "happyhorse-1.1-r2v"
       ],
-      "description": "Video model. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step worker and Default Media Quality Pro uses the non-distilled dev worker. \"wan22\": Fast 4-step, simple motion, no audio. Default: \"ltx23\". Seedance quality is selected only by model: use \"seedance2-mini\" for fast, lower-cost 720p Seedance draft iteration unless the user explicitly asks for legacy Fast, use \"seedance2-fast\" only when the user asks for Seedance Fast / seedance-fast, and use \"seedance2\" for the full Seedance 2.0 model, explicit non-fast/full-quality requests, 1080p/4K requests, or generated/uploaded storyboard images unless the user explicitly asks for a draft, Mini, or the fast model. Do not use Default Media Quality Fast/HQ/Pro or targetResolution to represent Seedance quality. Seedance supports multimodal loose reference assets: images (up to 9), videos (up to 3), and audios (up to 3), with no more than 12 asset files total. Use @Image1/@Video1/@Audio1 style references in creative briefs when assigning roles. Assign every useful reference asset a role and prefer positive preservation constraints. If an uploaded video is the source clip to transform, upscale, enhance, restyle, or remaster, use video_to_video with controlMode=\"seedance-v2v\" instead of generate_video referenceVideoIndices."
+      "description": "Video model. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step variant and Default Media Quality Pro uses the non-distilled dev variant. \"wan22\": Fast 4-step, simple motion, no audio. Default: \"ltx23\". HappyHorse 1.1 can be used here for \"happyhorse-1.1-t2v\" text-to-video, \"happyhorse-1.1-i2v\" with one uploaded/generated first-frame image via referenceImageIndices, or \"happyhorse-1.1-r2v\" with 1-9 image references. For a locked still image/source-frame animation, animate_photo with videoModel=\"happyhorse-1.1-i2v\" is also valid. HappyHorse supports 720p/1080p, 3-15s clips, native synchronized audio that is always on, image-only references, and no negativePrompt or generateAudio input. MiniMax H3 text-to-video uses \"minimax-h3-t2v\". H3 renders 5.17-15.08s clips at a fixed 24 fps inside a 1344x768 pixel budget on a 32px grid, jointly generates its own stereo audio, takes no negativePrompt input, and supports generateAudio=false to return a video without an audio track. Use animate_photo with \"minimax-h3-i2v\" for a first-frame animation or \"minimax-h3-flf2v\" with frameRole=\"both\" for a first-to-last-frame transition. Seedance quality is selected only by model: use \"seedance2-mini\" for fast, lower-cost 720p Seedance draft iteration unless the user explicitly asks for legacy Fast, use \"seedance2-fast\" only when the user asks for Seedance Fast / seedance-fast, and use \"seedance2\" for the full Seedance 2.0 model, explicit non-fast/full-quality requests, 1080p/4K requests, or generated/uploaded storyboard images unless the user explicitly asks for a draft, Mini, or the fast model. Do not use Default Media Quality Fast/HQ/Pro or targetResolution to represent Seedance quality. Seedance supports multimodal loose reference assets: images (up to 9), videos (up to 3), and audios (up to 3), with no more than 12 asset files total. Use @Image1/@Video1/@Audio1 style references in creative briefs when assigning roles. Assign every useful reference asset a role and prefer positive preservation constraints. If an uploaded video is the source clip to transform, upscale, enhance, restyle, or remaster, use video_to_video with controlMode=\"seedance-v2v\" instead of generate_video referenceVideoIndices."
     },
     "generateAudio": {
       "type": "boolean",
-      "description": "Seedance only. Whether Seedance should generate a native audio track. Omit by default; set false only when the user explicitly asks for silent output or no audio."
+      "description": "Whether to include generated/native audio for audio-capable models. Omit to include audio by default; set false only when the user explicitly asks for silent output or no audio. When false, the returned video has no audio track. Not supported by WAN or HappyHorse."
     },
     "referenceImageIndices": {
       "type": "array",

@@ -23,17 +23,25 @@
       "type": "string",
       "enum": [
         "ltx23",
-        "wan22"
+        "wan22",
+        "happyhorse-1.1-i2v",
+        "happyhorse-1.1-r2v",
+        "minimax-h3-i2v",
+        "minimax-h3-flf2v"
       ],
-      "description": "Which video model to use. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step worker and Default Media Quality Pro uses the non-distilled dev worker; per-clip duration 2-20s. \"wan22\": Fast 4-step, simple motion, no audio; per-clip duration capped at 10s (the worker rejects clips above 161 frames). For any wan22 total longer than 10s, batch multiple <=10s clips via sourceImageIndices and stitch them — never request a single >10s wan22 clip. Use ltx23 for most requests. Use wan22 for quick simple motions without audio. Default: \"ltx23\". Do not set seedance2, seedance2-mini, or seedance2-fast here; use generate_video with referenceImageIndices and @Image role text for Seedance."
+      "description": "Which video model to use. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step variant and Default Media Quality Pro uses the non-distilled dev variant; per-clip duration 2-20s. \"wan22\": Fast 4-step, simple motion, no audio; per-clip duration capped at 10s. \"happyhorse-1.1-i2v\": HappyHorse 1.1 image-to-video from one source frame; 3-15s, 720p/1080p, native synchronized audio always on. \"happyhorse-1.1-r2v\": HappyHorse 1.1 reference-to-video with image-only loose references; use only when referenceImageIndices provide additional image references for the same clip. \"minimax-h3-i2v\": MiniMax H3 image-to-video from one first frame; 5.17-15.08s at a fixed 24 fps with jointly generated stereo audio, a 1344x768 pixel budget on a 32px grid. \"minimax-h3-flf2v\": MiniMax H3 first-and-last-frame interpolation; use it with frameRole=\"both\" plus endImageIndex/endImageIndices so the first image is the opening frame and the second is the closing frame. Do not set seedance2, seedance2-mini, or seedance2-fast here; use generate_video with referenceImageIndices/referenceVideoIndices/referenceAudioIndices and @Image/@Video/@Audio role text for Seedance. HappyHorse accepts neither negativePrompt nor generateAudio. MiniMax H3 accepts no negativePrompt; set generateAudio=false only when the user asks for silent output, and the returned video has no audio track."
+    },
+    "generateAudio": {
+      "type": "boolean",
+      "description": "Whether to include generated/native audio for audio-capable models. Omit to include audio by default; set false only when the user explicitly asks for silent output or no audio. When false, the returned video has no audio track. Ignored by audio-less WAN."
     },
     "negativePrompt": {
       "type": "string",
-      "description": "Optional negative prompt for LTX/Wan image-to-video models. Use only when the user explicitly states what should be avoided; do not use this field for Seedance workflows."
+      "description": "Advanced LTX/WAN only. Use this field only when the user explicitly asks to set a separate negative prompt. MiniMax H3 has no negative-prompt input; put requested exclusions in prompt."
     },
     "duration": {
       "type": "number",
-      "description": "Video duration in seconds. Default: 5. Use when the user explicitly requests a specific length (e.g., \"make a 10 second video\"). Per-model maximum: ltx23 = 20s, wan22 = 10s (worker hard-rejects longer clips). For totals beyond the per-model cap, batch multiple clips via sourceImageIndices instead of requesting a single oversized clip."
+      "description": "Video duration in seconds. Default: 5. Use when the user explicitly requests a specific length (e.g., \"make a 10 second video\"). Per-model maximum: ltx23 = 20s, wan22 = 10s (clips longer than this are invalid), minimax-h3 = 15.08s with a 5.17s minimum because H3 renders 124-362 frames on a 17-frame grid at a fixed 24 fps. For totals beyond the per-model cap, batch multiple clips via sourceImageIndices instead of requesting a single oversized clip."
     },
     "targetResolution": {
       "type": "number",
