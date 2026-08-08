@@ -1,9 +1,35 @@
 {
-  "description": "Maximum loose-reference assets accepted per Seedance 2.0 video generation request. SDKs use this catalog to validate user input client-side and to render UI affordances (e.g. disable an upload button once the per-modality cap or the combined-total cap is reached). The numbers mirror the BytePlus Dreamina Seedance 2.0 platform limits and are the same values previously hard-coded in sogni-chat's orchestration. Per-video request: at most `images` image refs (start frame + end frame + loose `referenceImageUrls`), `videos` video refs, and `audios` audio refs, with at most `assets` total ref files across all three modalities.",
+  "description": "Maximum loose-reference assets accepted per Seedance video generation request. SDKs use this catalog to validate user input client-side and to render UI affordances (e.g. disable an upload button once the per-modality cap or the combined-total cap is reached). The numbers mirror the BytePlus Dreamina Seedance platform limits and are the same values previously hard-coded in sogni-chat's orchestration. Per-video request: at most `images` image refs (start frame + end frame + loose `referenceImageUrls`), `videos` video refs, and `audios` audio refs, with at most `assets` total ref files across all three modalities. The caps are per-model: model-aware consumers should read `perModel[<canonical model id>]` and reject unknown model IDs rather than guessing. `limits` intentionally remains the backwards-compatible default for consumers that do not select a model and carries the Seedance 2.0 family numbers so an SDK built against an older protocol under-permits rather than over-permits.",
   "limits": {
     "images": 9,
     "videos": 3,
     "audios": 3,
     "assets": 12
+  },
+  "perModel": {
+    "seedance-2-0": {
+      "images": 9,
+      "videos": 3,
+      "audios": 3,
+      "assets": 12
+    },
+    "seedance-2-0-mini": {
+      "images": 9,
+      "videos": 3,
+      "audios": 3,
+      "assets": 12
+    },
+    "seedance-2-0-fast": {
+      "images": 9,
+      "videos": 3,
+      "audios": 3,
+      "assets": 12
+    },
+    "seedance-2-5": {
+      "images": 30,
+      "videos": 10,
+      "audios": 10,
+      "assets": 30
+    }
   }
 }
