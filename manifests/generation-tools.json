@@ -173,8 +173,6 @@
                 "seedance2-5",
                 "minimax-h3-t2v",
                 "minimax-h3-t2v-turbo",
-                "minimax-h3-i2v-turbo",
-                "minimax-h3-flf2v-turbo",
                 "happyhorse-1.1-t2v",
                 "happyhorse-1.1-i2v",
                 "happyhorse-1.1-r2v",
@@ -538,9 +536,11 @@
                 "happyhorse-1.1-i2v",
                 "happyhorse-1.1-r2v",
                 "minimax-h3-i2v",
-                "minimax-h3-flf2v"
+                "minimax-h3-i2v-turbo",
+                "minimax-h3-flf2v",
+                "minimax-h3-flf2v-turbo"
               ],
-              "description": "Which video model to use. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step variant and Default Media Quality Pro uses the non-distilled dev variant; per-clip duration 2-20s. \"wan22\": Fast 4-step, simple motion, no audio; per-clip duration capped at 10s. \"happyhorse-1.1-i2v\": HappyHorse 1.1 image-to-video from one source frame; 3-15s, 720p/1080p, native synchronized audio always on. \"happyhorse-1.1-r2v\": HappyHorse 1.1 reference-to-video with image-only loose references; use only when referenceImageIndices provide additional image references for the same clip. \"minimax-h3-i2v\": MiniMax H3 image-to-video from one first frame; 5.17-15.08s at a fixed 24 fps with jointly generated stereo audio, a 1344x768 pixel budget on a 32px grid. \"minimax-h3-flf2v\": MiniMax H3 first-and-last-frame interpolation; use it with frameRole=\"both\" plus endImageIndex/endImageIndices so the first image is the opening frame and the second is the closing frame. Do not set seedance2, seedance2-mini, seedance2-fast, or seedance2-5 here; use generate_video with referenceImageIndices/referenceVideoIndices/referenceAudioIndices and @Image/@Video/@Audio role text for Seedance. HappyHorse accepts neither negativePrompt nor generateAudio. MiniMax H3 accepts no negativePrompt; set generateAudio=false only when the user asks for silent output, and the returned video has no audio track."
+              "description": "Which video model to use. \"ltx23\" (default): LTX 2.3 with native audio; Fast/HQ use the distilled 8-step variant and Default Media Quality Pro uses the non-distilled dev variant; per-clip duration 2-20s. \"wan22\": Fast 4-step, simple motion, no audio; per-clip duration capped at 10s. \"happyhorse-1.1-i2v\": HappyHorse 1.1 image-to-video from one source frame; 3-15s, 720p/1080p, native synchronized audio always on. \"happyhorse-1.1-r2v\": HappyHorse 1.1 reference-to-video with image-only loose references; use only when referenceImageIndices provide additional image references for the same clip. \"minimax-h3-i2v\": MiniMax H3 image-to-video from one first frame; 5.17-15.08s at a fixed 24 fps with jointly generated stereo audio, a 1344x768 pixel budget on a 32px grid. \"minimax-h3-flf2v\": MiniMax H3 first-and-last-frame interpolation; use it with frameRole=\"both\" plus endImageIndex/endImageIndices so the first image is the opening frame and the second is the closing frame. Do not set seedance2, seedance2-mini, seedance2-fast, or seedance2-5 here; use generate_video with referenceImageIndices/referenceVideoIndices/referenceAudioIndices and @Image/@Video/@Audio role text for Seedance. HappyHorse accepts neither negativePrompt nor generateAudio. MiniMax H3 accepts no negativePrompt; set generateAudio=false only when the user asks for silent output, and the returned video has no audio track. MiniMax H3 Base and Turbo T2V/I2V/FLF2V prompts use exactly integrated_multimodal_description, overall_soundscape, then non_diegetic_music; I2V/FLF2V prepend the official alignment line. Standard uses 20 steps with res_multistep/simple; Turbo uses 4 steps with er_sde/simple. Turbo is available only as minimax-h3-t2v-turbo, minimax-h3-i2v-turbo, and minimax-h3-flf2v-turbo; there is no Turbo R2V."
             },
             "generateAudio": {
               "type": "boolean",
