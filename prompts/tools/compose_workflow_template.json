@@ -14,7 +14,7 @@
     "duration_seconds": "Target total duration in seconds for video-bearing plans (1-120).",
     "aspect_ratio": "Output aspect ratio. One of 1:1, 4:3, 3:4, 16:9, 9:16, 21:9.",
     "style": "Optional stylistic guidance such as \"cinematic, neon, low-key\" or \"whiteboard illustration\".",
-    "destination_models": "Optional preferred image/video/music model selectors (e.g. flux2, ltx23). Each subkey is optional.",
+    "destination_models": "Optional preferred image/video/music model selectors (e.g. flux2, ltx25, ltx23). Each subkey is optional.",
     "max_estimated_capacity_units": "Optional coarse capacity budget. The planner returns fits_budget=false if it cannot fit under the cap.",
     "include_audio": "When true, include a generate_music step in the example plan. Defaults to false.",
     "return_format": "Reserved for future use; only \"json\" is supported in Phase 2. Omit if unsure.",

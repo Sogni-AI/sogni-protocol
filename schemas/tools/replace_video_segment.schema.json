@@ -41,6 +41,7 @@
       "type": "string",
       "enum": [
         "auto",
+        "ltx25",
         "ltx23",
         "wan22",
         "seedance2",
@@ -48,7 +49,7 @@
         "seedance2-fast",
         "seedance2-5"
       ],
-      "description": "Which model to use for the new segment. Default: \"auto\" — detect from the base video's producer (Seedance base → the same Seedance model, Wan base → Wan 2.2, otherwise LTX-2.3). Override only when the user explicitly requests a different model. \"seedance2-5\" is the Seedance 2.5 editing path: 480p/720p only, 4-30s replacement windows at 24 fps with native audio."
+      "description": "Which model to use for the new segment. Default: \"auto\" — preserve Seedance or WAN for matching base clips and otherwise use LTX 2.5. Use ltx23 only for explicit rollback. \"seedance2-5\" supports 480p/720p and 4-30s replacement windows at 24 fps."
     },
     "keepOriginalAudio": {
       "type": "boolean",

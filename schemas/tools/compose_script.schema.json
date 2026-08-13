@@ -17,7 +17,7 @@
     },
     "destination_model": {
       "type": "string",
-      "description": "Optional destination video model selector, such as ltx23, wan22, or seedance2."
+      "description": "Optional destination video model selector, such as ltx25, ltx23, wan22, or seedance2."
     },
     "destination_tool": {
       "type": "string",

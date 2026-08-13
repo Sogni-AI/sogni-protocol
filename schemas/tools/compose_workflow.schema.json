@@ -41,7 +41,7 @@
         },
         "video": {
           "type": "string",
-          "description": "Preferred video model (e.g., 'ltx23', 'wan22', 'seedance2')."
+          "description": "Preferred video model (e.g., 'ltx25', 'ltx23', 'wan22', 'seedance2')."
         },
         "music": {
           "type": "string",

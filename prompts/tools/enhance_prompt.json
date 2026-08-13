@@ -6,7 +6,7 @@
   "parameterDocs": {
     "prompt": "The source prompt, rough idea, or prompt revision request to enhance.",
     "target_output": "The kind of prompt artifact to produce. One of image_prompt, video_prompt, music_prompt, edit_prompt, model_prompt, or general_prompt.",
-    "destination_model": "Optional destination model selector, such as seedance2, ltx23, wan22, flux2, gpt-image-2, or sdxl.",
+    "destination_model": "Optional destination model selector, such as seedance2, ltx25, ltx23, wan22, flux2, gpt-image-2, or sdxl.",
     "destination_tool": "Optional downstream generation tool, such as generate_image, edit_image, generate_video, animate_photo, sound_to_video, video_to_video, or generate_music.",
     "prompting_type": "Optional image-prompting family when producing an image prompt. One of flux, sdxl, sd15, pony, fast, sd3, editing, or video.",
     "model_title": "Optional human-readable target model name for image prompt guidance.",

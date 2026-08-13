@@ -6,7 +6,7 @@
   "parameterDocs": {
     "brief": "The creative writing brief, story idea, product concept, video idea, or revision request.",
     "script_type": "The kind of script or creative writing artifact to produce. One of video_prompt, screenplay, storyboard, ad_script, trailer, social_short, talking_head, campaign, or revision.",
-    "destination_model": "Optional destination video model selector, such as ltx23, wan22, or seedance2.",
+    "destination_model": "Optional destination video model selector, such as ltx25, ltx23, wan22, or seedance2.",
     "destination_tool": "Optional downstream tool, such as generate_video, animate_photo, sound_to_video, or video_to_video.",
     "duration_seconds": "Requested runtime in seconds (1-300) for a video prompt, social short, ad, or talking-head script.",
     "scene_count": "Requested number of scenes, shots, beats, or storyboard panels (1-12).",

@@ -17,7 +17,7 @@
     },
     "destination_model": {
       "type": "string",
-      "description": "Optional destination model selector, such as seedance2, ltx23, wan22, flux2, gpt-image-2, or sdxl."
+      "description": "Optional destination model selector, such as seedance2, ltx25, ltx23, wan22, flux2, gpt-image-2, or sdxl."
     },
     "destination_tool": {
       "type": "string",

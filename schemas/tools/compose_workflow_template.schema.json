@@ -117,7 +117,7 @@
       "additionalProperties": false,
       "properties": {
         "image": { "type": "string", "description": "Preferred image model (e.g., 'flux2', 'gpt-image-2')." },
-        "video": { "type": "string", "description": "Preferred video model (e.g., 'ltx23', 'wan22', 'seedance2')." },
+        "video": { "type": "string", "description": "Preferred video model (e.g., 'ltx25', 'ltx23', 'wan22', 'seedance2')." },
         "music": { "type": "string", "description": "Preferred music model." }
       }
     },
