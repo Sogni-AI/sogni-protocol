@@ -24,7 +24,7 @@ This package ships pure data — JSON Schemas, OpenAI tool manifests, prompt con
 | `enums/chat-run-waiting-reasons.json` | Why a run is paused for user input. | All SDKs. |
 | `enums/token-types.json` | Sogni billing token types (`sogni`, `spark`). | All SDKs. |
 | `catalogs/quality-presets.json` | Quality tier presets (fast/hq/pro) -> model + sampling parameters. | UI SDKs rendering quality toggles. |
-| `catalogs/audio-models.json` | ACE-Step audio model capability table + duration/BPM/time-signature constraints. | SDKs validating music-gen input. |
+| `catalogs/audio-models.json` | ACE-Step + MiniMax Music 3 audio model capability table + duration/BPM/time-signature constraints. | SDKs validating music-gen input. |
 | `version.json` | Protocol version for compatibility checks. | All SDKs. |
 
 ## Why a separate package

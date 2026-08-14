@@ -1,20 +1,76 @@
 {
-  "description": "Audio / music generation model catalog. ACE-Step 1.5 family. Each entry lists per-parameter ranges so SDKs can validate user input and render sliders without round-tripping to the server. Cross-cutting audio constraints (duration, BPM, time signatures) live in the top-level `constraints` block.",
+  "description": "Audio / music generation model catalog. ACE-Step 1.5 family plus MiniMax Music 3. Each entry lists per-parameter ranges so SDKs can validate user input and render sliders without round-tripping to the server. Cross-cutting audio constraints (duration, BPM, time signatures) live in the top-level `constraints` block; models with different limits carry a per-model `constraints` override.",
   "default": "turbo",
   "models": {
     "turbo": {
       "id": "ace_step_1.5_turbo",
       "name": "ACE-Step 1.5 Turbo",
-      "steps": { "min": 4, "max": 16, "default": 8 },
-      "shift": { "min": 1, "max": 5, "default": 3 },
+      "steps": {
+        "min": 4,
+        "max": 16,
+        "default": 8
+      },
+      "shift": {
+        "min": 1,
+        "max": 5,
+        "default": 3
+      },
       "guidance": null
     },
     "sft": {
       "id": "ace_step_1.5_sft",
       "name": "ACE-Step 1.5 SFT",
-      "steps": { "min": 10, "max": 200, "default": 50 },
-      "shift": { "min": 1, "max": 5, "default": 3 },
-      "guidance": { "min": 1, "max": 15, "default": 5 }
+      "steps": {
+        "min": 10,
+        "max": 200,
+        "default": 50
+      },
+      "shift": {
+        "min": 1,
+        "max": 5,
+        "default": 3
+      },
+      "guidance": {
+        "min": 1,
+        "max": 15,
+        "default": 5
+      }
+    },
+    "music3": {
+      "id": "minimax_music3",
+      "name": "MiniMax Music 3",
+      "steps": {
+        "min": 10,
+        "max": 100,
+        "default": 30
+      },
+      "shift": null,
+      "guidance": {
+        "min": 1,
+        "max": 5,
+        "default": 1.7
+      },
+      "promptStrength": {
+        "min": 0,
+        "max": 10,
+        "default": 1.7
+      },
+      "topK": {
+        "min": 1,
+        "max": 16384,
+        "default": 50
+      },
+      "constraints": {
+        "duration": {
+          "min": 10,
+          "max": 300,
+          "default": 60,
+          "unit": "seconds",
+          "note": "Maximum duration; the planner composes an ending and may stop earlier."
+        },
+        "bpm": null,
+        "timeSignatures": null
+      }
     }
   },
   "constraints": {
@@ -29,6 +85,11 @@
       "max": 300,
       "default": 120
     },
-    "timeSignatures": [2, 3, 4, 6]
+    "timeSignatures": [
+      2,
+      3,
+      4,
+      6
+    ]
   }
 }
