@@ -37,7 +37,7 @@
       "properties": {
         "image": {
           "type": "string",
-          "description": "Preferred image model (e.g., 'flux2', 'gpt-image-2')."
+          "description": "Preferred image model (e.g., 'gpt-image-2', 'qwen')."
         },
         "video": {
           "type": "string",

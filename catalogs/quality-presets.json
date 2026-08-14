@@ -19,12 +19,12 @@
       "description": "More detail"
     },
     "pro": {
-      "model": "flux2_dev_fp8",
-      "steps": 40,
+      "model": "qwen_image_edit_2511_fp8",
+      "steps": 25,
       "guidance": 4.0,
       "outputFormat": "jpg",
       "label": "Pro",
-      "description": "Flux.2 Dev"
+      "description": "Maximum Qwen detail"
     }
   }
 }
