@@ -24,6 +24,7 @@
     "restore_photo",
     "sound_to_video",
     "stitch_video",
+    "upscale_image",
     "video_to_video"
   ],
   "app": [
@@ -74,6 +75,7 @@
     "set_content_filter",
     "sound_to_video",
     "stitch_video",
+    "upscale_image",
     "validate_asset_references",
     "video_to_video"
   ],
