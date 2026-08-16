@@ -449,7 +449,7 @@
       "type": "function",
       "function": {
         "name": "upscale_image",
-        "description": "Enlarge an existing image with NVIDIA RTX Video Super Resolution while preserving its content, identity, composition, and colors. This is deterministic reconstruction, not a generative edit: it takes no prompt and must not be used for restoration, sharpening requests that imply repainting, object changes, style changes, or creative enhancement. Use it when the user asks to upscale, enlarge, increase resolution, prepare for print, or produce a 2K/4K/6K/8K copy without changing the image.",
+        "description": "Enlarge an existing image with NVIDIA RTX Video Super Resolution while preserving its content, identity, composition, and colors. This is deterministic reconstruction, not a generative edit: it takes no prompt and must not be used for restoration, sharpening requests that imply repainting, object changes, style changes, or creative enhancement. Use it when the user asks to upscale, enlarge, increase resolution, prepare for print, or produce a 2K/4K/6K/8K/16K copy without changing the image.",
         "parameters": {
           "type": "object",
           "properties": {
@@ -469,8 +469,8 @@
             "targetLongestEdge": {
               "type": "number",
               "minimum": 512,
-              "maximum": 8192,
-              "description": "Optional requested pixel length for the output longest edge, from 512 through 8192. Use 3840 for 4K UHD, 6144 for 6K, 7680 for 8K UHD, or 8192 for an 8K-class maximum. The other edge is calculated automatically so the source aspect ratio is preserved; both aligned output edges must be at least 512px."
+              "maximum": 15360,
+              "description": "Optional requested pixel length for the output longest edge, from 512 through 15360. Use 3840 for 4K UHD, 7680 for 8K, or 15360 for the 16K maximum. The other edge is calculated automatically so the source aspect ratio is preserved; both 8px-aligned output edges must be at least 512px."
             }
           },
           "required": []
