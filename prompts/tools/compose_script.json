@@ -1,8 +1,8 @@
 {
   "contractId": "compose_script_v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "toolName": "compose_script",
-  "baseDescription": "compose_script composes scripts, storyboards, video prompts, ad concepts, trailers, social\nshorts, campaign beats, and talking-head plans. Use for creative writing artifacts where\nthe user wants prose, scenes, beats, or a script-shaped deliverable.\n\nDo not use compose_script for song lyrics — use compose_lyrics. Do not use it for simple\nprompt expansion — use enhance_prompt. Do not use it to plan a runnable multi-step\nworkflow — use compose_workflow or compose_workflow_template.\n\ncompose_script returns a creative-writing deliverable. When the script is meant to feed a\ndownstream video tool, pair it with destination_tool/destination_model so the output is\ntuned for that pipeline; the caller still has to invoke the generation tool itself.",
+  "baseDescription": "compose_script composes scripts, screenplays, storyboards, treatments, ad concepts, trailers,\nsocial shorts, campaign beats, and talking-head plans. Use it for prose, scenes, beats, or\nother script-shaped creative-writing deliverables.\n\nWhen the user explicitly asks for a directly runnable prompt for a named image or video\nmodel, use enhance_prompt instead, even when the subject is a commercial. Do not use\ncompose_script for song lyrics, instrumental composition, simple prompt authoring, or a\nrunnable multi-step workflow.\n\ncompose_script returns a creative-writing deliverable. When that deliverable will later feed\na video pipeline, destination_tool and destination_model may record the intended handoff;\nthey do not turn the result into the model's native prompt contract.",
   "parameterDocs": {
     "brief": "The creative writing brief, story idea, product concept, video idea, or revision request.",
     "script_type": "The kind of script or creative writing artifact to produce. One of video_prompt, screenplay, storyboard, ad_script, trailer, social_short, talking_head, campaign, or revision.",

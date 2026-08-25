@@ -1,7 +1,7 @@
 {
   "title": "compose_script tool schema",
   "schemaVersion": "2026-05-14.1",
-  "description": "Synchronous creative writing utility for scripts, storyboards, video prompts, ad concepts, trailers, social shorts, campaign beats, and talking-head plans.",
+  "description": "Synchronous creative-writing utility for scripts, screenplays, storyboards, treatments, ad concepts, trailers, social shorts, campaign beats, and talking-head plans. Directly runnable prompts for named media models belong to enhance_prompt.",
   "type": "object",
   "additionalProperties": false,
   "required": ["brief"],
