@@ -671,13 +671,13 @@
       "type": "function",
       "function": {
         "name": "video_to_video",
-        "description": "Transform an existing video using WAN 2.2 Animate, LTX 2.5 V2V controls by default, LTX 2.3 as rollback, or Seedance V2V when explicitly requested. LTX 2.5 distilled supports canny/pose/depth/detailer/inpaint/outpaint; Dev + Speed LoRA supports canny/pose/depth/detailer. Requires an uploaded video.",
+        "description": "Transform an existing video using WAN 2.2 Animate, LTX 2.5 V2V controls by default, LTX 2.3 as rollback, or Seedance V2V when explicitly requested. LTX 2.5 Fast, HQ, and Pro use the release-validated official Distilled workflow for canny/pose/depth/detailer/inpaint/outpaint; Dev is not publicly routed until upstream publishes and Sogni validates an official ComfyUI Dev recipe. Requires an uploaded video.",
         "parameters": {
           "type": "object",
           "properties": {
             "prompt": {
               "type": "string",
-              "description": "Describe the TARGET appearance, motion, dialogue, audio, and style in positive present-tense language. For LTX 2.5 (default) or LTX 2.3 rollback canny/depth/pose modes, the source preserves the selected structure or motion, so emphasize style, atmosphere, lighting, texture, color, scale, and pacing. Canny preserves edges; pose preserves skeletal motion; depth preserves 3D layout; detailer should describe the original content with quality qualifiers only. Distilled LTX 2.5 also supports inpaint and outpaint; Dev + Speed LoRA does not. For inpaint, describe only the regenerated region. For outpaint, describe the newly revealed area consistently with the source. For Seedance V2V, use natural prose and describe the target transformation holistically."
+              "description": "Describe the TARGET appearance, motion, dialogue, audio, and style in positive present-tense language. For LTX 2.5 (default) or LTX 2.3 rollback canny/depth/pose modes, the source preserves the selected structure or motion, so emphasize style, atmosphere, lighting, texture, color, scale, and pacing. Canny preserves edges; pose preserves skeletal motion; depth preserves 3D layout; detailer should describe the original content with quality qualifiers only. The validated Distilled LTX 2.5 path supports inpaint and outpaint; Dev is not publicly routed. For inpaint, describe only the regenerated region. For outpaint, describe the newly revealed area consistently with the source. For Seedance V2V, use natural prose and describe the target transformation holistically."
             },
             "expandPrompt": {
               "type": "boolean",
