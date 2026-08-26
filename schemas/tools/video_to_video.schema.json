@@ -13,7 +13,7 @@
     },
     "expandPrompt": {
       "type": "boolean",
-      "description": "Seedance and Wan 3 only. Whether to expand the prompt before dispatch. Defaults to true. For Wan 3, a successful Sogni expansion disables Alibaba prompt_extend to prevent a second rewrite; false disables both expansion layers so exact prompts remain exact."
+      "description": "Seedance and Wan 3 only. Whether to run Sogni's exact-model prompt shaper before dispatch. Defaults to true. Set false when the supplied prompt is already model-ready and must remain exact."
     },
     "videoSourceIndex": {
       "type": "number",
@@ -106,7 +106,7 @@
         "edit",
         "extend"
       ],
-      "description": "Wan 3 only. Use \"edit\" to transform the source or \"extend\" to continue it. Extension automatically uses ratio=\"adaptive\" and the prompt should explicitly describe continuation intent."
+      "description": "Wan 3 only. Use \"edit\" to transform the source or \"extend\" to continue it. For extension, explicitly describe the intended continuation."
     },
     "ratio": {
       "type": "string",
@@ -118,7 +118,7 @@
         "3:4",
         "9:16"
       ],
-      "description": "Wan 3 only. Extension requires \"adaptive\"; edit defaults to adaptive."
+      "description": "Wan 3 only. Output ratio. Use \"adaptive\" to let the provider choose from the source; omit to use the provider default."
     },
     "referenceFileUrl": {
       "type": "string",

@@ -13,7 +13,7 @@
     },
     "expandPrompt": {
       "type": "boolean",
-      "description": "Seedance and Wan 3 only. Whether to expand the prompt before dispatch. Defaults to true. For Wan 3, a successful Sogni expansion disables Alibaba prompt_extend to prevent a second rewrite; false disables both expansion layers so exact prompts remain exact."
+      "description": "Seedance and Wan 3 only. Whether to run Sogni's exact-model prompt shaper before dispatch. Defaults to true. Set false when the supplied prompt is already model-ready and must remain exact."
     },
     "negativePrompt": {
       "type": "string",
