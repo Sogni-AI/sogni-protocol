@@ -31,7 +31,8 @@
         "minimax-h3-i2v-turbo",
         "minimax-h3-flf2v",
         "minimax-h3-flf2v-turbo",
-        "wan3.0-video"
+        "wan3.0-video",
+        "wan3.0-spicy-video"
       ],
       "description": "\"ltx25\" (default): LTX 2.5 I2V or first/last-frame video with native audio; Fast, HQ, and Pro currently use the release-validated official Distilled INT8 workflow. The Dev checkpoints are not publicly routed until upstream publishes and Sogni validates an official ComfyUI Dev recipe. Which video model to use. \"ltx23\": LTX 2.3 rollback with native audio. \"wan22\": quick simple motion without audio, up to 10s. \"minimax-h3-i2v\" and \"minimax-h3-i2v-turbo\": standard and 4-step Turbo MiniMax H3 from one first frame. \"minimax-h3-flf2v\" and \"minimax-h3-flf2v-turbo\": standard and 4-step Turbo MiniMax H3 between required first and last frames; use frameRole=\"both\" and provide the end frame. H3 generates native audio at fixed 24fps for 5.17-15.08s and has no negative-prompt input. H3 Base and Turbo prompts use the exact three-field contract and the official mode-specific alignment line. Do not set Seedance here; use generate_video with Seedance references. \"wan3.0-video\" is Alibaba Wan 3: one canonical premium-vendor model for text-to-video, first-frame and first+last-frame animation, loose multimodal references, and audio-driven generation. It renders 2-30s at fixed 30 fps with optional native audio, supports 480p/720p/1080p and 16:9/4:3/1:1/3:4/9:16, accepts up to 10 reference images, 5 reference videos, and 5 reference audios, and uses plain per-type prompt labels Image 1, Video 1, and Audio 1. Do not send negativePrompt. Use animate_photo for native first/last frames, generate_video for text or loose references, and sound_to_video when audio is the primary driver. Video references are loose conditioning, not source-video edit or extend modes."
     },
