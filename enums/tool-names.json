@@ -25,6 +25,7 @@
     "sound_to_video",
     "stitch_video",
     "upscale_image",
+    "upscale_video",
     "video_to_video"
   ],
   "app": [
@@ -76,6 +77,7 @@
     "sound_to_video",
     "stitch_video",
     "upscale_image",
+    "upscale_video",
     "validate_asset_references",
     "video_to_video"
   ],
