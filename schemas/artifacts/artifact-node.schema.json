@@ -91,7 +91,7 @@
     },
     "kind": {
       "type": "string",
-      "enum": ["image", "video", "audio", "text", "workflow", "collection"]
+      "enum": ["image", "video", "audio", "model", "text", "workflow", "collection"]
     },
     "uri": {
       "type": "string",
