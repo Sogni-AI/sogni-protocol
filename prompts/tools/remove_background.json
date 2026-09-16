@@ -1,0 +1,10 @@
+{
+  "contractId": "remove_background_v1",
+  "version": "1.0.0",
+  "toolName": "remove_background",
+  "baseDescription": "Use BiRefNet to remove an existing image background while preserving the original foreground. No prompt is needed. Return a transparent PNG by default, or an alpha mask when applyMask=false.",
+  "parameterDocs": {
+    "sourceImageIndex": "Original image to isolate.",
+    "applyMask": "Default true: transparent cutout; false: mask."
+  }
+}

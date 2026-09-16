@@ -1,0 +1,11 @@
+{
+  "contractId": "segment_image_v1",
+  "version": "1.0.0",
+  "toolName": "segment_image",
+  "baseDescription": "Select objects with SAM 3 using an object description, normalized original-image points, or boxes. Text can combine with boxes. Points can combine with at most one positive box and never with text. Output a binary mask by default or an original-pixel cutout with applyMask=true; do not repaint the source.",
+  "parameterDocs": {
+    "sourceImageIndex": "Original image to select from.",
+    "maxInstances": "Keep the strongest N selections (1–16).",
+    "applyMask": "True returns a cutout; false returns a mask."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "contractId": "image_to_3d_v1",
+  "version": "1.0.0",
+  "toolName": "image_to_3d",
+  "baseDescription": "Reconstruct a downloadable GLB from an original front image, optionally with left, back and right views of the same subject at consistent height and framing. Pass each view in its named slot; never invent views or substitute screenshots. Choose mesh and texture budgets for the intended use. The output is a 3D model, so do not send it to image or video tools.",
+  "parameterDocs": {
+    "sourceImageIndex": "Front view; negative indices select uploads.",
+    "leftViewImageIndex": "Subject own left side toward camera (subject faces screen-left).",
+    "backViewImageIndex": "Subject seen from behind.",
+    "rightViewImageIndex": "Subject own right side toward camera (subject faces screen-right)."
+  }
+}

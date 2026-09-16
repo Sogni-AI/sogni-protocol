@@ -7,7 +7,7 @@
   "additionalProperties": false,
   "properties": {
     "id": { "type": "string" },
-    "kind": { "type": "string", "enum": ["image", "video", "audio", "archive", "json", "text", "other"] },
+    "kind": { "type": "string", "enum": ["image", "video", "audio", "model", "archive", "json", "text", "other"] },
     "url": { "type": "string" },
     "mimeType": { "type": "string" },
     "width": { "type": "number" },

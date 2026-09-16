@@ -9,7 +9,7 @@
   "properties": {
     "prompt": {
       "type": "string",
-      "description": "The exact words to be spoken, verbatim. This is NOT a description of the audio: whatever is written here is read aloud character for character. \"a calm woman reading the news\" would be spoken as those seven words — put that in voiceDescription instead and write the actual news copy here.\n\nLITERAL PROMPT OVERRIDE: If the user explicitly says not to modify the prompt, or to use it exactly/verbatim/as-is, copy the identified prompt text verbatim instead of applying these construction rules unless a hard requirement is missing.\n\nPunctuation is prosody: full stops, commas, question marks and ellipses control pauses and intonation, so keep them. Write numbers, dates, currency and abbreviations the way they should be said (\"nineteen eighty-four\", \"twelve dollars fifty\", \"Doctor Chen\") when the plain form would be ambiguous. Line breaks are not pauses; use punctuation.\n\nLimit 4096 characters, roughly five minutes of speech. A longer script is refused rather than cut off mid-sentence, so split it across several calls at a natural break.",
+      "description": "The exact words to be spoken, verbatim. This is NOT a description of the audio: whatever is written here is read aloud character for character. \"a calm woman reading the news\" would be spoken as those seven words — put that in voiceDescription instead and write the actual news copy here.\n\nLITERAL PROMPT OVERRIDE: If the user explicitly says not to modify the prompt, or to use it exactly/verbatim/as-is, copy the identified prompt text verbatim instead of applying these construction rules unless a hard requirement is missing.\n\nPunctuation is prosody: full stops, commas, question marks and ellipses control pauses and intonation, so keep them. Write numbers, dates, currency and abbreviations the way they should be said (\"nineteen eighty-four\", \"twelve dollars fifty\", \"Doctor Chen\") when the plain form would be ambiguous. Line breaks are not pauses; use punctuation.\n\nIf the user asks for a script rather than supplying one — \"read me a poem about the sea\", \"record an intro for my podcast\" — write the words first and pass them here. compose_script is for longer or structured pieces; a sentence or two you can simply write.\n\nLimit 4096 characters, roughly five minutes of speech. A longer script is refused rather than cut off mid-sentence, so split it across several calls at a natural break.",
       "maxLength": 4096
     },
     "model": {
@@ -45,6 +45,10 @@
       "type": "number",
       "description": "Which audio holds the voice to clone, using the same numbering every other tool uses for audio: negative indices are uploads (-1 = first/primary upload, -2 = second upload, and so on) and 0-based non-negative indices are audio generated earlier in this conversation. A clip the user just uploaded is -1. Required when model=\"clone\" and ignored otherwise. The clip should be three to thirty seconds of one person speaking cleanly, with no music, no second speaker and no heavy room echo; anything past thirty seconds is trimmed."
     },
+    "voice_source_url": {
+      "type": "string",
+      "description": "REST alternative to voiceSourceIndex: retrievable original recording for clone mode."
+    },
     "voiceTranscript": {
       "type": "string",
       "description": "The exact words spoken in the uploaded clip, when model=\"clone\". Supplying it lets the model condition on the recording itself rather than on a speaker fingerprint alone, which is markedly closer to the source — set it whenever the user tells you what the clip says or the transcript is otherwise known. Omitting it still produces a recognisable clone, just a looser one. Limit 1024 characters.",
@@ -66,6 +70,27 @@
         "italian"
       ],
       "description": "Language of the script. Default \"auto\", which infers it from the text and is the only setting that reads a code-switched line correctly. Pin a language only when auto mis-reads a name, a loanword, or a passage that is ambiguous between two of them. Cloning is cross-lingual: an English reference clip can read Japanese in the same voice."
+    },
+    "creativity": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 2,
+      "description": "Speech delivery variation from 0.1 to 2; default 0.9."
+    },
+    "outputFormat": {
+      "type": "string",
+      "enum": [
+        "wav",
+        "mp3",
+        "flac"
+      ],
+      "description": "Audio file format; default wav."
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295,
+      "description": "Optional seed for reproducible delivery."
     },
     "numberOfVariations": {
       "type": "number",

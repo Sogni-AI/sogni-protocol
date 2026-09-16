@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-07-18.1/tools/image_to_3d.schema.json",
+  "title": "image_to_3d arguments",
+  "schemaVersion": "2026-07-18.1",
+  "description": "Reconstruct a textured 3D model with Pixal3D from an original front image, optionally with left, back and right views of the same subject. Returns a downloadable binary GLB model, not an image or video. Takes no prompt. Use original stills with consistent framing and height; never substitute screenshots or invented views.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sourceImageIndex": {
+      "type": "integer",
+      "description": "Front image: negative indices select uploads (-1 is the first), non-negative indices select generated images. Omit to use the latest image."
+    },
+    "source_image_url": {
+      "type": "string",
+      "description": "REST alternative to sourceImageIndex: retrievable front image URL."
+    },
+    "leftViewImageIndex": {
+      "type": "integer",
+      "description": "Subject own LEFT side facing the camera (subject faces screen-left). Any subset of orbit views enables multi-view reconstruction."
+    },
+    "backViewImageIndex": {
+      "type": "integer",
+      "description": "Same subject seen from behind."
+    },
+    "rightViewImageIndex": {
+      "type": "integer",
+      "description": "Subject own RIGHT side facing the camera (subject faces screen-right). Do not swap left and right."
+    },
+    "left_view_image_url": {
+      "type": "string",
+      "description": "REST alternative for the left view."
+    },
+    "back_view_image_url": {
+      "type": "string",
+      "description": "REST alternative for the back view."
+    },
+    "right_view_image_url": {
+      "type": "string",
+      "description": "REST alternative for the right view."
+    },
+    "meshTargetFaces": {
+      "type": "integer",
+      "minimum": 5000,
+      "maximum": 700000,
+      "description": "Triangle budget. Default 700000; choose a lower budget for real-time use."
+    },
+    "textureSize": {
+      "type": "integer",
+      "minimum": 1024,
+      "maximum": 4096,
+      "description": "Base-colour texture and UV atlas size. Default 4096."
+    },
+    "normalMapSize": {
+      "type": "integer",
+      "minimum": 512,
+      "maximum": 2048,
+      "description": "Normal map size. Default 2048."
+    },
+    "ambientOcclusionSize": {
+      "type": "integer",
+      "minimum": 256,
+      "maximum": 1024,
+      "description": "Ambient occlusion map size. Default 1024."
+    },
+    "shapeResolution": {
+      "type": "integer",
+      "enum": [
+        1024,
+        1536
+      ],
+      "description": "Shape resolution. Default 1024; 1536 costs more."
+    }
+  },
+  "required": []
+}
