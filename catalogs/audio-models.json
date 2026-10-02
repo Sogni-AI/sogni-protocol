@@ -1,41 +1,7 @@
 {
-  "description": "Audio / music generation model catalog. ACE-Step 1.5 family plus MiniMax Music 3. Each entry lists per-parameter ranges so SDKs can validate user input and render sliders without round-tripping to the server. Cross-cutting audio constraints (duration, BPM, time signatures) live in the top-level `constraints` block; models with different limits carry a per-model `constraints` override.",
-  "default": "turbo",
+  "description": "Audio / music generation model catalog. MiniMax Music 3 (the default) plus the ACE-Step 1.5 family. Each entry lists per-parameter ranges so SDKs can validate user input and render sliders without round-tripping to the server. Cross-cutting audio constraints (duration, BPM, time signatures) live in the top-level `constraints` block; models with different limits carry a per-model `constraints` override.",
+  "default": "music3",
   "models": {
-    "turbo": {
-      "id": "ace_step_1.5_turbo",
-      "name": "ACE-Step 1.5 Turbo",
-      "steps": {
-        "min": 4,
-        "max": 16,
-        "default": 8
-      },
-      "shift": {
-        "min": 1,
-        "max": 5,
-        "default": 3
-      },
-      "guidance": null
-    },
-    "sft": {
-      "id": "ace_step_1.5_sft",
-      "name": "ACE-Step 1.5 SFT",
-      "steps": {
-        "min": 10,
-        "max": 200,
-        "default": 50
-      },
-      "shift": {
-        "min": 1,
-        "max": 5,
-        "default": 3
-      },
-      "guidance": {
-        "min": 1,
-        "max": 15,
-        "default": 5
-      }
-    },
     "music3": {
       "id": "minimax_music3",
       "name": "MiniMax Music 3",
@@ -70,6 +36,40 @@
         },
         "bpm": null,
         "timeSignatures": null
+      }
+    },
+    "turbo": {
+      "id": "ace_step_1.5_turbo",
+      "name": "ACE-Step 1.5 Turbo",
+      "steps": {
+        "min": 4,
+        "max": 16,
+        "default": 8
+      },
+      "shift": {
+        "min": 1,
+        "max": 5,
+        "default": 3
+      },
+      "guidance": null
+    },
+    "sft": {
+      "id": "ace_step_1.5_sft",
+      "name": "ACE-Step 1.5 SFT",
+      "steps": {
+        "min": 10,
+        "max": 200,
+        "default": 50
+      },
+      "shift": {
+        "min": 1,
+        "max": 5,
+        "default": 3
+      },
+      "guidance": {
+        "min": 1,
+        "max": 15,
+        "default": 5
       }
     }
   },
