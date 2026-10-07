@@ -46,10 +46,11 @@
         "wan22",
         "seedance2",
         "seedance2-mini",
+        "seedance2-mini-uncensored",
         "seedance2-5",
         "seedance2-5-uncensored"
       ],
-      "description": "Which model to use for the new segment. Default: \"auto\" — preserve Seedance or WAN for matching base clips and otherwise use LTX 2.5. Use ltx23 only for explicit rollback. \"seedance2-5\" and \"seedance2-5-uncensored\" (Seedance 2.5 Uncensored, only when requested) support 480p/720p and 4-30s replacement windows at 24 fps."
+      "description": "Which model to use for the new segment. Default: \"auto\" — preserve Seedance or WAN for matching base clips and otherwise use LTX 2.5. Use ltx23 only for explicit rollback. \"seedance2-5\" and \"seedance2-5-uncensored\" (Seedance 2.5 Uncensored, only when requested) support 480p/720p and 4-30s replacement windows at 24 fps. \"seedance2-mini-uncensored\" (Seedance 2.0 Mini Uncensored, only when requested) supports the same 480p/720p and 4-15s replacement windows as \"seedance2-mini\"."
     },
     "keepOriginalAudio": {
       "type": "boolean",
