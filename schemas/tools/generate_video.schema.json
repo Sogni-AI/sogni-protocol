@@ -163,6 +163,14 @@
     "returnLastFrame": {
       "type": "boolean",
       "description": "Seedance 2.5 only. Set true to export a separate image of the final frame alongside the video. The result includes lastFrameUrl, which can be used as the first-frame image for a subsequent clip. Defaults to false; this does not extend the video automatically."
+    },
+    "referenceVideoCompression": {
+      "type": "string",
+      "enum": [
+        "none",
+        "vpack"
+      ],
+      "description": "Optional compression for one-stage MiniMax H3 Reference to Video (Standard, Balanced, LightX2V Turbo, or FastH3). Requires a video reference. Omit or use \"none\" to preserve normal behavior; use \"vpack\" only when the user explicitly chooses reference-video compression. It can reduce memory use but change fine detail and motion. It does not apply to two-stage output, other video models, or image-only references. Never silently enable it or remove it after a worker-capability refusal."
     }
   },
   "required": [
