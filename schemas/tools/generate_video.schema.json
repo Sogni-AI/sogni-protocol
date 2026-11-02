@@ -170,7 +170,7 @@
         "none",
         "vpack"
       ],
-      "description": "Optional compression for one-stage MiniMax H3 Reference to Video (Standard, Balanced, LightX2V Turbo, or FastH3). Requires a video reference. Omit or use \"none\" to preserve normal behavior; use \"vpack\" only when the user explicitly chooses reference-video compression. It can reduce memory use but change fine detail and motion. It does not apply to two-stage output, other video models, or image-only references. Never silently enable it or remove it after a worker-capability refusal."
+      "description": "Legacy compatibility preference for MiniMax H3 reference video. Current services select compression automatically; this field no longer selects compression. Leave it unset for new requests."
     }
   },
   "required": [
