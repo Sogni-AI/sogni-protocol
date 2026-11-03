@@ -943,7 +943,7 @@
     },
     {
       "name": "create_upload",
-      "description": "Create signed upload and download URLs for reference media. Upload bytes directly to storage, then pass the download URL to a generation tool.",
+      "description": "Create a signed upload for reference media. Follow the returned HTTP method and signed form fields, upload directly to storage within max_size_bytes, then pass download_url to a generation tool.",
       "inputSchema": {
         "type": "object",
         "properties": {
