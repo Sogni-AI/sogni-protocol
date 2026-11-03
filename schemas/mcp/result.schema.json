@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/result.schema.json",
+  "title": "Sogni MCP result",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": [
+        "models",
+        "account",
+        "quote",
+        "job",
+        "upload"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "kind",
+    "data"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/get_job.schema.json",
+  "title": "Sogni MCP get_job",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Job ID returned by a previous call."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "workflow",
+        "run"
+      ]
+    },
+    "artifact_offset": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Output page offset. Use next_artifact_offset from the previous response."
+    },
+    "artifact_limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Outputs per page; defaults to 50."
+    }
+  },
+  "required": [
+    "job_id",
+    "kind"
+  ],
+  "additionalProperties": false
+}

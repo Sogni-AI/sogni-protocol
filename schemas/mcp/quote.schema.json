@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/quote.schema.json",
+  "title": "Sogni MCP quote",
+  "type": "object",
+  "properties": {
+    "tool": {
+      "type": "string",
+      "enum": [
+        "generate_image",
+        "generate_video",
+        "generate_audio",
+        "transform_media"
+      ]
+    },
+    "arguments": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "tool",
+    "arguments"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/cancel_job.schema.json",
+  "title": "Sogni MCP cancel_job",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Durable job ID."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "workflow",
+        "run"
+      ]
+    }
+  },
+  "required": [
+    "job_id",
+    "kind"
+  ],
+  "additionalProperties": false
+}

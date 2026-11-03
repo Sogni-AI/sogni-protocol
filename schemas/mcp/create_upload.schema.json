@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/create_upload.schema.json",
+  "title": "Sogni MCP create_upload",
+  "type": "object",
+  "properties": {
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video",
+        "audio"
+      ]
+    },
+    "content_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "MIME type of the reference file."
+    }
+  },
+  "required": [
+    "media_type",
+    "content_type"
+  ],
+  "additionalProperties": false
+}
