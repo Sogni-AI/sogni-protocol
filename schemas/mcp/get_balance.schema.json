@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/get_balance.schema.json",
+  "title": "Sogni MCP get_balance",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "additionalProperties": false
+}

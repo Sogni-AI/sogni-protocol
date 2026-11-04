@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/list_models.schema.json",
+  "title": "Sogni MCP list_models",
+  "type": "object",
+  "properties": {
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video",
+        "audio",
+        "text",
+        "model"
+      ]
+    },
+    "network": {
+      "type": "string",
+      "enum": [
+        "fast",
+        "relaxed"
+      ]
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Return details for one model ID."
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

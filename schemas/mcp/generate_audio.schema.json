@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/generate_audio.schema.json",
+  "title": "Sogni MCP generate_audio",
+  "type": "object",
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64000,
+      "description": "Complete user prompt; preserve all requested details."
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Concrete model ID from list_models."
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Additional native Sogni tool parameters. Preserved and validated by the API; do not duplicate named fields."
+    },
+    "reference_images": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://.+",
+        "maxLength": 16384,
+        "description": "HTTPS media download URL; never a local path or upload URL."
+      },
+      "maxItems": 16
+    },
+    "reference_audios": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://.+",
+        "maxLength": 16384,
+        "description": "HTTPS media download URL; never a local path or upload URL."
+      },
+      "maxItems": 16
+    },
+    "reference_videos": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://.+",
+        "maxLength": 16384,
+        "description": "HTTPS media download URL; never a local path or upload URL."
+      },
+      "maxItems": 16
+    },
+    "token_type": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "spark",
+        "sogni"
+      ],
+      "description": "Payment currency. Auto follows account coverage."
+    },
+    "billing_mode": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "subscription",
+        "tokens"
+      ],
+      "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "music",
+        "speech"
+      ]
+    },
+    "duration": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "voice_sample": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://.+",
+      "maxLength": 16384,
+      "description": "HTTPS media download URL; never a local path or upload URL."
+    },
+    "safe_content_filter": {
+      "type": "boolean",
+      "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+    }
+  },
+  "required": [
+    "prompt",
+    "model",
+    "kind",
+    "request_id"
+  ],
+  "additionalProperties": false
+}

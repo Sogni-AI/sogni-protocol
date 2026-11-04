@@ -1,0 +1,1148 @@
+{
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "generate_image",
+      "description": "Generate or edit images. Covered models use the caller's subscription; other models spend tokens. Returns a durable job handle.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64000,
+            "description": "Complete user prompt; preserve all requested details."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Concrete model ID from list_models."
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional native Sogni tool parameters. Preserved and validated by the API; do not duplicate named fields."
+          },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_audios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_videos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "spark",
+              "sogni"
+            ],
+            "description": "Payment currency. Auto follows account coverage."
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "subscription",
+              "tokens"
+            ],
+            "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "mask": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "safe_content_filter": {
+            "type": "boolean",
+            "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+          }
+        },
+        "required": [
+          "prompt",
+          "model",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "generate_video",
+      "description": "Generate video using text, frames, audio or reference video. Returns a durable job handle; follow with get_job.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64000,
+            "description": "Complete user prompt; preserve all requested details."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Concrete model ID from list_models."
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional native Sogni tool parameters. Preserved and validated by the API; do not duplicate named fields."
+          },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_audios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_videos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "spark",
+              "sogni"
+            ],
+            "description": "Payment currency. Auto follows account coverage."
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "subscription",
+              "tokens"
+            ],
+            "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "t2v",
+              "i2v",
+              "flf",
+              "r2v",
+              "a2v",
+              "ia2v",
+              "flfa2v",
+              "v2v"
+            ]
+          },
+          "duration": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "first_frame": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "last_frame": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "audio": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "source_video": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "safe_content_filter": {
+            "type": "boolean",
+            "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+          }
+        },
+        "required": [
+          "prompt",
+          "model",
+          "duration",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "generate_audio",
+      "description": "Generate music or speech, including supported reference-voice workflows. Returns a durable job handle.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64000,
+            "description": "Complete user prompt; preserve all requested details."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Concrete model ID from list_models."
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional native Sogni tool parameters. Preserved and validated by the API; do not duplicate named fields."
+          },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_audios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_videos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "spark",
+              "sogni"
+            ],
+            "description": "Payment currency. Auto follows account coverage."
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "subscription",
+              "tokens"
+            ],
+            "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "music",
+              "speech"
+            ]
+          },
+          "duration": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "voice_sample": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://.+",
+            "maxLength": 16384,
+            "description": "HTTPS media download URL; never a local path or upload URL."
+          },
+          "safe_content_filter": {
+            "type": "boolean",
+            "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+          }
+        },
+        "required": [
+          "prompt",
+          "model",
+          "kind",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "transform_media",
+      "description": "Transform uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "upscale_image",
+              "upscale_video",
+              "remove_background",
+              "restore_photo",
+              "extend_video",
+              "stitch_video"
+            ]
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64000,
+            "description": "Complete user prompt; preserve all requested details."
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional native Sogni tool parameters. Preserved and validated by the API; do not duplicate named fields."
+          },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_audios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_videos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "spark",
+              "sogni"
+            ],
+            "description": "Payment currency. Auto follows account coverage."
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "subscription",
+              "tokens"
+            ],
+            "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "safe_content_filter": {
+            "type": "boolean",
+            "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+          }
+        },
+        "required": [
+          "operation",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "run_creative_agent",
+      "description": "Give Sogni's hosted creative agent a complete brief. Returns a durable run handle. Cost approvals may be required during execution.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "brief": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64000,
+            "description": "Complete user prompt; preserve all requested details."
+          },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_audios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "reference_videos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://.+",
+              "maxLength": 16384,
+              "description": "HTTPS media download URL; never a local path or upload URL."
+            },
+            "maxItems": 16
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "spark",
+              "sogni"
+            ],
+            "description": "Payment currency. Auto follows account coverage."
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "subscription",
+              "tokens"
+            ],
+            "description": "Billing preference passed to Sogni. Auto uses eligible subscription coverage; tokens opts into token billing. Premium models retain their normal charges."
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          },
+          "safe_content_filter": {
+            "type": "boolean",
+            "description": "Use the user's chosen content-filter setting. Omit to retain the normal Sogni API default."
+          }
+        },
+        "required": [
+          "brief",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_models",
+      "description": "Discover active models and supported parameters before selecting a model.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "media_type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "audio",
+              "text",
+              "model"
+            ]
+          },
+          "network": {
+            "type": "string",
+            "enum": [
+              "fast",
+              "relaxed"
+            ]
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Return details for one model ID."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "quote",
+      "description": "Estimate the exact generation or transform call without starting it. Reports token value and subscription coverage. An estimate is not a spending authorization.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": [
+              "generate_image",
+              "generate_video",
+              "generate_audio",
+              "transform_media"
+            ]
+          },
+          "arguments": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "tool",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_balance",
+      "description": "Read the authenticated account's balances and subscription status.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_job",
+      "description": "Read a durable generation or creative-agent job. Also returns the current cost approval and output links when available.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Job ID returned by a previous call."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "workflow",
+              "run"
+            ]
+          },
+          "artifact_offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Output page offset. Use next_artifact_offset from the previous response."
+          },
+          "artifact_limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Outputs per page; defaults to 50."
+          }
+        },
+        "required": [
+          "job_id",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create_upload",
+      "description": "Create a signed upload for reference media. Follow the returned HTTP method and signed form fields, upload directly to storage within max_size_bytes, then pass download_url to a generation tool.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "media_type": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "audio"
+            ]
+          },
+          "content_type": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "MIME type of the reference file."
+          }
+        },
+        "required": [
+          "media_type",
+          "content_type"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "approve_cost",
+      "description": "Confirm or decline a job's current cost preview. Pass the exact approval object returned by get_job; never approve a different amount.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Durable job ID."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "workflow",
+              "run"
+            ]
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "confirm",
+              "cancel"
+            ]
+          },
+          "approval": {
+            "type": "object",
+            "properties": {
+              "acceptedCostPreview": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "toolCallId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            },
+            "additionalProperties": false
+          },
+          "request_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+          }
+        },
+        "required": [
+          "job_id",
+          "kind",
+          "decision",
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "cancel_job",
+      "description": "Cancel one of the caller's durable jobs. Cancellation may not undo work already completed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "description": "Durable job ID."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "workflow",
+              "run"
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "models",
+              "account",
+              "quote",
+              "job",
+              "upload"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "kind",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/approve_cost.schema.json",
+  "title": "Sogni MCP approve_cost",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Durable job ID."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "workflow",
+        "run"
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "confirm",
+        "cancel"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "acceptedCostPreview": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "toolCallId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "additionalProperties": false
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Stable unique request ID for this operation. Reuse it when retrying the same request; change it for new work.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    }
+  },
+  "required": [
+    "job_id",
+    "kind",
+    "decision",
+    "request_id"
+  ],
+  "additionalProperties": false
+}

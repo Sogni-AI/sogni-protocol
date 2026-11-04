@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "generate_image",
+      "description": "Generate or edit images. Covered models use the caller's subscription; other models spend tokens. Returns a durable job handle.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": true,
+        "name": "generate_image",
+        "family": "creative",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/generate_image.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "long_running"
+      }
+    },
+    {
+      "name": "generate_video",
+      "description": "Generate video using text, frames, audio or reference video. Returns a durable job handle; follow with get_job.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": true,
+        "name": "generate_video",
+        "family": "creative",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/generate_video.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "long_running"
+      }
+    },
+    {
+      "name": "generate_audio",
+      "description": "Generate music or speech, including supported reference-voice workflows. Returns a durable job handle.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": true,
+        "name": "generate_audio",
+        "family": "creative",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/generate_audio.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "long_running"
+      }
+    },
+    {
+      "name": "transform_media",
+      "description": "Transform uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": true,
+        "name": "transform_media",
+        "family": "artifact",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/transform_media.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "long_running"
+      }
+    },
+    {
+      "name": "run_creative_agent",
+      "description": "Give Sogni's hosted creative agent a complete brief. Returns a durable run handle. Cost approvals may be required during execution.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": true,
+        "name": "run_creative_agent",
+        "family": "creative",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/run_creative_agent.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "long_running"
+      }
+    },
+    {
+      "name": "list_models",
+      "description": "Discover active models and supported parameters before selecting a model.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": false,
+        "requiresConfirmation": "never",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "list_models",
+        "family": "analysis",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/list_models.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "quote",
+      "description": "Estimate the exact generation or transform call without starting it. Reports token value and subscription coverage. An estimate is not a spending authorization.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": false,
+        "requiresConfirmation": "never",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "quote",
+        "family": "analysis",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/quote.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "get_balance",
+      "description": "Read the authenticated account's balances and subscription status.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": false,
+        "requiresConfirmation": "never",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "get_balance",
+        "family": "analysis",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/get_balance.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "get_job",
+      "description": "Read a durable generation or creative-agent job. Also returns the current cost approval and output links when available.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": false,
+        "requiresConfirmation": "never",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "get_job",
+        "family": "control",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/get_job.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "create_upload",
+      "description": "Create a signed upload for reference media. Follow the returned HTTP method and signed form fields, upload directly to storage within max_size_bytes, then pass download_url to a generation tool.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": true,
+        "requiresConfirmation": "never",
+        "retrySafety": "not_safe",
+        "producesArtifacts": false,
+        "name": "create_upload",
+        "family": "artifact",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/create_upload.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "approve_cost",
+      "description": "Confirm or decline a job's current cost preview. Pass the exact approval object returned by get_job; never approve a different amount.",
+      "metadata": {
+        "costClass": "variable",
+        "mutatesData": true,
+        "requiresConfirmation": "paid",
+        "retrySafety": "dedupe_key_required",
+        "producesArtifacts": false,
+        "name": "approve_cost",
+        "family": "control",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/approve_cost.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "cancel_job",
+      "description": "Cancel one of the caller's durable jobs. Cancellation may not undo work already completed.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": true,
+        "requiresConfirmation": "destructive",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "cancel_job",
+        "family": "control",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/cancel_job.schema.json",
+        "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    }
+  ],
+  "outputSchemaRef": "schemas/mcp/result.schema.json"
+}
