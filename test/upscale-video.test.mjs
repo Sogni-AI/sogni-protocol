@@ -27,4 +27,5 @@ test('the prompt contract limits the 4K refusal to FlashVSR and documents every 
   assert.deepEqual(Object.keys(prompt.parameterDocs).sort(), Object.keys(schema.properties).sort());
   assert.match(prompt.baseDescription.replace(/\s+/g, ' '), /FlashVSR cannot produce 4K/);
   assert.doesNotMatch(prompt.baseDescription.replace(/\s+/g, ' '), /[^R] It cannot produce 4K/);
+  assert.match(prompt.baseDescription.replace(/\s+/g, ' '), /2160p needs a source short edge of 540-768px or exactly 1080px/);
 });
