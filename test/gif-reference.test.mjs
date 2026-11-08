@@ -7,6 +7,12 @@ const read = path => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.u
 test('GIF edit controls agree across schemas and hosted manifests and remain opt-in', () => {
   const edit = read('schemas/tools/edit_image.schema.json');
   const generate = read('schemas/tools/generate_image.schema.json');
+  for (const params of [edit, generate, ...['generation-tools.json', 'openai-tools.json'].flatMap(file =>
+    read(`manifests/${file}`).tools.filter(tool => ['generate_image', 'edit_image'].includes(tool.function.name)).map(tool => tool.function.parameters)
+  )]) {
+    assert.match(params.properties.outputFormat.description, /Set only when the user explicitly requests a file format/);
+    assert.match(params.properties.outputFormat.description, /Otherwise leave outputFormat unset/);
+  }
   for (const params of [edit, ...['generation-tools.json', 'openai-tools.json'].map(file => read(`manifests/${file}`).tools.find(tool => tool.function.name === 'edit_image').function.parameters)]) {
     assert.deepEqual(params.properties.outputFormat.enum, ['png', 'jpg', 'jpeg', 'webp', 'gif']);
     for (const field of ['gptImageFrameCount', 'gptImageFrameDurationMs']) {
