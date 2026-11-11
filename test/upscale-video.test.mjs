@@ -6,12 +6,13 @@ const root = new URL('../', import.meta.url);
 const read = (path) => JSON.parse(readFileSync(new URL(path, root)));
 const schema = read('schemas/tools/upscale_video.schema.json');
 
-test('upscale_video offers RelayVSR by name and keeps FlashVSR the default', () => {
+test('upscale_video recommends explicit RelayVSR and preserves omitted-model compatibility', () => {
   assert.deepEqual(schema.properties.model.enum, ['flashvsr', 'relayvsr']);
   assert.deepEqual(schema.properties.targetResolution.enum, [1080, 1440, 2160]);
   assert.deepEqual(schema.required, []);
   assert.equal(schema.properties.model.default, undefined);
-  assert.match(schema.description, /FlashVSR is the default/);
+  assert.match(schema.description, /Explicitly set model to relayvsr for new upscales/);
+  assert.match(schema.description, /Omitted model retains FlashVSR for compatibility/);
 });
 
 test('both hosted manifests carry the upscale_video schema verbatim', () => {
