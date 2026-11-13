@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/list_changelog.schema.json",
+  "title": "Sogni MCP list_changelog",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 200,
+      "pattern": "^[a-z0-9][a-z0-9-]{0,199}$",
+      "description": "One entry's ID from a list result. Returns that entry with its full Markdown text; the other arguments are ignored."
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "artist",
+        "developer",
+        "worker"
+      ],
+      "description": "Only entries for this audience: artists, developers or worker operators."
+    },
+    "product": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+      "description": "Only entries for this product ID, such as create, chat, api, sdk-js, sdk-python, mcp or fast-worker. Each entry lists its product IDs."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "new",
+        "improved",
+        "fixed",
+        "release",
+        "deprecated",
+        "removed",
+        "notice"
+      ],
+      "description": "Only entries of this type."
+    },
+    "since": {
+      "type": "string",
+      "maxLength": 40,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|[+-]\\d{2}:\\d{2}))?$",
+      "description": "Only entries published at or after this time: an ISO 8601 date (read as midnight UTC) or a date-time with a zone."
+    },
+    "until": {
+      "type": "string",
+      "maxLength": 40,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|[+-]\\d{2}:\\d{2}))?$",
+      "description": "Only entries published before this time: an ISO 8601 date (read as midnight UTC) or a date-time with a zone."
+    },
+    "action_required": {
+      "type": "boolean",
+      "description": "true lists only entries you need to act on, such as a model retirement or a new minimum worker version. false applies no filter."
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Entries per page; defaults to 20."
+    },
+    "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400,
+      "description": "nextCursor from the previous page. Keep the same filters."
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

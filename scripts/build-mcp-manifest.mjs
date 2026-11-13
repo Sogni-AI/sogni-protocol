@@ -3,10 +3,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../', import.meta.url);
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const catalog = read('catalogs/mcp-tools.json');
-const outputSchema = read(catalog.outputSchemaRef);
-for (const key of ['$schema', '$id', 'title']) delete outputSchema[key];
 const tools = catalog.tools.map(({ name, description, metadata }) => {
   const { $schema, $id, title, ...inputSchema } = read(`schemas/mcp/${name}.schema.json`);
+  // Each tool's declared result envelope; the original tools share catalog.outputSchemaRef.
+  const { $schema: _, $id: __, title: ___, ...outputSchema } = read(metadata.outputSchemaRef);
   return { name, description, inputSchema, outputSchema, annotations: {
     readOnlyHint: !metadata.mutatesData && metadata.costClass === 'free',
     destructiveHint: metadata.requiresConfirmation === 'destructive',

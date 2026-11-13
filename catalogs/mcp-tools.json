@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "tools": [
     {
       "name": "generate_image",
@@ -202,6 +202,23 @@
         "executionMode": "hosted",
         "inputSchemaRef": "schemas/mcp/cancel_job.schema.json",
         "outputSchemaRef": "schemas/mcp/result.schema.json",
+        "latencyClass": "interactive"
+      }
+    },
+    {
+      "name": "list_changelog",
+      "description": "Read the Sogni platform changelog: what changed for artists, developers and worker operators, newest first. Filter by audience, product, type, publication date or entries that need action. List results give each entry's title, summary, type, products, links and ISO 8601 dates without the full text; pass id to read one entry in full. Pass nextCursor as cursor for the next page.",
+      "metadata": {
+        "costClass": "free",
+        "mutatesData": false,
+        "requiresConfirmation": "never",
+        "retrySafety": "idempotent",
+        "producesArtifacts": false,
+        "name": "list_changelog",
+        "family": "analysis",
+        "executionMode": "hosted",
+        "inputSchemaRef": "schemas/mcp/list_changelog.schema.json",
+        "outputSchemaRef": "schemas/mcp/changelog_result.schema.json",
         "latencyClass": "interactive"
       }
     }

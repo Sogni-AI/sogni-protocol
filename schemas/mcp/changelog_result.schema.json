@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/mcp/v1/changelog_result.schema.json",
+  "title": "Sogni MCP changelog result",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": [
+        "changelog"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "kind",
+    "data"
+  ],
+  "additionalProperties": false
+}
