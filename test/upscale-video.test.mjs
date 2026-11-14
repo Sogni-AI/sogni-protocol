@@ -30,3 +30,16 @@ test('the prompt contract limits the 4K refusal to FlashVSR and documents every 
   assert.doesNotMatch(prompt.baseDescription.replace(/\s+/g, ' '), /[^R] It cannot produce 4K/);
   assert.match(prompt.baseDescription.replace(/\s+/g, ' '), /2160p needs a source short edge of 540-768px or exactly 1080px/);
 });
+
+test('schema validation keeps alpha.61 FlashVSR answers: 2160 only with model relayvsr', () => {
+  // alpha.61 allowed targetResolution 1080 or 1440 and nothing else. The if/else keeps that
+  // for an omitted model or flashvsr, so a JSON Schema validator still refuses FlashVSR at 2160.
+  assert.deepEqual(schema.if, { properties: { model: { const: 'relayvsr' } }, required: ['model'] });
+  assert.deepEqual(schema.else, { properties: { targetResolution: { enum: [1080, 1440] } } });
+  assert.equal(schema.then, undefined);
+  const allowed = (args) =>
+    args.model === 'relayvsr' ? schema.properties.targetResolution.enum : schema.else.properties.targetResolution.enum;
+  assert.equal(allowed({}).includes(2160), false);
+  assert.equal(allowed({ model: 'flashvsr' }).includes(2160), false);
+  assert.equal(allowed({ model: 'relayvsr' }).includes(2160), true);
+});

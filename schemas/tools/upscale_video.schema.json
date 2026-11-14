@@ -51,5 +51,25 @@
       "description": "FlashVSR only. Seed for the upscaler's fine texture, 0 through 4294967295; different seeds give slightly different fine detail. Omit it to keep the repeatable default of 0. Use -1 for a random seed. Set it only when the user gives a seed or asks for a different or random variation of an upscale."
     }
   },
-  "required": []
+  "required": [],
+  "if": {
+    "properties": {
+      "model": {
+        "const": "relayvsr"
+      }
+    },
+    "required": [
+      "model"
+    ]
+  },
+  "else": {
+    "properties": {
+      "targetResolution": {
+        "enum": [
+          1080,
+          1440
+        ]
+      }
+    }
+  }
 }
