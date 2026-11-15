@@ -28,7 +28,11 @@ test('the prompt contract limits the 4K refusal to FlashVSR and documents every 
   assert.deepEqual(Object.keys(prompt.parameterDocs).sort(), Object.keys(schema.properties).sort());
   assert.match(prompt.baseDescription.replace(/\s+/g, ' '), /FlashVSR cannot produce 4K/);
   assert.doesNotMatch(prompt.baseDescription.replace(/\s+/g, ' '), /[^R] It cannot produce 4K/);
-  assert.match(prompt.baseDescription.replace(/\s+/g, ' '), /2160p needs a source short edge of 540-768px or exactly 1080px/);
+  assert.ok(prompt.baseDescription.replace(/\s+/g, ' ').includes(
+    'With RelayVSR the output is at most twice the source size for a source up to 1920x1088 pixels ' +
+      '(1088x1920 in portrait), or four times for a source up to 1344x768 (768x1344 in portrait), so 2160p ' +
+      "needs a source short edge of 540-768px or 1080-1088px, and the output's long edge can be at most 3840px.",
+  ));
 });
 
 test('schema validation keeps alpha.61 FlashVSR answers: 2160 only with model relayvsr', () => {
