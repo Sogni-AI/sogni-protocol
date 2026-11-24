@@ -36,6 +36,12 @@
       "videos": 10,
       "audios": 10,
       "assets": 50
+    },
+    "seedance-2-5-flash": {
+      "images": 10,
+      "videos": 5,
+      "audios": 5,
+      "assets": 20
     }
   }
 }
