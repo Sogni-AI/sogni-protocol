@@ -37,6 +37,10 @@
       ],
       "description": "Wan 3 only. Output ratio. Use \"adaptive\" to derive the shape from input/context media. Omit for automatic behavior."
     },
+    "watermark": {
+      "type": "boolean",
+      "description": "Retired; accepted and ignored. Sogni no longer adds a provider watermark, so this flag has no effect."
+    },
     "referenceFileUrl": {
       "type": "string",
       "description": "Alibaba wan3.0-video only. One public HTTPS document URL for context (DOCX/DOC/XLSX/XLS/PPTX/PPT/PDF/TXT/KEY/PAGES/NUMBERS/Markdown, up to 100 MB; PDF/DOCX/DOC/PPTX/PPT/KEY/PAGES up to 50 pages). Mutually exclusive with referenceLinkUrl and first/last-frame inputs."
