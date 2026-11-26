@@ -1,0 +1,54 @@
+{
+  "description": "Speech-to-text transcription model catalog covering Parakeet TDT 0.6B v3 and NVIDIA Nemotron 3.5 Transcribe 30B. Each entry declares audio duration ceilings, timestamp granularities, diarization, vocabulary hints, and pricing basis.",
+  "default": "parakeet",
+  "models": {
+    "parakeet": {
+      "id": "parakeet_tdt_0.6b_v3_bf16",
+      "name": "Parakeet TDT 0.6B v3",
+      "maxDurationSec": 7200,
+      "languageCount": 25,
+      "languageCoverage": "European",
+      "timestamps": [
+        "none",
+        "sentence",
+        "word"
+      ],
+      "diarization": false,
+      "hotwords": false,
+      "promptHint": false,
+      "pricingBasis": "duration"
+    },
+    "nemotron": {
+      "id": "nemotron_3.5_transcribe_30b_a4b_nvfp4",
+      "name": "NVIDIA Nemotron 3.5 Transcribe 30B",
+      "maxDurationSec": 3600,
+      "languageCount": 40,
+      "languageCoverage": "Multilingual",
+      "timestamps": [
+        "none",
+        "sentence",
+        "word"
+      ],
+      "diarization": true,
+      "hotwords": true,
+      "maxHotwordsChars": 1000,
+      "promptHint": true,
+      "maxPromptChars": 2000,
+      "pricingBasis": "duration"
+    }
+  },
+  "constraints": {
+    "timestampGranularities": [
+      "none",
+      "sentence",
+      "word"
+    ],
+    "responseFormats": [
+      "json",
+      "text",
+      "srt",
+      "vtt"
+    ],
+    "outputFormat": "json"
+  }
+}

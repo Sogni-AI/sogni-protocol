@@ -1,15 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.sogni.ai/creative-agent/2026-09-07.1/tools/generate_speech.schema.json",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-11-26.1/tools/generate_speech.schema.json",
   "title": "generate_speech arguments",
-  "schemaVersion": "2026-09-07.1",
-  "description": "Turn written words into spoken audio. Use when the user wants something read aloud, a narration, a voiceover, a line of dialogue, an audiobook passage, or a voice cloned from a recording they uploaded. This tool speaks text; it does not compose music — use generate_music for songs and instrumentals.",
+  "schemaVersion": "2026-11-26.1",
+  "description": "Turn written words into spoken audio. Use when the user wants something read aloud, a narration, a voiceover, a line of dialogue, an audiobook passage, expressive acting speech, or a voice cloned from a recording they uploaded or from a saved persona's voice recording. This tool speaks text; it does not compose music — use generate_music for songs and instrumentals.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "prompt": {
       "type": "string",
-      "description": "The exact words to be spoken, verbatim. This is NOT a description of the audio: whatever is written here is read aloud character for character. \"a calm woman reading the news\" would be spoken as those seven words — put that in voiceDescription instead and write the actual news copy here.\n\nLITERAL PROMPT OVERRIDE: If the user explicitly says not to modify the prompt, or to use it exactly/verbatim/as-is, copy the identified prompt text verbatim instead of applying these construction rules unless a hard requirement is missing.\n\nPunctuation is prosody: full stops, commas, question marks and ellipses control pauses and intonation, so keep them. Write numbers, dates, currency and abbreviations the way they should be said (\"nineteen eighty-four\", \"twelve dollars fifty\", \"Doctor Chen\") when the plain form would be ambiguous. Line breaks are not pauses; use punctuation.\n\nIf the user asks for a script rather than supplying one — \"read me a poem about the sea\", \"record an intro for my podcast\" — write the words first and pass them here. compose_script is for longer or structured pieces; a sentence or two you can simply write.\n\nLimit 4096 characters, roughly five minutes of speech. A longer script is refused rather than cut off mid-sentence, so split it across several calls at a natural break.",
+      "description": "The exact words to be spoken, verbatim. This is NOT a description of the audio: whatever is written here is read aloud character for character. \"a calm woman reading the news\" would be spoken as those seven words — put that in voiceDescription instead and write the actual news copy here.\n\nLITERAL PROMPT OVERRIDE: If the user explicitly says not to modify the prompt, or to use it exactly/verbatim/as-is, copy the identified prompt text verbatim instead of applying these construction rules unless a hard requirement is missing.\n\nWith model=\"drama3\" (Fish Drama 3), inline acting directions in square brackets or whisper tags — such as [sighs], [laughs], [warmly], [gasps], or <whisper>...</whisper> — may be placed directly inside prompt to cue vocal delivery without being spoken literally. Do not place bracketed stage directions inside prompt for Qwen3-TTS modes (\"voice\", \"clone\", \"design\"), where they would be read aloud.\n\nPunctuation is prosody: full stops, commas, question marks and ellipses control pauses and intonation, so keep them. Write numbers, dates, currency and abbreviations the way they should be said (\"nineteen eighty-four\", \"twelve dollars fifty\", \"Doctor Chen\") when the plain form would be ambiguous. Line breaks are not pauses; use punctuation.\n\nIf the user asks for a script rather than supplying one — \"read me a poem about the sea\", \"record an intro for my podcast\" — write the words first and pass them here. compose_script is for longer or structured pieces; a sentence or two you can simply write.\n\nLimit 4096 characters, roughly five minutes of speech. A longer script is refused rather than cut off mid-sentence, so split it across several calls at a natural break.",
       "maxLength": 4096
     },
     "model": {
@@ -17,9 +17,10 @@
       "enum": [
         "voice",
         "clone",
-        "design"
+        "design",
+        "drama3"
       ],
-      "description": "Which speech model to use, chosen by what the user gave you. \"voice\" (default): one of nine studio voices, optionally restyled by voiceDescription — the right choice for narration, voiceover and dialogue when no particular person is being imitated. \"clone\": reproduces a specific voice from a recording the user uploaded; requires voiceSourceIndex. \"design\": invents a speaker who does not exist from a written description; requires voiceDescription and takes no recording. Pick \"clone\" whenever the user uploads a voice clip and asks for that person, and \"design\" when they describe a speaker instead of choosing one."
+      "description": "Which speech model to use, chosen by what the user gave you. \"voice\" (default, Qwen3-TTS 1.7B): one of nine studio voices, optionally restyled by voiceDescription — the right choice for narration, voiceover and dialogue when no particular person is being imitated. \"clone\" (Qwen3-TTS 1.7B): reproduces a specific voice from a recording the user uploaded or a resolved persona's voice recording; requires voiceSourceIndex or voice_source_url. \"design\" (Qwen3-TTS 1.7B): invents a speaker who does not exist from a written description; requires voiceDescription and takes no recording. \"drama3\" (Fish Drama 3): expressive acting speech supporting inline [direction] and <whisper>...</whisper> tags directly in prompt, with optional zero-shot voice cloning via voiceSourceIndex / voice_source_url and optional voiceTranscript. Pick \"drama3\" when the user asks for Fish Drama 3, expressive acting delivery with inline direction tags, or Drama 3 cloning; pick \"clone\" whenever the user uploads a voice clip or asks for a saved persona's own voice without requesting Drama 3; pick \"design\" when they describe a speaker instead of choosing one."
     },
     "voice": {
       "type": "string",
@@ -38,21 +39,21 @@
     },
     "voiceDescription": {
       "type": "string",
-      "description": "How the line should be delivered, or who should deliver it. With model=\"voice\" this restyles the chosen voice without changing who it is: \"whispering, close to the microphone\", \"furious\", \"reading a bedtime story\", \"like a sports commentator\". With model=\"design\" this is required and describes a speaker to invent: age, gender, accent, timbre, pace, mood, and recording space — \"a warm, unhurried narrator in her forties with a faint Scottish lilt, close-miked in a quiet room\". Describe one coherent person; contradictory directions produce a voice that shifts mid-sentence. Not accepted with model=\"clone\", where the recording defines the voice. Limit 512 characters.",
+      "description": "How the line should be delivered, or who should deliver it. With model=\"voice\" this restyles the chosen voice without changing who it is: \"whispering, close to the microphone\", \"furious\", \"reading a bedtime story\", \"like a sports commentator\". With model=\"design\" this is required and describes a speaker to invent: age, gender, accent, timbre, pace, mood, and recording space — \"a warm, unhurried narrator in her forties with a faint Scottish lilt, close-miked in a quiet room\". Describe one coherent person; contradictory directions produce a voice that shifts mid-sentence. Not accepted with model=\"clone\" or model=\"drama3\" (for drama3, place inline [direction] tags directly inside prompt). Limit 512 characters.",
       "maxLength": 512
     },
     "voiceSourceIndex": {
       "type": "number",
-      "description": "Which audio holds the voice to clone, using the same numbering every other tool uses for audio: negative indices are uploads (-1 = first/primary upload, -2 = second upload, and so on) and 0-based non-negative indices are audio generated earlier in this conversation. A clip the user just uploaded is -1. Required when model=\"clone\" and ignored otherwise. The clip should be three to thirty seconds of one person speaking cleanly, with no music, no second speaker and no heavy room echo; anything past thirty seconds is trimmed."
+      "description": "Which audio holds the voice to clone, using the same numbering every other tool uses for audio: negative indices are uploads (-1 = first/primary upload, -2 = second upload, and so on) and 0-based non-negative indices are audio generated earlier in this conversation. A clip the user just uploaded is -1. A resolved persona's full voice recording uses the index resolve_personas reports. Required when model=\"clone\", optional when model=\"drama3\" (1-30 seconds), and ignored otherwise. For Qwen3-TTS clone mode the clip should be three to thirty seconds of one person speaking cleanly, with no music, no second speaker and no heavy room echo; anything past thirty seconds is trimmed."
     },
     "voice_source_url": {
       "type": "string",
-      "description": "REST alternative to voiceSourceIndex: retrievable original recording for clone mode."
+      "description": "REST alternative to voiceSourceIndex: retrievable original recording URL for clone mode or optional drama3 voice cloning."
     },
     "voiceTranscript": {
       "type": "string",
-      "description": "The exact words spoken in the uploaded clip, when model=\"clone\". Supplying it lets the model condition on the recording itself rather than on a speaker fingerprint alone, which is markedly closer to the source — set it whenever the user tells you what the clip says or the transcript is otherwise known. Omitting it still produces a recognisable clone, just a looser one. Limit 1024 characters.",
-      "maxLength": 1024
+      "description": "The exact words spoken in the uploaded reference clip, when model=\"clone\" or when cloning a reference recording with model=\"drama3\". Supplying it lets the model condition on the recording itself rather than on a speaker fingerprint alone, which is markedly closer to the source — set it whenever the user tells you what the clip says or the transcript is otherwise known. Omitting it still produces a recognisable clone (on drama3, an omitted reference transcript is auto-transcribed). Leave it out for a persona voice recording: the persona's saved transcript is filled in automatically. Limit 1024 characters on model=\"clone\" and 2000 characters on model=\"drama3\".",
+      "maxLength": 2000
     },
     "language": {
       "type": "string",
@@ -67,7 +68,8 @@
         "russian",
         "portuguese",
         "spanish",
-        "italian"
+        "italian",
+        "arabic"
       ],
       "description": "Language of the script. Default \"auto\", which infers it from the text and is the only setting that reads a code-switched line correctly. Pin a language only when auto mis-reads a name, a loanword, or a passage that is ambiguous between two of them. Cloning is cross-lingual: an English reference clip can read Japanese in the same voice."
     },
@@ -75,7 +77,7 @@
       "type": "number",
       "minimum": 0.1,
       "maximum": 2,
-      "description": "Speech delivery variation from 0.1 to 2; default 0.9."
+      "description": "Qwen3-TTS (voice, clone, design) speech delivery variation from 0.1 to 2; default 0.9. Omit when model=\"drama3\"."
     },
     "outputFormat": {
       "type": "string",

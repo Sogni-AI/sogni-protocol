@@ -1,0 +1,117 @@
+{
+  "description": "Text-to-speech model catalog covering Qwen3-TTS 1.7B modes and Fish Drama 3. Each entry declares accepted inputs, voice-cloning bounds, sample rate, and pricing basis so SDKs and UI surfaces can validate requests without round-tripping.",
+  "default": "voice",
+  "languages": [
+    "auto",
+    "english",
+    "chinese",
+    "japanese",
+    "korean",
+    "german",
+    "french",
+    "russian",
+    "portuguese",
+    "spanish",
+    "italian",
+    "arabic"
+  ],
+  "voices": [
+    { "id": "serena", "label": "Serena", "gender": "female", "accent": "English" },
+    { "id": "vivian", "label": "Vivian", "gender": "female", "accent": "Chinese" },
+    { "id": "uncle_fu", "label": "Uncle Fu", "gender": "male", "accent": "Chinese" },
+    { "id": "ryan", "label": "Ryan", "gender": "male", "accent": "English" },
+    { "id": "aiden", "label": "Aiden", "gender": "male", "accent": "English" },
+    { "id": "ono_anna", "label": "Ono Anna", "gender": "female", "accent": "Japanese" },
+    { "id": "sohee", "label": "Sohee", "gender": "female", "accent": "Korean" },
+    { "id": "eric", "label": "Eric", "gender": "male", "accent": "English" },
+    { "id": "dylan", "label": "Dylan", "gender": "male", "accent": "English" }
+  ],
+  "models": {
+    "voice": {
+      "id": "qwen3_tts_1.7b_custom_voice_bf16",
+      "name": "Qwen3-TTS Studio Voices",
+      "sampleRateHz": 24000,
+      "voices": true,
+      "instruct": "optional",
+      "referenceAudio": "unsupported",
+      "referenceText": false,
+      "creativity": {
+        "min": 0.1,
+        "max": 2,
+        "default": 0.9
+      },
+      "inlineDirections": false,
+      "pricingBasis": "flat"
+    },
+    "clone": {
+      "id": "qwen3_tts_1.7b_voice_clone_bf16",
+      "name": "Qwen3-TTS Voice Clone",
+      "sampleRateHz": 24000,
+      "voices": false,
+      "instruct": "unsupported",
+      "referenceAudio": "required",
+      "referenceSeconds": {
+        "min": 3,
+        "max": 30
+      },
+      "referenceText": true,
+      "maxReferenceTextChars": 1024,
+      "creativity": {
+        "min": 0.1,
+        "max": 2,
+        "default": 0.9
+      },
+      "inlineDirections": false,
+      "pricingBasis": "flat"
+    },
+    "design": {
+      "id": "qwen3_tts_1.7b_voice_design_bf16",
+      "name": "Qwen3-TTS Voice Design",
+      "sampleRateHz": 24000,
+      "voices": false,
+      "instruct": "required",
+      "maxInstructChars": 512,
+      "referenceAudio": "unsupported",
+      "referenceText": false,
+      "creativity": {
+        "min": 0.1,
+        "max": 2,
+        "default": 0.9
+      },
+      "inlineDirections": false,
+      "pricingBasis": "flat"
+    },
+    "drama3": {
+      "id": "fish_drama_3_nvfp4",
+      "name": "Fish Drama 3",
+      "sampleRateHz": 44100,
+      "voices": false,
+      "instruct": "unsupported",
+      "referenceAudio": "optional",
+      "referenceSeconds": {
+        "min": 1,
+        "max": 30
+      },
+      "referenceText": true,
+      "maxReferenceTextChars": 2000,
+      "inlineDirections": true,
+      "directionTagExamples": [
+        "[sighs]",
+        "[laughs]",
+        "[warmly]",
+        "[gasps]",
+        "<whisper>...</whisper>"
+      ],
+      "pricingBasis": "characters"
+    }
+  },
+  "constraints": {
+    "maxScriptChars": 4096,
+    "maxInstructChars": 512,
+    "outputFormats": [
+      "wav",
+      "mp3",
+      "flac"
+    ]
+  }
+}

@@ -28,6 +28,7 @@
     "segment_image",
     "sound_to_video",
     "stitch_video",
+    "transcribe_audio",
     "upscale_image",
     "upscale_video",
     "video_to_video"
@@ -84,6 +85,7 @@
     "set_content_filter",
     "sound_to_video",
     "stitch_video",
+    "transcribe_audio",
     "upscale_image",
     "upscale_video",
     "validate_asset_references",

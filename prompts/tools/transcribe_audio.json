@@ -1,0 +1,16 @@
+{
+  "contractId": "transcribe_audio_v1",
+  "version": "1.0.0",
+  "toolName": "transcribe_audio",
+  "baseDescription": "transcribe_audio converts spoken audio from an uploaded or generated audio/video clip into\nstructured text, sentence or word timestamps, speaker-diarized turns, or SRT/VTT subtitle text.\n\nUse transcribe_audio whenever the user asks what is said in an audio or video clip, wants a\nverbatim transcript, needs speaker labels (who spoke when), or asks for SRT/VTT/plain-text\ncaptions without burning them onto video pixels. analyze_video inspects visual frames only and\ndoes not transcribe speech — pair or prefer transcribe_audio when spoken dialogue matters.\n\nENGINE SELECTION:\n- \"parakeet\" (default): fast 25-language European speech-to-text up to 2 hours with sentence\n  and word timestamps. Best for single-speaker European-language recordings and quick captions.\n- \"nemotron\": 40-language NVIDIA Nemotron 3.5 30B transcription up to 1 hour with speaker\n  diarization (diarize=true -> S01, S02, ...), custom vocabulary hints (hotwords), and context\n  prompting (prompt). Choose \"nemotron\" for multi-speaker conversations, non-European languages\n  (including Asian and Arabic languages), or domain-specific terminology.\n\nTo burn spoken subtitles directly into a video in one step, you can either call add_subtitles\nwith auto_transcribe=true or run transcribe_audio first when the user wants to review/edit the\ntranscript or use speaker diarization before burning.",
+  "parameterDocs": {
+    "model": "Choose \"parakeet\" (default, fast 25-language European STT up to 2h) or \"nemotron\" (40-language multilingual STT up to 1h with diarization and hotwords).",
+    "audioSourceIndex": "Negative uploaded audio/video index (-1 = first upload) or 0-based generated audio index. Omit to default to the primary upload or latest audio.",
+    "audio_source_url": "REST alternative to audioSourceIndex: retrievable HTTPS URL or inline audio data URI.",
+    "timestamps": "Timestamp granularity: \"sentence\" (default), \"word\" (word-level timings), or \"none\".",
+    "diarize": "Set true for multi-speaker labels (S01, S02, ...). Supported by model=\"nemotron\" (auto-selected if model is omitted).",
+    "hotwords": "Comma-separated names, brands, or technical terms to bias recognition on model=\"nemotron\" (max 1000 chars).",
+    "prompt": "Optional context or language hint for model=\"nemotron\" (max 2000 chars).",
+    "responseFormat": "Output format: \"json\" (default structured segments), \"text\", \"srt\", or \"vtt\"."
+  }
+}
