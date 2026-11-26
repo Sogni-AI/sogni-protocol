@@ -27,6 +27,8 @@ test('generate_speech schema adds Fish Drama 3, Arabic, and 2000-char reference 
   assert.deepEqual(schema.properties.model.enum, ['voice', 'clone', 'design', 'drama3']);
   assert.ok(schema.properties.language.enum.includes('arabic'));
   assert.equal(schema.properties.language.enum.length, 12);
+  assert.match(schema.properties.language.description, /arabic.*drama3|drama3.*arabic/i);
+  assert.match(prompt.parameterDocs.language, /arabic.*drama3|drama3.*arabic/i);
   assert.equal(schema.properties.voiceTranscript.maxLength, 2000);
   assert.deepEqual(schema.required, ['prompt']);
   assert.deepEqual(Object.keys(schema.properties).sort(), expectedPropertyKeys);
@@ -103,6 +105,21 @@ test('speech-models and transcription-models catalogs publish canonical model ID
       'fish_drama_3_nvfp4',
     ],
   );
+  for (const [key, entry] of Object.entries(speechCatalog.models)) {
+    assert.equal(entry.pricingBasis, 'characters', `${key} pricingBasis`);
+    assert.equal(entry.minimumBilledCharacters, 170, `${key} minimumBilledCharacters`);
+    assert.equal(entry.maxCharacters, key === 'drama3' ? 5000 : 4096, `${key} maxCharacters`);
+    assert.equal(
+      entry.supportedLanguages.includes('arabic'),
+      key === 'drama3',
+      `${key} arabic support`,
+    );
+    assert.equal(
+      entry.supportedLanguages.length,
+      key === 'drama3' ? 12 : 11,
+      `${key} supportedLanguages length`,
+    );
+  }
   const drama3 = speechCatalog.models.drama3;
   assert.equal(drama3.sampleRateHz, 44100);
   assert.equal(drama3?.creativity, undefined);
@@ -113,13 +130,16 @@ test('speech-models and transcription-models catalogs publish canonical model ID
     'id',
     'inlineDirections',
     'instruct',
+    'maxCharacters',
     'maxReferenceTextChars',
+    'minimumBilledCharacters',
     'name',
     'pricingBasis',
     'referenceAudio',
     'referenceSeconds',
     'referenceText',
     'sampleRateHz',
+    'supportedLanguages',
     'voices',
   ]);
 
@@ -130,9 +150,13 @@ test('speech-models and transcription-models catalogs publish canonical model ID
   const { parakeet, nemotron } = sttCatalog.models;
   assert.equal(parakeet.maxDurationSec, 7200);
   assert.equal(parakeet.diarization, false);
+  assert.equal(parakeet.minimumBilledDurationSeconds, 10);
+  assert.equal(parakeet.maxVariations, 1);
   assert.equal(nemotron.maxDurationSec, 3600);
   assert.equal(nemotron.diarization, true);
   assert.equal(nemotron.maxHotwordsChars, 1000);
+  assert.equal(nemotron.minimumBilledDurationSeconds, 10);
+  assert.equal(nemotron.maxVariations, 1);
 
   assert.ok(mcpTransform.properties.operation.enum.includes('transcribe_audio'));
   assert.ok(mcpTransform.properties.operation.enum.includes('add_subtitles'));

@@ -16,6 +16,8 @@
       "diarization": false,
       "hotwords": false,
       "promptHint": false,
+      "minimumBilledDurationSeconds": 10,
+      "maxVariations": 1,
       "pricingBasis": "duration"
     },
     "nemotron": {
@@ -34,6 +36,8 @@
       "maxHotwordsChars": 1000,
       "promptHint": true,
       "maxPromptChars": 2000,
+      "minimumBilledDurationSeconds": 10,
+      "maxVariations": 1,
       "pricingBasis": "duration"
     }
   },

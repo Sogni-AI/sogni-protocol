@@ -41,7 +41,22 @@
         "default": 0.9
       },
       "inlineDirections": false,
-      "pricingBasis": "flat"
+      "supportedLanguages": [
+        "auto",
+        "english",
+        "chinese",
+        "japanese",
+        "korean",
+        "german",
+        "french",
+        "russian",
+        "portuguese",
+        "spanish",
+        "italian"
+      ],
+      "maxCharacters": 4096,
+      "minimumBilledCharacters": 170,
+      "pricingBasis": "characters"
     },
     "clone": {
       "id": "qwen3_tts_1.7b_voice_clone_bf16",
@@ -62,7 +77,22 @@
         "default": 0.9
       },
       "inlineDirections": false,
-      "pricingBasis": "flat"
+      "supportedLanguages": [
+        "auto",
+        "english",
+        "chinese",
+        "japanese",
+        "korean",
+        "german",
+        "french",
+        "russian",
+        "portuguese",
+        "spanish",
+        "italian"
+      ],
+      "maxCharacters": 4096,
+      "minimumBilledCharacters": 170,
+      "pricingBasis": "characters"
     },
     "design": {
       "id": "qwen3_tts_1.7b_voice_design_bf16",
@@ -79,7 +109,22 @@
         "default": 0.9
       },
       "inlineDirections": false,
-      "pricingBasis": "flat"
+      "supportedLanguages": [
+        "auto",
+        "english",
+        "chinese",
+        "japanese",
+        "korean",
+        "german",
+        "french",
+        "russian",
+        "portuguese",
+        "spanish",
+        "italian"
+      ],
+      "maxCharacters": 4096,
+      "minimumBilledCharacters": 170,
+      "pricingBasis": "characters"
     },
     "drama3": {
       "id": "fish_drama_3_nvfp4",
@@ -102,6 +147,22 @@
         "[gasps]",
         "<whisper>...</whisper>"
       ],
+      "supportedLanguages": [
+        "auto",
+        "english",
+        "chinese",
+        "japanese",
+        "korean",
+        "german",
+        "french",
+        "russian",
+        "portuguese",
+        "spanish",
+        "italian",
+        "arabic"
+      ],
+      "maxCharacters": 5000,
+      "minimumBilledCharacters": 170,
       "pricingBasis": "characters"
     }
   },
