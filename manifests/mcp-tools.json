@@ -474,7 +474,7 @@
     },
     {
       "name": "transform_media",
-      "description": "Transform uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
+      "description": "Transform, subtitle or transcribe uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -486,7 +486,9 @@
               "remove_background",
               "restore_photo",
               "extend_video",
-              "stitch_video"
+              "stitch_video",
+              "transcribe_audio",
+              "add_subtitles"
             ]
           },
           "prompt": {

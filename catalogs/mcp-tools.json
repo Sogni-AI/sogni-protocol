@@ -54,7 +54,7 @@
     },
     {
       "name": "transform_media",
-      "description": "Transform uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
+      "description": "Transform, subtitle or transcribe uploaded media using an existing Sogni workflow. Native parameters choose size, duration and other operation settings.",
       "metadata": {
         "costClass": "variable",
         "mutatesData": true,

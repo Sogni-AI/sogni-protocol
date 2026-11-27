@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sogni.ai/creative-agent/2026-11-26.1/tools/transcribe_audio.schema.json",
+  "title": "transcribe_audio arguments",
+  "schemaVersion": "2026-11-26.1",
+  "description": "Transcribe spoken audio or video speech into text, timed segments, word timestamps, speaker-diarized dialogue, or SRT/VTT subtitles. Use when the user asks for a transcript, verbatim spoken words, speaker labels, timecodes, or downloadable SRT/VTT captions from an uploaded or generated audio/video clip. To burn subtitles directly onto video frames, use add_subtitles instead (or chain transcribe_audio into add_subtitles).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "model": {
+      "type": "string",
+      "enum": [
+        "parakeet",
+        "nemotron"
+      ],
+      "default": "parakeet",
+      "description": "Speech-to-text engine. \"parakeet\" (default): Parakeet TDT 0.6B v3 — fast 25-language European transcription up to 2 hours with sentence and word timestamps. \"nemotron\": NVIDIA Nemotron 3.5 Transcribe 30B — 40-language multilingual transcription up to 1 hour with speaker diarization (S01, S02, ...), custom vocabulary hotwords, and optional context prompt. When diarize=true, hotwords, or prompt is supplied and model is omitted, executors auto-select \"nemotron\"."
+    },
+    "audioSourceIndex": {
+      "type": "integer",
+      "description": "Which audio or video clip to transcribe. Negative indices address uploads (-1 = first uploaded audio/video clip, -2 = second upload) and 0-based non-negative indices address audio generated earlier in this conversation. Omit to default to -1 (most recent relevant upload or generated clip)."
+    },
+    "audio_source_url": {
+      "type": "string",
+      "description": "REST alternative to audioSourceIndex: retrievable HTTPS media URL or inline base64 audio data URI."
+    },
+    "timestamps": {
+      "type": "string",
+      "enum": [
+        "none",
+        "sentence",
+        "word"
+      ],
+      "default": "sentence",
+      "description": "Timestamp granularity for transcript segments: \"sentence\" (default, phrase/sentence cues), \"word\" (word-level start/end timings in addition to segments), or \"none\" (plain text without timestamps)."
+    },
+    "diarize": {
+      "type": "boolean",
+      "default": false,
+      "description": "Assign speaker labels (S01, S02, ...) across turns of dialogue. Supported by model=\"nemotron\"; when diarize=true and model is omitted, executors auto-select \"nemotron\"."
+    },
+    "hotwords": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Comma-separated custom vocabulary terms, proper nouns, brand names, or acronyms to bias recognition on model=\"nemotron\". Limit 1000 characters."
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Optional transcription context, topic summary, or language hint for model=\"nemotron\". Limit 2000 characters."
+    },
+    "responseFormat": {
+      "type": "string",
+      "enum": [
+        "json",
+        "text",
+        "srt",
+        "vtt"
+      ],
+      "default": "json",
+      "description": "Primary transcript representation to return: \"json\" (default structured transcript with segments/words), \"text\" (clean plain text), \"srt\" (SubRip subtitle document), or \"vtt\" (WebVTT subtitle document)."
+    }
+  },
+  "required": []
+}

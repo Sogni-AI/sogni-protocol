@@ -12,7 +12,9 @@
         "remove_background",
         "restore_photo",
         "extend_video",
-        "stitch_video"
+        "stitch_video",
+        "transcribe_audio",
+        "add_subtitles"
       ]
     },
     "prompt": {
