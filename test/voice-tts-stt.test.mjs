@@ -25,6 +25,8 @@ test('generate_speech schema adds Fish Drama 3, Arabic, and 2000-char reference 
   ];
 
   assert.deepEqual(schema.properties.model.enum, ['voice', 'clone', 'design', 'drama3']);
+  assert.equal(schema.properties.prompt.maxLength, 5000);
+  assert.match(schema.properties.prompt.description, /4096.*voice.*5000.*drama3/i);
   assert.ok(schema.properties.language.enum.includes('arabic'));
   assert.equal(schema.properties.language.enum.length, 12);
   assert.match(schema.properties.language.description, /arabic.*drama3|drama3.*arabic/i);
